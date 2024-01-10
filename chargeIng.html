@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>结算单位待确认列表</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div class="queryWarp">
+      <div class="query-item">
+        <div class="query-title blue">
+          <em><b>待确认</b></em>
+        </div>
+        <!-- <div class="query-title blue">
+                    <em><b>结算中</b></em>
+                </div> -->
+        <div class="query-title" @click="toChargeListEnd">
+          <em><b>已确认</b></em>
+        </div>
+      </div>
+    </div>
+    <!-- 头部信息结束 -->
+    <div class="content nobottom orderList_content">
+      <div id="mescroll" class="notice-content selService-content mescroll" style="top:50px">
+        <!-- 待支付 -->
+        <ul id="dataList" class="order-items dataList">
+          <li class="settleList" v-for="item in pdlist">
+            <div class="icon-select" @click="selSet(item)">
+              <span v-show="item.bargainSucc!=1" class="icon-radio"
+                :class="item.flagSel ? `icon-radio-ok` : `` "></span>
+            </div>
+            <div class="settleInfo" @click="toView(item)">
+              <h3 class="settle-tit" style="border:none">
+                <span><b>{{item.settlementDate}}</b></span>
+                <!-- <em>待确认</em> -->
+              </h3>
+              <div class="settle-context">
+                <div class="item-info">
+                  <label class="grey">门店名称：</label>
+                  <span>{{item.shopName}}</span>
+                </div>
+                <div class="item-info">
+                  <label class="grey">门店编号：</label>
+                  <span>{{item.shopCode}}</span>
+                </div>
+                <div class="item-info">
+                  <label class="grey">结算单号：</label>
+                  <span>{{item.settlementSn}}</span>
+                </div>
+                <div class="item-info">
+                  <label class="grey">现金结算金额：</label>
+                  <span class="red">¥ <b>{{item.settlementAmount}}</b></span>
+                </div>
+				<div class="item-info" v-if="item.rebatePrice">
+				  <label class="grey">返利金额：</label>
+				  <span class="red">¥ <b>{{item.rebatePrice}}</b></span>
+				</div>
+                <span class="showMore" style="top:40%"></span>
+              </div>
+            </div>
+            <!-- <div class="order-bottom unit-bottom" style="border-top: 1px dashed #f1f1f1">
+                            <div>
+                                <button class="orderBtn blueBorder" @click="surSettle(item)">确认结算</button>
+                            </div>
+                        </div> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="set-foot">
+      <div class="set-foot-info">
+        <div class="option-set-select" @click="allSel">
+          <span class="icon-radio" :class="allSelect ? `icon-radio-ok` : ``"></span>
+          <label>全选</label>
+        </div>
+        <div class="set-money">
+          <em class="grey">结算金额：</em>
+          <span class="red p16">¥ <em class="set-total-money">{{totalPrice}}</em></span>
+        </div>
+      </div>
+      <div class="set-foot-btn">
+        <span @click="surSettle">确认结算</span>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/chargeIng.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

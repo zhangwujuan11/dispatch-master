@@ -1,0 +1,92 @@
+//分享
+$(function() {
+
+    //alert(111)
+    var link = window.location.href;
+
+    var params = {
+        url: link
+        //token: userInfo.token  
+    }
+    //Service.autoSignature('GET', params, (function callback(data) {
+        
+    $.ajax({
+            url: HOST + "wx/autoSignature",
+            type: "POST",
+            data: params,
+            // contentType: "application/json;charset-UTF-8",
+            dataType: "json"
+        })
+        .done(function(data) {
+            console.log("数据：", data)
+            if (data.code == 200) {
+
+                var appId = data.data.appId;
+                var timestamp = data.data.timestamp;
+                var nonceStr = data.data.nonceStr;
+                var signature = data.data.signature;
+                wx.config({
+                    debug: false, //调式模式，设置为ture后会直接在网页上弹出调试信息，用于排查问题
+                    appId: appId,
+                    timestamp: timestamp,
+                    nonceStr: nonceStr,
+                    signature: signature,
+                    jsApiList: [ //需要使用的网页服务接口
+                        //'onMenuShareTimeline', //分享给好友
+                        //'onMenuShareAppMessage', //分享到朋友圈
+                        'chooseImage', //拍照或从手机相册中选图接口
+                        'previewImage', //预览图片接口
+                        'uploadImage', //上传图片接口
+                        'downloadImage', //下载图片接口
+                    ]
+                });
+            }else{
+                fn.showTip(data.message);
+            }
+        })
+
+    //alert(imgUrl);
+    wx.ready(function() {
+        // wx.onMenuShareTimeline({ //例如分享到朋友圈的API  
+        //     title: title, // 分享标题
+        //     desc: desc,
+        //     link: links, // 分享链接
+        //     imgUrl: imgUrl, // 分享图标
+        //     success: function() {
+        //         //alert('1111')
+        //     },
+        //     cancel: function() {
+        //         //alert('222')
+        //     }
+        // });
+
+        // wx.onMenuShareAppMessage({
+        //     title: title, // 分享标题
+        //     desc: desc,
+        //     link: links, // 分享链接
+        //     imgUrl: imgUrl, // 分享图标
+        //     trigger: function(res) {
+        //         // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+        //         //alert('用户点击发送给朋友');
+        //     },
+        //     success: function(res) {
+        //         // alert('已分享');
+        //     },
+        //     cancel: function(res) {
+        //         //alert('已取消');
+        //     },
+        //     fail: function(res) {
+        //         //alert(JSON.stringify(res));
+        //     }
+        // });
+        // alert('已注册获取“发送给朋友”状态事件');
+    });
+    wx.error(function(res) {
+        alert(res.errMsg); //打印错误消息。及把 debug:false,设置为debug:ture就可以直接在网页上看到弹出的错误提示
+    });
+
+
+
+
+
+})

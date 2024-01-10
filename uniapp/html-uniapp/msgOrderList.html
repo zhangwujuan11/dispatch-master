@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>信息工单</title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <link rel="stylesheet" type="text/css" href="css/dateselect.css" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div id="appContent">
+      <div class="queryWarp">
+        <div class="query-item">
+          <div class="query-title" @click="showNormal">
+            <em ref="titStatus">订单状态</em> <span class="detailMore"></span>
+          </div>
+          <div class="query-title" @click="showDate">
+            <em ref="titDates">订单时间</em> <span class="detailMore"></span>
+          </div>
+        </div>
+        <ul class="query-select hock_query-select">
+          <li class="query-sel-item bline" :class="{ 'active' : search.orderLevel == index  }" :score="index"
+            :status="item.status" :relDate="item.name" v-for="(item,index) in arrLevel" @click="searchLevel(0)">
+            <p v-text="item.name"></p>
+            <span class="hock_iconFill icon_fill"></span>
+          </li>
+        </ul>
+        <ul class="query-select query-selectDate">
+          <li class="query-sel-item bline">
+          <li class="query-sel-item ">
+            <div class="choiceDate">
+              <!-- <label>选择开始日期：</label>
+              <span id="startDate">{{startDate}}</span> -->
+              <div class="section">
+                <label class="date-label">选择开始日期：</label>
+                <input type="text" id="begin_date" class="mbsc-comp" readonly="">
+              </div>
+            </div>
+            <div class="choiceDate">
+              <!-- <label>选择截止日期：</label>
+              <span id="endDate">{{endDate}}</span> -->
+              <div class="section">
+                <label class="date-label">选择截止日期：</label>
+                <input type="text" id="end_date" class="mbsc-comp" readonly="">
+              </div>
+            </div>
+          </li>
+          <div class="btnOpts fixed">
+            <span class="orangeGradient fl" @click="searchLevel(2)">重置</span>
+            <span class="blueGradient fr" @click="searchLevel()">确定</span>
+          </div>
+          </li>
+        </ul>
+      </div>
+      <!-- 头部信息结束 -->
+      <div class="content nobottom orderList_content">
+        <div id="mescroll" class="notice-content selService-content mescroll">
+          <!-- 待支付 -->
+          <ul id="dataList" class="order-items dataList" style="display: block">
+            <li class="orderList" v-for="item in pdlist">
+              <div class="orderList_title">
+                <p class="orderTit">
+                  <span>信息单号：{{item.orderSn}}</span>
+                </p>
+                <p class="state"
+                  :class="(item.orderStatus == 106 || item.orderStatus == 103 || item.orderStatus == 105 ) ? `red` : ``">
+                  {{item.orderStatusDes}}</p>
+              </div>
+              <a href="javascript:;">
+                <div class="order_panel" :orderSn="item.orderSn" :orderStatus="item.orderStatus" @click="toDetail">
+                  <div class="dataMsg">
+                    <p class="p1">报&nbsp;&nbsp;案&nbsp;&nbsp;号：</p>
+                    <p class="p2">{{item.outOrderSn}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">查&nbsp;&nbsp;勘&nbsp;&nbsp;员：</p>
+                    <p class="p2">{{item.contactName}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">查勘员电话：</p>
+                    <p class="p2">{{item.mobile}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">修理厂联系人：</p>
+                    <p class="p2">{{item.repairContact}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">修理厂电话：</p>
+                    <p class="p2">{{item.repairTel}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">车&nbsp;&nbsp;牌&nbsp;&nbsp;号：</p>
+                    <p class="p2 blue">{{item.carNo}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">车&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型：</p>
+                    <p class="p2">{{item.carType}}</p>
+                  </div>
+                </div>
+              </a>
+              <div class="order-bottom">
+                <span class="settlement" :class="item.settleStatus==2 ? `green` : `red`"
+                  v-show="item.orderStatus==104">{{item.settlementStatusName}}</span>
+                <div v-show="item.orderStatus!=103">
+                  <button class="orderBtn blueBorder" v-show="item.orderStatus==100" :orderSn="item.orderSn"
+                    @click="orderRecevie">接单</button>
+                  <button class="orderBtn blueBorder" :orderSn="item.orderSn" v-show="item.orderStatus==101" @click="toDetail">查看</button>
+                </div>
+              </div>
+              <span class="showMore" v-show="item.orderStatus==101 || item.orderStatus==102"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- 拒绝理由申请 -->
+      <div class="mark" id="mark" style="display: none"></div>
+
+      <div id="tip-box">
+        <div class="wx_confirm_tit" id="tip-mes"></div>
+      </div>
+      <div class="mask" id="mask" @click="hideMask"></div>
+      <div class="_loading" id="loading"><img src="images/loading.gif" /></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<!-- <script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script> -->
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript'  src="js/date.js"></script>
+<script src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/msgOrderList.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+<script>
+		
+  var theme = "ios";
+  var mode = "scroller";
+  var display = "bottom";
+  var lang="zh";
+
+  // Date demo initialization
+  $('#begin_date').mobiscroll().date({
+      theme: theme,
+      mode: mode,
+      display: display,
+      lang: lang
+  });
+
+  $('#end_date').mobiscroll().date({
+      theme: theme,
+      mode: mode,
+      display: display,
+      lang: lang
+  });
+</script>
+
+</html>

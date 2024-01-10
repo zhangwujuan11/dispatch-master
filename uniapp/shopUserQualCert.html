@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>店员认证考核</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div>
+        <div class="shopHead">
+          <dl class="shop-title">
+            <dt><img src="images/logo.png"></dt>
+            <dd style="width: 70%">
+              <h3 class="omit">{{shopInfo.shopName}}</h3>
+              <!-- <p style="width:58px">
+                                <span >认证门店</span>
+                            </p> -->
+            </dd>
+          </dl>
+        </div>
+        <ul class="shopNav fixed">
+          <li @click="toShopCert">门店资质认证</li>
+          <li class="on">店员认证</li>
+          <li @click="toQuestionCert">门店问题改进</li>
+        </ul>
+        <div class="innerCont">
+          <div class="item-info">
+            <div class="inner-item certUser">
+              <h3 class="item-tit"><span>店员认证进度</span><em class="grey p12">（三项均通过）</em></h3>
+              <div class="etc-top">
+                <ul class="etc-steps">
+                  <li class="etc-step" @click="cngPost(0)">
+                    <!-- <img :src="personInfo.qtStaus ==1 ? `images/cert/serviceOn.png` : `images/cert/service.png` "
+                      width="100%" /> -->
+                    <img src="images/cert/serviceOn.png" width="100%" />
+                    <p v-if="personInfo.qtStaus == 1" class="blue">前台认证通过</p>
+                    <p v-else class="blue">
+                      前台审核
+                    </p>
+                  </li>
+                  <li class="etc-step" @click="cngPost(1)">
+                    <!-- <img :src="personInfo.jsStaus ==1 ? `images/cert/optionOn.png` : `images/cert/option.png`"
+                      width="100%" /> -->
+                      <img src="images/cert/optionOn.png" width="100%" />
+                    <p v-if="personInfo.jsStaus == 1" class="blue">技师认证通过</p>
+                    <p v-else class="blue">
+                      技师审核
+                    </p>
+                  </li>
+                  <li class="etc-step" @click="cngPost(2)">
+                    <!-- <img :src="personInfo.dzStaus ==1 ? `images/cert/shopOn.png` : `images/cert/shop.png`"
+                      width="100%" /> -->
+                      <img src="images/cert/shopOn.png" width="100%" />
+                    <p v-if="personInfo.dzStaus == 1" class="blue">店长认证通过</p>
+                    <p v-else class="blue">
+                      店长审核
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <ul class="shopNav fixed" style="margin-top:10px">
+                    <li class="on"><span>学习资料</span></li>
+                    <li><span >员工考试</span></li>
+                </ul> -->
+        <div class="innerCont">
+          <div class="item-info">
+            <ul class="shopCertNav fixed" style="margin-top:7px">
+              <li :class="index==currentIndex ? 'on' : ''" v-for="(item,index) in postlist" @click="cngPost(index)">
+                {{item.name}}</li>
+            </ul>
+            <ul class=" fixed" style="padding:0; background:#fff; height: 340px; overflow-y:auto;">
+              <div class="inner-item">
+                <li class="item-rgt" v-for="item in knowList" @click="toLearn(item)">
+                  <div class="item-rgt-img" style="margin-right:10px">
+                    <img :src="item.imgPath ? item.imgPath : `images/404.jpg`" width="100%" />
+                  </div>
+                  <div class="item-rgt-info" style="width:70%">
+                    <h3 class="omit" style="width:100%">{{item.title}}</h3>
+                    <p>讲师：{{item.lecturer}}</p>
+                    <p>{{item.publishTime}}</p>
+                  </div>
+                </li>
+                <div class="no-data" v-if="!knowList.length">暂无知识库信息</div>
+              </div>
+            </ul>
+          </div>
+        </div>
+
+        <div class="activeListContent" v-if="examInfo.subjectId">
+          <ul class="activeList">
+            <li>
+              <span class="activeTime">准备测评</span>
+              <a href="javascript:;" style="padding:10px">
+                <div class="activeContext">
+                  <h3 class="item-tit" style="text-align: left; position: relative;">
+                    <span>{{examInfo.subjectName}}</span>
+                    <em class="statusPass blue">{{examInfo.examStatusValue}}</em>
+                  </h3>
+                  <img :src="examInfo.subjectImg ? examInfo.subjectImg : `images/active.jpg`" width="100%" />
+                  <div class="viewDetail">
+                    <em>测评时间：{{examInfo.startTime}} 到 {{examInfo.endTime}}</em>
+                  </div>
+                  <button class="option-btn p16" @click="toExam(examInfo)">开始测评</button>
+                </div>
+                <div class="active-user" v-for="item in examVOList" v-if="examVOList">
+                  <ul class="item-lists">
+                    <li class="item-list">
+                      <em>店员姓名</em>
+                      <p>
+                        <span>{{item.personName}}</span>
+                      </p>
+                    </li>
+                    <li class="item-list">
+                      <em>评测分数</em>
+                      <p class="blue">
+                        {{item.score}}
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="activeListContent" v-if="examInfo.examStatus==1">
+          <ul class="activeList">
+            <div style="text-align: center;">
+              <span class="activeTime">店员实操测评</span>
+            </div>
+            <li>
+              <div class="item-info">
+                <div class="inner-item">
+                  <h3 class="item-tit" style="text-align: left; position: relative;">
+                    <span>实操测评说明</span>
+                    <em class="statusPass blue">{{optionInfo.statusValue}}</em>
+                  </h3>
+                  <!-- <ul class="item-lists pb10">
+                    <li class="item-list">
+                      <em>店员姓名</em>
+                      <p v-show="optionInfo.status == 100 || optionInfo.status == 101 || optionInfo.status == 106">
+                        <select v-model="personId">
+                          <option value="">请选择店员姓名</option>
+                          <option :value="item.personId" v-for="item in examSucPersonList">{{item.personName}}</option>
+                        </select>
+                      </p>
+                      <p v-show="optionInfo.status != 100 && optionInfo.status != 101 && optionInfo.status != 106">
+                        {{optionInfo.personName}}
+                      </p>
+                    </li>
+                  </ul>
+                  <div>
+                    <h3 style="text-align: left; color: #999; font-size: 13px">上传实操照片（表格拍照图片必传）</h3>
+                    <ul class="optionPics"
+                      v-show="optionInfo.status == 100 || optionInfo.status == 101 || optionInfo.status == 106">
+                      <li class="optionPic upLoadImgs" v-for="(item,index) in optionPics" :checkItemId="item.imgId">
+                        <img :src="item.imgPath?item.imgPath:`images/upload.jpg`" class="picFullcar" width="100%" />
+                        <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG"
+                          @change="btnUploadFile(index)" />
+                        <div class="noPass" v-show="item.auditStatus==-1">
+                          <span>不通过</span>
+                          <p>重新上传</p>
+                        </div>
+                        <div class="maskUploadImg" style="display: none">
+                          <span class="maskLoading"></span>
+                        </div>
+                      </li>
+                    </ul>
+                    <ul class="optionPics"
+                      v-show="optionInfo.status != 100 && optionInfo.status != 101 && optionInfo.status != 106">
+                      <li class="optionPic upLoadImgs" v-for="(item,index) in optionPics" :checkItemId="item.imgId">
+                        <img v-show="item.imgPath" :src="item.imgPath" class="picFullcar" width="100%" />
+                        <div class="maskUploadImg noPass" v-show="item.auditStatus==-1">
+                          <span>不通过</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </div> -->
+                  <div class="standard">
+                    &nbsp;&nbsp;请按照16步标准安装流程提交完整安装视频，<br>联系杨平: <a href="tel:13959163653">13959163653</a>，<br>通过QQ:4805680发送视频，完成实操考核。
+                  </div>
+                  <div @click="onstandard" style="color: #349cff;">
+                    《16步标准安装流程》
+                  </div>
+                  <div style="text-align:left" v-show="optionInfo.auditDec">
+                    <span class="grey">审核结果：</span>
+                    <span class="red">{{optionInfo.auditDec}}</span>
+                  </div>
+                  <!-- <button class="option-btn"
+                    v-show="optionInfo.status == 100 || optionInfo.status == 101 || optionInfo.status == 106"
+                    @click="add">提交实操</button> -->
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="tip-box">
+    <div class="wx_confirm_tit" id="tip-mes"></div>
+  </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/shopUserQualCert.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

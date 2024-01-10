@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>优秀门店评选</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+    <link rel="stylesheet" type="text/css" href="css/style.css?v=1.0" />
+    <style>
+        body {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="shop">
+        <div id="appContent">
+            <ul class="shop-dataList">
+                <li class="shop-item"><h3>奖项</h3><h3>地址</h3></li>
+                <li v-for="(item,index) of shopList" :key="index" class="shop-item" @click="toDetail(item)">
+                    <p class="shop-title">{{item.comment}}</p>
+                    <div class="shop-address">
+                        <span style="font-size: 15px;">{{item.shopName}}</span>
+                        <img src="" >
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="tip-box">
+            <div class="wx_confirm_tit" id="tip-mes"></div>
+        </div>
+    </div>
+</body>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="http://v.bootstrapmb.com/2019/9/fep716068/js/jquery.masonry.min.js"></script>
+<script type="text/javascript" src="js/jquery.masonry.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js"></script>
+<script type='text/javascript' src="js/Service.js"></script>
+<script type='text/javascript' src="js/jswx.js"></script>
+<script type='text/javascript' src="js/shop.js"></script>
+
+</html>

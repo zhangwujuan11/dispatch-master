@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>活动报名</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div id="mescroll" class="notice-content selService-content mescroll" style="top:0">
+        <div class="activeListContent">
+
+          <ul id="dataList" class="activeList dataList" style="display: block">
+            <li v-for="item in pdlist">
+              <span class="activeTime">{{item.beginDate}}</span>
+              <a :href="`activeDetail.html?id=` + item.id">
+                <div class="activeContext">
+                  <h3>{{item.title}}</h3>
+                  <img :src="item.imagePath" width="100%" />
+                  <p>{{item.introduct ? item.introduct : "暂无简介" }}
+                  </p>
+                  <!-- <div class="tagList">
+                                    <span>{{item.tag}}</span>
+                                </div> -->
+                  <div class="viewDetail">
+                    <em>{{item.tag}}</em>
+                    <label class="viewD">查看详情</label>
+                    <span class="go"></span>
+                  </div>
+                </div>
+              </a>
+            </li>
+
+          </ul>
+        </div>
+        <!-- <div class="non_reslut">
+                <span class='icon_reserch'></span>
+                <p>对不起，无相应匹配结果</p>
+            </div> -->
+      </div>
+    </div>
+  </div>
+  <div id="tip-box">
+    <div class="wx_confirm_tit" id="tip-mes"></div>
+  </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/activeList.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

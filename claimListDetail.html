@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>理赔案件详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <link rel="stylesheet" type="text/css" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script>
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div v-show="step1" class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>基本信息</span></h3>
+            <ul class="item-lists pb10">
+              <li class="item-list">
+                <em>客户姓名</em>
+                <p>{{orderInfo.userName}}</p>
+              </li>
+              <li class="item-list">
+                <em>联系方式</em>
+                <p>{{orderInfo.mobile}}</p>
+              </li>
+              <li class="item-list">
+                <em>车牌号码</em>
+                <p>{{orderInfo.carNo}}</p>
+              </li>
+              <li class="item-list">
+                <em>车型</em>
+                <p class="omit">{{orderInfo.carType}}</p>
+              </li>
+              <li class="item-list">
+                <em>报案时间</em>
+                <p class="omit">{{orderInfo.appointmentTime}}</p>
+              </li>
+              <li class="item-list">
+                <em>客户类型</em>
+                <p class="omit">{{orderInfo.bizName}}</p>
+              </li>
+              <li class="item-list">
+                <em>客户地址</em>
+                <p class="omit">{{orderInfo.address}}</p>
+              </li>
+              <li class="item-list">
+                <em>车架号</em>
+                <p class="omit">{{orderInfo.vin}}</p>
+              </li>
+              <li class="item-list">
+                <em>主机厂零件号</em>
+                <p class="omit">{{orderInfo.oe}}</p>
+              </li>
+              <li class="item-list">
+                <em>破损部位</em>
+                <p class="omit">{{orderInfo.claimPartName}}</p>
+              </li>
+              <li class="item-list">
+                <em>4S店价格</em>
+                <p class="omit">{{orderInfo.originPriceRefer}}</p>
+              </li>
+              <li class="item-list">
+                <em>指导价</em>
+                <p class="omit">{{orderInfo.marketPriceRefer}}</p>
+              </li>
+              <li class="item-list">
+                <em>事故原因</em>
+                <p class="omit">{{orderInfo.carType}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>案件跟进</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>操作人</em>
+                <p @click="toOperator" class="color-cfcfcd">
+                  <label id="choose-operator">请选择操作人</label>
+                </p>
+              </li>
+              <li class="item-list">
+                <em>客户状态</em>
+                <p @click="toLevel" class="color-cfcfcd">
+                  <label id="choose-level">{{orderInfo.confirmName == ""?'请选择客户状态':orderInfo.confirmName}}</label>
+                </p>
+              </li>
+              <li class="item-list">
+                <em>案件备注</em>
+                <p><input type="text" v-model="orderInfo.trackRemark" placeholder="案件备注"></p>
+              </li>
+              <li class="item-list" v-show="showSubUp">
+                <em>预约时间</em>
+                <p @click="toTime" class="color-cfcfcd">
+                  <label id="choose-time">{{orderInfo.appointmentTime == ""?'请选择时间':orderInfo.appointmentTime}}</label>
+                </p>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+         <div class="item-info" v-show="showSubUp" v-if="orderInfo.shopInfo != undefined">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>服务门店</span></h3>
+            <ul class="item-lists edit-lists">
+              <li class="item-list">
+                <em>门店名称</em>
+                <p><input type="text" v-model="orderInfo.shopInfo.name" @input="getAllShop" list="students"
+                    placeholder="门店名称" @change="inputSelect">
+                </p>
+                <datalist id="students">
+                  <option :value="item.name" v-for="item in shopAllList" :data-id="item.id">{{item.name}}</option>
+                </datalist>
+              </li>
+              <li class="item-list">
+                <em>门店地址</em>
+                <p><input type="text" v-model="orderInfo.shopInfo.address" placeholder="门店地址"></p>
+              </li>
+              <li class="item-list">
+                <em>联系人</em>
+                <p><input type="text" v-model="orderInfo.shopInfo.chargeName" placeholder="联系人"></p>
+              </li>
+              <li class="item-list">
+                <em>联系电话</em>
+                <p><input type="text" v-model="orderInfo.shopInfo.linktel" placeholder="联系电话"></p>
+              </li>
+            </ul>
+          </div>
+        </div>
+       <div class="item-info" v-show="showSubUp">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>产品匹配</span></h3>
+            <ul class="item-lists edit-lists">
+              <li class="item-list">
+                <em>确认部位</em>
+                <p @click="toRegion" class="color-cfcfcd">
+                  <label id="choose-region">{{orderInfo.parts == ""?'请选择部位':orderInfo.parts}}</label>
+                </p>
+              </li>
+              <li class="item-list">
+                <em>商品名称</em>
+                <div class="glassss">
+                  <input type="text" v-model="orderInfo.productName" placeholder="请输入或选择商品" class="chaxun">
+                  <div class="serleglass" @click="toProName('proName')">选择商品</div>
+                </div>
+              </li>
+              <li class="item-list">
+                <em>CARG</em>
+                <p><input type="text" v-model="orderInfo.carg" placeholder="CARG"></p>
+              </li>
+              <li class="item-list">
+                <em>零件编码</em>
+                <p> <input type="text" v-model="orderInfo.partSn" placeholder="零件编码"> </p>
+              </li>
+              <li class="item-list">
+                <em>OE码</em>
+                <p> <input type="text" v-model="orderInfo.oe" placeholder="OE码"> </p>
+              </li>
+              <li class="item-list">
+                <em>玻璃品牌</em>
+                <p @click="toGlass" class="color-cfcfcd">
+                  <label id="choose-glass">{{orderInfo.productBrand == ""?'请选择玻璃品牌':orderInfo.productBrand}}</label>
+                </p>
+              </li>
+              <li class="item-list">
+                <em>零售价格</em>
+                <p> <input type="text" v-model="orderInfo.retailPrice" placeholder="零售价格"> </p>
+              </li>
+              <li class="item-list">
+                <em>理赔价格</em>
+                <p> <input type="text" v-model="orderInfo.claimPrice" placeholder="理赔价格"> </p>
+              </li>
+              <li class="item-list">
+                <em>服务类型</em>
+                <p @click="toService" class="color-cfcfcd">
+                  <label id="choose-service">{{orderInfo.serviceName == ""?'请选择服务类型':orderInfo.serviceName}}</label>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>处理日志</span></h3>
+            <ul class="item-lists edit-lists">
+              <li class="item-list">
+                <em>处理人</em>
+                <p>{{orderInfo.auditUser}}</p>
+              </li>
+              <li class="item-list">
+                <em>处理时间</em>
+                <p> {{orderInfo.auditTime}}</p>
+              </li>
+
+              <li class="item-list">
+                <em>处理状态</em>
+                <p>{{orderInfo.auditStatus}} </p>
+              </li>
+              <li class="item-list">
+                <em>备注</em>
+                <p> {{orderInfo.auditDec}} </p>
+              </li>
+            </ul>
+          </div>
+        </div> -->
+        <div class="btns">
+          <button class="redOrder" @click="subAdd(1)">退回保险</button>
+          <button class="startOrder" @click="subAdd(2)">已联系客户</button>
+          <button class="redOrder" @click="subAdd(3)">派查勘</button>
+          <button class="startOrder" @click="subAdd(4)">派工单</button>
+        </div>
+      </div>
+
+      <div v-show="step4" style="background:#efeff4">
+        <!-- <div class="search">
+          <span class="icon_search"></span>
+          <input type="txet" v-model="kw" class="pro-search"
+            style="width: 100%; height: 20px; line-height: 20px; padding:12px 0; text-indent: 32px; color: #333" name=""
+            @input="search(kw)" :placeholder="searchType == 'proName' ?  `搜索商品名称` : `搜索太阳膜防伪码`">
+        </div> -->
+        <div class="excellContent">
+          <div class="mp60">
+            <div id="mescroll" class="mescroll">
+              <ul class="wasteLists fixed" id="dataList">
+                <li class="wasteList" v-for="item in prolist" @click="surSrh(item)">
+                  <p>{{item.partsName}}</p>
+                  <p class="grey">商品编码： [ {{item.garg}} ] </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script>
+  var userInfo = {}
+</script>
+<script src="plugins/vue/vue.js"></script>
+<script type="text/javascript" src="plugins/mescroll/mescroll.min.js" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.7"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/claimListDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+  });
+</script>
+
+</html>

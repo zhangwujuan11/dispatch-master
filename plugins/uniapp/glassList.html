@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>玻璃查询列表</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app" style="display: none">
+    <!-- 头部信息结束 -->
+    <div class="content nobottom orderList_content">
+      <div id="mescroll" class="notice-content selService-content mescroll" style="top:0">
+        <!-- 待支付 -->
+        <ul id="dataList" class="order-items dataList" style="display: block">
+          <li class="glassLists" :style="`border-left: 3px solid ` + glassColor[item.colorIndex].borderColor" :id="item.colorIndex"
+            v-for="(item,index) in pdlist">
+            <div class="glassList_title">
+              <div class="glassList_title_item">
+                <img :src="item.brandImg" width="50" height="50">
+                <p>{{item.brandName}}</p>
+              </div>
+              <div class="glassList_title_item">
+                <p style="margin-right: 10px">年款 {{item.yearType ? item.yearType : `(--)`  }}</p>
+              </div>
+            </div>
+            <div class="glassCode" :style="`background: ` + glassColor[item.colorIndex].backgroundColor">
+              <div class="glassCode_item">
+                <p class="red">CARG码</p>
+                <p class="red">{{item.carg}}</p>
+              </div>
+              <div class="glassCode_item">
+                <p>供应商零件编码</p>
+                <p style="color: #333">{{item.gysPartsSn}}</p>
+              </div>
+              <div class="glassCode_item" v-show="item.partsNo">
+                <p>主机厂零件码</p>
+                <p style="color: #333">{{item.partsNo}}</p>
+              </div>
+
+            </div>
+            <div class="glassImg">
+              <img :src="item.frontImg" width="80%" v-show="item.frontImg" @click="showBigImg(item.frontImg)" />
+              <div class="no-data" v-show="!item.frontImg">暂无图片</div>
+              <p>{{item.glassName}}</p>
+            </div>
+            <div v-if="accountType == 110">
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>4S店裸玻璃价格</span></p>
+                  <p class="blue p18">
+                    <strong v-if="item.price4s>1">
+                      ¥{{item.price4s}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>易道零售指导价</span></p>
+                  <p class="blue p18">
+                    <strong v-if="item.price4s>1">
+                      ¥{{item.retailPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>创配保险总价</span> </p>
+                  <p class="blue p18">
+                    <strong v-if="item.claimPrice>1" style="color: #FF5454">
+                      ¥{{item.claimPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>创配裸玻璃价格</span></p>
+                  <p class="blue p18">
+                    <strong v-if="item.nakedPrice>1">
+                      ¥{{item.nakedPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>创配辅料费用</span> </p>
+                  <p class="blue p18">
+                    <strong v-if="item.materialPrice>1">
+                      ¥{{item.materialPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>创配工时费用</span> </p>
+                  <p class="blue p18">
+                    <strong v-if="item.workPrice>1">
+                      ¥{{item.workPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div v-else-if="accountType == 7">
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>4S店裸玻璃价格</span></p>
+                  <p class="blue p18">
+                    <strong v-if="item.price4s>1">
+                      ¥{{item.price4s}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>保险总价</span> </p>
+                  <p class="blue p18">
+                    <strong v-if="item.claimPrice>1" style="color: #FF5454">
+                      ¥{{item.claimPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>易道裸玻璃价格</span></p>
+                  <p class="blue p18">
+                    <strong v-if="item.nakedPrice>1">
+                      ¥{{item.nakedPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>辅料费用</span> </p>
+                  <p class="blue p18">
+                    <strong v-if="item.materialPrice>1">
+                      ¥{{item.materialPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>工时费用</span> </p>
+                  <p class="blue p18">
+                    <strong v-if="item.workPrice>1">
+                      ¥{{item.workPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>零售指导价</span> <em class="red p12"> (含工时辅料)</em></p>
+                  <p class="blue p18"><strong>¥{{item.retailPrice}}</strong></p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>4S店裸玻璃价格</span> <em class="red p12"> (不含工时辅料) </em></p>
+                  <p class="blue p18">
+                    <strong v-if="item.price4s>1">
+                      ¥{{item.price4s}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+              <div class="glassPrix">
+                <div class="glassPrix_item">
+                  <p><span>保险总价</span> </p>
+                  <p class="blue p18">
+                    <strong v-if="item.claimPrice>1" style="color: #FF5454">
+                      ¥{{item.claimPrice}}
+                    </strong>
+                    <strong v-else>--</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- 拒绝理由申请 -->
+    <div class="mark" id="mark" style="display: none"></div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+    <div class="maskBigPic" v-show="isShow" @click="hideMask"></div>
+    <div class="closeBigPic" v-show="isShow" @click="hideMask"></div>
+    <div class="showBigPic" v-show="isShow"><img :src="bigPic" width="100%" /></div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/glassList.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: #eee;
+    }
+
+    h2 {
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .item {
+        width: 245px;
+        background: #fff;
+        margin: 10px;
+    }
+
+    .con-img img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .title {
+        padding: 5px 12px 5px 12px;
+        color: #444;
+    }
+
+    .d {
+        color: #a0a0a0;
+        padding: 6px;
+    }
+
+    .d span {
+        margin: 0 10px;
+    }
+
+    .aut {
+        padding: 8px 11px 7px 11px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .aut a {
+        text-decoration: none;
+        color: #666;
+    }
+
+    .aut img {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    .tips {
+        display: block;
+        width: 150px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin: 20px auto;
+        border-radius: 5px;
+        background: yellowgreen;
+        cursor: pointer;
+    }
+
+    .disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+    </style>
+</head>
+
+<body>
+    <h2>图片瀑布流</h2>
+    <div class="items"></div>
+    <p class="tips">加载更多</p>
+</body>
+
+</html>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script src="js/masonry.pkgd.min.js"></script>
+<script src="js/template-web.js"></script>
+<script>
+$(function() {
+    var number = 0;
+    $('.tips').click(function() {
+        if ($('.tips').hasClass('disabled') == true) {
+            return;
+        }
+        var params = {
+            activitId: 15,
+            name: "",
+            openId: "oO8Dv01Y4SE7r9nLrLJ8U-el7KzD",
+            pageNo: 1,
+            pageSize: 999
+        }
+        $.ajax({
+            url: 'https://edows.txsofts.com/api/activities/voteInfo',
+            type: 'post',
+            contentType: "application/json;charset-UTF-8",
+            dataType: "json",
+            data: JSON.stringify(params),
+            success: function(data) {
+                console.log(data.data.layerData.data.length);
+                var resule = template('temp', data.data.layerData.data);
+                var $dom = $(resule);
+                $('.items').masonry({}).append($dom).masonry('appended', $dom).masonry();
+                number += 5;
+                if (data.data.layerData.data.length == 0) {
+                    $('.tips').html('暂无更多数据').addClass('disabled');
+                }
+            }
+        })
+    })
+})
+</script>

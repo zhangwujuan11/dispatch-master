@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>结算单位</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+<!-- <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script> -->
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+	  <!-- <div class="serbox">
+		  <input type="text">
+		  <button>搜索</button>
+	  </div> -->
+	  <ul class="unilistul">
+	  	<li v-for="(item, index) in tablelist" :key="index">
+			{{item.settlementName}}
+			<div class="licpon">
+				<p><span>纳税识别号：</span>{{item.nsrsbh}}</p>
+				<p><span>开户银行：</span>{{item.bankName}}</p>
+				<p><span>银行账户：</span>{{item.bankNo}}</p>
+				<p><span>联系电话：</span>{{item.telephone}}</p>
+				<p><span>结算方式：</span>{{item.settletmentMethod | settletmentType}}</p>
+				<p><span>企业地址：</span>{{item.companyAddres}}</p>
+				<p><span>邮箱：</span>{{item.email}}</p>
+			</div>
+			<div class="btonbox">
+				<button @click="changedata(item)">修改</button>
+				<button class="del" @click="deteldaat(item)">删除</button>
+			</div>
+		</li>
+	  </ul>
+	  <img class="pluss" src="images/plus.png"  @click="adddata" alt="">
+	  <div id="tip-box">
+	    <div class="wx_confirm_tit" id="tip-mes"></div>
+	  </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script type='text/javascript' src="js/Service.js?v=0.8"></script>
+<script type='text/javascript' src="js/jswx.js"></script>
+<script type="text/javascript" src="js/city.js?v=3.3"></script>
+<script>
+	document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+	document.write("<script type='text/javascript' src='js/unilist.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>
+<style scoped>
+	.unilistul{
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+	.unilistul li{
+		width: 95%;
+		background-color: white;
+		border-radius: 10px;
+		padding: 10px;
+		box-sizing: border-box;
+		margin-top: 20px;
+	}
+	.serbox{
+		width:100%;
+		background-color: white;
+		padding: 20px 10px;
+		box-sizing: border-box;
+	}
+	.serbox input{
+		width: 80%;
+		border: 1px solid #cccccc;
+		border-radius: 3px;
+		height: 35px;
+		text-indent: 20px;
+	}
+	.serbox button{
+		width: 50px;
+		height: 35px;
+		text-align: center;
+		line-height: 35px;
+		background-color: #007DFF;
+		color: white;
+		border-radius: 5px;
+	}
+	.unilistul .licpon{
+		width: 95%;
+		background-color: #F5F7FB;
+		line-height: 30px;
+		padding: 10px;
+		box-sizing: border-box;
+		margin-top: 15px;
+	}
+	.unilistul .licpon span{
+		color: #999999;
+	}
+	.btonbox{
+		text-align: right;
+	}
+	.btonbox button{
+		padding:9px 22px;
+		background-color: #F5F7FB;
+		color: #007DFF;
+		border-radius: 20px;
+		margin-right: 25px;
+		margin-top: 15px;
+	}
+	.btonbox .del{
+		background-color:#FBF5F5;
+		color:#E80000;
+	}
+	.pluss{
+		width: 50px;
+		height: 50px;
+		position: fixed;
+		bottom: 100px;
+		right: 0;
+	}
+</style>

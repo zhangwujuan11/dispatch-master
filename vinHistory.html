@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>VIN查询</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body>
+  <div id="app" class="vinDoms">
+    <div class="vin_query vin_result">
+      <div class="vin_choose">
+        <img src="images/vin/vin.png" class="vinImg" />
+        <input accept="image/*" type="file" class="vinUploadImg" id="uploadIMG" @change="btnUploadFile" />
+      </div>
+      <input v-model="vinSearch" maxlength="18" type="text" @keyup="toUpperCase(vinSearch)"
+        onKeyUp="value=value.replace(/[\W]/g,'')" placeholder="输入或扫描VIN查询" class="vin_search">
+      <div class="collect" @click="onIconSearch">
+        <img style="height: 100%;width: 100%;" src="images/vin/search.png" alt="">
+      </div>
+    </div>
+    <div class="tishis">
+      <li> VIN码示例：LVSHCFDB1FE104164</li>
+      <li @click="look()"> 如何查看VIN码 ？</li>
+      <div v-show="lokShow" style="margin-left: 5%;"><img src="images/vin/vins.png"></div>
+    </div>
+    <!-- <ul class="records">
+            <li class="records_li">
+                <span>如何查看VIN码/公告号 ？</span>
+                <img class="records_del" src="images/del.png" alt="">
+            </li>
+            <li v-for="(item,index) in vinList" :key="index" @click="clickRecords(index)">
+                <img class="records_del" src="images/del.png" alt="">
+                {{item.name}}
+            </li>
+        </ul> -->
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=2.3"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/vinHistory.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

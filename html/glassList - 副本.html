@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>玻璃查询列表</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css?v=0.6" />
+</head>
+
+<body style="background:#f8f8f8">
+    <div id="app" style="display: none">
+        <!-- 头部信息结束 -->
+        <div class="content nobottom orderList_content">
+            <div id="mescroll" class="notice-content selService-content mescroll" style="top:0">
+                <!-- 待支付 -->
+                <ul id="dataList" class="order-items dataList" style="display: block">
+                    <li class="orderList glassList"  v-for="item in pdlist">
+                        <div class="orderList_title">
+                            <p class="orderTit">
+                                <span>CARG码：{{item.garg}}</span>
+                            </p>
+                        </div>
+                        <div class="item-list">
+                            <em>供应商零件编码</em>
+                            <p class="">{{item.gysPartsSn}}</p>
+                        </div>
+                        <div class="item-list" v-show="item.partsNo">
+                            <em>主机厂零件码</em>
+                            <p>{{item.partsNo}}</p>
+                        </div>
+                        <div class="item-list">
+                            <em>零件名</em>
+                            <p>{{item.partsName}}</p>
+                        </div>
+                        <div class="item-list">
+                            <em>年款</em>
+                            <p>{{item.yearType}}</p>
+                        </div>
+                        <div class="item-list">
+                            <em style="line-height:22px; width:120px">零售指导价<br><span style="color: red">（含工时辅料）</span></em>
+                            <p class="blue p18"><strong>¥{{item.retailPrice}}</strong></p>
+                        </div>
+                        <div class="item-list">
+                            <em style="line-height:22px; width:120px">4S店裸玻璃价格<br><span style="color: red">（不含工时辅料）</span></em>
+                            <p class="blue p18">
+                                <strong v-show="item.price4s">¥{{item.price4s}}</strong>
+                                <strong v-show="!item.price4s || item.price4s < 1">--</strong>
+                            </p>
+                        </div>
+                        <div class="item-list" v-show="item.frontImg" @click="showBigImg(item.frontImg)">
+                            <em>玻璃图片</em>
+                            <p><img :src="item.frontImg" width="100%" /></p>
+                        </div>
+                        <div class="item-list" v-show="!item.frontImg" >
+                            <em>玻璃图片</em>
+                            <p>暂 无 </p>
+                        </div>
+                    </li>
+                    <!-- <li class="orderList glassList">
+                        <div class="orderList_title">
+                            <p class="orderTit">
+                                <span>零件编码：FAD16LW00CGYVSE03</span>
+                            </p>
+                        </div>
+                        <div class="item-list">
+                            <em>供应商零件编码</em>
+                            <p class="">4979ALFWSGYYEP</p>
+                        </div>
+                        <div class="item-list">
+                            <em>零件名</em>
+                            <p>奥迪A3(13-)敞篷跑车前挡/灰带/圆雨感/夹丝加热/天线/包边</p>
+                        </div>
+                        <div class="item-list">
+                            <em>年款</em>
+                            <p>(08-12)</p>
+                        </div>
+                        <div class="item-list">
+                            <em>全国统一零售价</em>
+                            <p class="blue p18"><strong>¥455.00</strong></p>
+                        </div>
+                        <div class="item-list">
+                            <em>玻璃图片</em>
+                            <p><img src="images/test.jpg" width="100%" /></p>
+                        </div>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+        <!-- 拒绝理由申请 -->
+        <div class="mark" id="mark" style="display: none"></div>
+        <div id="tip-box">
+            <div class="wx_confirm_tit" id="tip-mes"></div>
+        </div>
+        <div class="maskBigPic" v-show="isShow" @click="hideMask"></div>
+        <div class="closeBigPic" v-show="isShow" @click="hideMask"></div>
+        <div class="showBigPic" v-show="isShow" ><img :src="bigPic" width="100%" /></div>
+    </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script type='text/javascript' src="js/Service.js?v=0.6"></script>
+<script src="plugins/lazyload/lazyload.js"></script>
+<script type='text/javascript' src="js/glassList.js"></script>
+
+</html>

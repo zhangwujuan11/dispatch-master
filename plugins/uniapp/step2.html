@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>开始订单</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div class="appContent">
+      <div class="step1">
+        <div class="innerCont pb40">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>客户信息</span></h3>
+              <ul class="item-lists pb10">
+                <li class="item-list">
+                  <em>车主姓名</em>
+                  <p><input type="text" name="" value="" placeholder="请输入车主姓名"></p>
+                </li>
+                <li class="item-list">
+                  <em>手机号码</em>
+                  <p><input type="text" name="" value="" oninput="if(value.length>11) value=value.slice(0,11)"
+                      placeholder="请输入联系电话" onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" placeholder="请输入手机号码">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>车牌号码</em>
+                  <p>{{orderInfo.carNo}}</p>
+                </li>
+                <li class="item-list">
+                  <em>车型</em>
+                  <p class="omit">{{orderInfo.carType}}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>订单信息</span></h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>订单号</em>
+                  <p>{{orderInfo.orderSn}}</p>
+                </li>
+                <li class="item-list">
+                  <em>服务预估金额</em>
+                  <p><em>¥</em> <span class="p18 blue">{{orderInfo.orderPrice}}</span></p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-info" v-show="orderInfo.userRights">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>权益信息</span></h3>
+              <ul class="item-lists">
+                <li class="item-list" v-for="(item,index) in orderInfo.userRights">
+                  <div class="inner-itemList">
+                    <em>{{item.name}}</em>
+                    <span class="maxNo">（{{item.residualNum}}{{item.units}}）</span>
+                    <div class="option_number" :useNum="item.useNum" :userRightId="item.userRightId">
+                      <button class='reduction' @click="reduNum(index)">-</button>
+                      <input type="number" class="number" oninput="if(value.length>1)value=value.slice(0,1)"
+                        v-model="item.useNum" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                        onafterpaste="this.value=this.value.replace(/\D/g,'')" @blur="showMaxNum(index)" />
+                      <button class='add(index)' @click="addNum(index)">+</button>
+                    </div>
+                  </div>
+                </li>
+                <!-- <li class="item-list">
+                                    <div class="inner-itemList">
+                                        <em>免费维修玻璃</em>
+                                        <span class="maxNo">（5片）</span>
+                                        <div class="option_number">
+                                            <button class='reduction'>-</button>
+                                            <input type="number" class="number" oninput="if(value.length>1)value=value.slice(0,1)" v-model="userNum2" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                                            <button class='add'>+</button>
+                                        </div>
+                                    </div>
+                                </li> -->
+              </ul>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>服务信息</span></h3>
+              <ul class="item-lists edit-lists">
+                <li class="item-list">
+                  <em>服务开始时间</em>
+                  <p>{{orderInfo.appointmentTime}}</p>
+                </li>
+                <li class="item-list">
+                  <em>商品名称</em>
+                  <p>
+                    <input type="text" name="" value="" v-model="orderInfo.productName" placeholder="请输入商品名称">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>更换部位</em>
+                  <p>
+                    <input type="text" name="" value="" v-model="orderInfo.changePart" placeholder="请输入更换部位">
+                  </p>
+                </li>
+                <!-- <li class="item-list">
+                                    <em>车辆VIN</em>
+                                    <p>
+                                        <input type="text" name="" value="" v-model="vinNo" placeholder="请输入车辆VIN">
+                                    </p>
+                                </li> -->
+                <li class="item-list">
+                  <em>CARG编码</em>
+                  <p>
+                    <input type="text" name="" value="" v-model="orderInfo.carg" placeholder="请输入零件编码">
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item">
+              <ul class="item-lists edit-lists">
+                <li class="item-list" style="margin-bottom:0">
+                  <em>实际服务金额</em>
+                  <p style="width:60%">
+                    <input type="text" name="" value="" v-model="orderInfo.dealPrice" placeholder="请输入实际服务金额"
+                      style="background:#fff">
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step2">
+        <div class="innerCont pb40">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>安装照片</span></h3>
+              <ul class="item-lists">
+                <h3 class="tit-require pt10">
+                  <em class="red">*</em>
+                  <span class="sBlue">破损全车照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（当前的验证码、车牌号、前挡玻璃、左前方玻璃、左后门玻璃）</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                  </div>
+                </div>
+              </ul>
+
+              <ul class="item-lists">
+                <h3 class="tit-require">
+                  <em class="red">*</em>
+                  <span class="sBlue">扩损照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（当前的验证码、车牌号、后挡玻璃、右前方玻璃、右后门玻璃）</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                  </div>
+                </div>
+              </ul>
+
+              <ul class="item-lists">
+                <h3 class="tit-require">
+                  <em class="red">*</em>
+                  <span class="sBlue">破损点特写照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（当前的验证码、车牌号、后挡玻璃、后前方玻璃、后后门玻璃）</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                  </div>
+                </div>
+              </ul>
+
+              <ul class="item-lists">
+                <h3 class="tit-require">
+                  <em class="red">*</em>
+                  <span class="sBlue">空窗VIN码照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（当前的验证码、整块前挡内部照（清晰、无遮挡））</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                  </div>
+                </div>
+              </ul>
+
+              <ul class="item-lists">
+                <h3 class="tit-require">
+                  <em class="red">*</em>
+                  <span class="sBlue">更换后全车照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（当前的验证码、车架号特写）</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                  </div>
+                </div>
+              </ul>
+
+              <ul class="item-lists">
+                <h3 class="tit-require">
+                  <em class="red">*</em>
+                  <span class="sBlue">玻璃福耀标照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（双面，含有效期（未过期时间））</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                  </div>
+                </div>
+              </ul>
+
+              <ul class="item-lists">
+                <h3 class="tit-require">
+                  <em class="red">*</em>
+                  <span class="sBlue">新玻璃合格证照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（双面，含有效期（未过期时间））</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                  </div>
+                </div>
+              </ul>
+
+              <ul class="item-lists">
+                <h3 class="tit-require">
+                  <em class="red">*</em>
+                  <span class="sBlue">行驶证照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（双面，含有效期（未过期时间））</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                    <div class="noPass">
+                      <span>不通过</span>
+                      <p>重新上传</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="markInfo red">备注：照片中需包含（当前的验证码、车牌号、前挡玻璃、左前方玻璃、左后门玻璃）</div>
+              </ul>
+
+              <ul class="item-lists">
+                <h3 class="tit-require">
+                  <em class="red">*</em>
+                  <span class="sBlue">保单照</span>
+                </h3>
+                <p class="markInfo grey">照片中需包含（双面，含有效期（未过期时间））</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img src="images/example.jpg" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic">
+                    <img src="images/upload.jpg" width="100%" />
+                  </div>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="startOrder fullBtn">提交审核</button>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<!-- <script type='text/javascript' src="js/insDetail.js"></script> -->
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/step.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

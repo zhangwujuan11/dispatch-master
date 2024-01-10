@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>活动排名</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <div id="appContent">
+      <div>
+        <div class="vote-top">
+          <img src="images/active/bottom.jpg" width="100%" />
+          <div class="vote-timer">
+            <img src="images/icon/clock.png" width="16px" height="16px" style="margin-right:6px" />
+            <p>更新时间： {{date}}</p>
+          </div>
+          <div v-for="(item,index) in pdlist" v-if="index==1">
+            <img class="memWeight1" :src="item.personImg">
+            <p class="rankName1">{{item.personName}}</p>
+            <p class="rankShop1">{{item.shopName}}</p>
+            <p class="rankVoteNo1">
+              <span>{{item.voteNum}}票</span>
+            </p>
+          </div>
+          <div v-for="(item,index) in pdlist" v-if="index==0">
+            <img class="memWeight2" :src="item.personImg">
+            <p class="rankName2">{{item.personName}}</p>
+            <p class="rankShop2">{{item.shopName}}</p>
+            <p class="rankVoteNo2"><span>{{item.voteNum}}票</span></p>
+          </div>
+          <div v-for="(item,index) in pdlist" v-if="index==2">
+            <img class="memWeight3" :src="item.personImg">
+            <p class="rankName3">{{item.personName}}</p>
+            <p class="rankShop3">{{item.shopName}}</p>
+            <p class="rankVoteNo3"><span>{{item.voteNum}}票</span></p>
+          </div>
+        </div>
+
+      </div>
+      <!-- <div>
+                <img src="images/active/top1.jpg" width="100%" />
+            </div> -->
+      <div style="position:relative; width:100%">
+        <div id="mescroll" style="position:absolute; width:100%; top:0 ; left: 0; z-index:99">
+          <div id="dataList">
+            <ul class="vote-lists">
+              <li class="vote-list" v-for="(item,index) in pdlist " v-if="index>2">
+                <p>{{index+1}}</p>
+
+                <img :src="item.personImg" width="50px" height="50px" style="border-radius: 50px">
+                <p class="vote-name">{{item.personName}}</p>
+                <p class="vote-shop grey">{{item.shopName}}</p>
+                <p class="voteRankNum">{{item.voteNum}}票</p>
+
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<!--   -->
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<!-- <script type='text/javascript' src="js/jaliswall.js"></script> -->
+<!-- <script type='text/javascript' src="http://v.bootstrapmb.com/2019/9/fep716068/js/jquery.masonry.min.js"></script> -->
+<script type="text/javascript" src="js/jquery.masonry.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/voteRank.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

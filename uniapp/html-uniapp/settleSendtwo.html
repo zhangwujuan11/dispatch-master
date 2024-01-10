@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>填写快递信息</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40 shopCont">
+		  <div style="display: flex;justify-content: space-around;height: 50px;align-items: center;background-color: white;margin: 10px 0;">
+			  <label style="display: flex;align-items: center;">
+					<input type="radio" name="senbuy" v-model="senbuy" value="快递" style="width: 20px;height:20px;-webkit-appearance:auto;margin-right: 10px;">
+					快递
+			  </label>
+			  <label style="display: flex;align-items: center;">
+					<input type="radio" name="senbuy" v-model="senbuy" value="发票" style="width: 20px;height:20px;-webkit-appearance:auto;margin-right: 10px;">
+					发票
+			  </label>
+			 
+		  </div>
+		 
+        <div class="item-info" v-if="senbuy== '快递'">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>快递信息</span></h3>
+            <ul class="item-lists edit-lists charge-lists">
+              <li class="item-list">
+                <em>快递公司</em>
+                <p>
+                  <select v-model="expressCompany">
+                    <option value="">请选择快递公司</option>
+                    <option v-for="item in expressList" :value="item.code">{{item.codeValue}}</option>
+
+                  </select>
+                </p>
+              </li>
+              <li class="item-list">
+                <em>快递单号</em>
+                <p>
+                  <input type="text" name="" v-model="expressSn" value="" placeholder="请输入快递单号">
+                </p>
+              </li>
+              <li class="item-list">
+                <em>快递时间</em>
+                <p>
+                  <input type="date" name="" value="" v-model="expressDate" placeholder="请输入快递时间">
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info"  v-if="senbuy== '快递'">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>快递凭证</span></h3>
+            <ul class="item-lists">
+              <p class="markInfo grey">照片中需包含（单号，寄件信息）</p>
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img src="images/facture.jpg" width="100%" />
+                  <p>例图</p>
+                </div>
+                <div class="item-pic">
+                  <img :src="expressImg ? expressImg : `images/upload.jpg`" class="matchImg" width="100%" />
+                  <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG"
+                    @change="btnUploadDriveImg()" />
+                  <div class="maskUploadImg" v-show="isShowMask">
+                    <span class="maskLoading"></span>
+                  </div>
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+		
+		<div class="item-info"  v-if="senbuy== '发票'">
+		  <div class="inner-item">
+		    <h3 class="item-tit"><span>发票凭证</span></h3>
+		    <ul class="item-lists">
+		      <!-- <p class="markInfo grey">照片中需包含（单号，寄件信息）</p> -->
+		      <div class="upDrive">
+		        <div class="item-pic">
+		          <img src="images/facturetwo.png" width="100%" />
+		          <p>例图</p>
+		        </div>
+		        <div class="item-pic">
+					<button class="startOrder fullBtn" @click="updateExpress" style="padding: 8px 10px;border-radius: 4px;">点击上传</button>
+		           <span style="color: forestgreen;" v-if="expressImg">上传成功</span>
+		          <input accept=".pdf" type="file" class="addUploadImg" id="uploadIMG"
+		            @change="btnUploadDriveImgtwo()" />
+		          <div class="maskUploadImg" v-show="isShowMask">
+		            <span class="maskLoading"></span>
+		          </div>
+		        </div>
+		      </div>
+		    </ul>
+		  </div>
+		</div>
+      </div>
+      <div class="btns">
+        <button class="startOrder fullBtn" @click="updateExpress">提交</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/settleSendtwo.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+
+
+  });
+</script>
+
+</html>

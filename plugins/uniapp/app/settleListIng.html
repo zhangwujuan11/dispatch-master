@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>结算列表</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div class="queryWarp">
+      <div class="query-item">
+        <div class="query-title" @click="toSettleList">
+          <em><b>待结算</b></em>
+        </div>
+        <div class="query-title blue">
+          <em><b>结算中</b></em>
+        </div>
+        <div class="query-title" @click="toSettleListEnd">
+          <em><b>已结算</b></em>
+        </div>
+      </div>
+    </div>
+    <!-- 头部信息结束 -->
+    <div class="content nobottom orderList_content">
+      <div id="mescroll" class="notice-content selService-content mescroll" style="top:50px">
+        <!-- 待支付 -->
+        <ul id="dataList" class="order-items dataList">
+          <li class="settleList chargeList" v-for="item in pdlist">
+            <!-- <div class="icon-select">
+                                <span class="icon-radio" :class="item.flagSel ? `icon-radio-ok` : `` "></span>
+                            </div> -->
+            <div class="settleInfo" @click="toView(item)">
+              <h3 class="settle-tit" style="border:none">
+                <span><b>{{item.settlementDate}}</b></span>
+                <em class="blue">{{item.settlementStatusDes}}</em>
+              </h3>
+              <div class="settle-context">
+                <div class="item-info">
+                  <label class="grey">结算单号：</label>
+                  <span>{{item.settlementSn}}</span>
+                </div>
+                <div class="item-info">
+                  <label class="grey">结算金额：</label>
+                  <span class="red">¥ <b>{{item.settlementAmount}}</b></span>
+                </div>
+                <span class="showMore" style="top:40%"></span>
+              </div>
+            </div>
+            <!-- <div class="order-bottom unit-bottom" style="border-top: 1px dashed #f1f1f1" v-show="item.auditStatus == 2 && !item.isExpress" >
+                            <div>
+                                <button class="orderBtn blueBorder" @click="toSettleSend(item)">异议</button>
+                                <button class="orderBtn blueBorder" @click="toSettleSend(item)" >发票快递</button>
+
+                            </div>
+                        </div> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="js/varInfo.js"></script>
+<script type="text/javascript" src="plugins/vue/vue.js"></script>
+<script type="text/javascript" src="plugins/mescroll/mescroll.min.js" ></script>
+<script type='text/javascript' src="plugins/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="plugins/common.js?v=0.6"></script>
+<script type='text/javascript' src="plugins/Service.js?v=0.6"></script>
+<script type="text/javascript" src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/settleListIng.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

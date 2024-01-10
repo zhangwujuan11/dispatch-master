@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>学习资料</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <div id="appContent">
+      <div class="step1">
+        <div class="annonce">
+          <div class="newsHeader">
+            <h2>{{learnInfo.title}}</h2>
+            <div class="learnData">
+              <span class="newsTag">讲师：{{learnInfo.lecturer}}</span>
+              <em>{{learnInfo.publishTime}}</em> </div>
+          </div>
+
+          <!-- <div class="newsCont" v-html="activeInfo.describe">
+                    </div> -->
+          <div v-show="learnInfo.imgPath" style="margin-bottom: 10px">
+            <img :src="learnInfo.imgPath" width="100%">
+          </div>
+          <div v-if="learnInfo.videoAddress">
+            <video id="video" :src="learnInfo.videoAddress" controls="true" preload="auto" webkit-playsinline="true"
+              playsinline="true" x-webkit-airplay="allow" x5-video-player-type="h5" x5-video-player-fullscreen="true"
+              x5-video-orientation="portraint" style="object-fit:fill">
+            </video>
+          </div>
+          <div class="newsCont" style="margin-top:10px" v-html="learnInfo.content">
+            <!-- 掌握访谈五要素，大幅提高约单成功率掌握访谈五要素 -->
+          </div>
+          <div class="fileAddr" v-if="learnInfo.coverAddress"
+            style="margin-top:10px; padding-bottom: 20px; text-align: right;">
+            <a :href="learnInfo.coverAddress" class="blue">
+              查阅文档
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+    <!-- <div class="mask" id="mask" @click="hideMask"></div>
+        <div class="_loading" id="loading"><img src="images/loading.gif" /></div> -->
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script src="plugins/lazyload/lazyload.js"></script>
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/learningDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

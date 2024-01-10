@@ -1,0 +1,53 @@
+/*
+ **common code
+*/
+body, p, h1, h2, h3, h4, h5, h6,ul,li,dt,img,a,input, dl, dd, form,button { margin:0;padding: 0; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; }
+html{height: 100%;width:100%; position:relative; font-size: 14px; max-width:750px;  margin:0 auto; color: #333; }
+body { font-family:"Microsoft YaHei", arial; font-size:14px;height: 100%;background-color: #fff;}
+ul, ol, li { list-style:none;}
+input,label,span { vertical-align:top;} 
+img,input,a,button,select,option { border:none; outline:none; -webkit-appearance: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); background: transparent; }
+a { text-decoration:none;color: #333;}
+a:hover { text-decoration:none;}
+a:visited { text-decoration:none;}
+h1,h2,h3,h4,h5,h6,var,em,strong{font-weight: normal;font-style: normal;}
+.p12{ font-size: 12px}
+.p14{ font-size: 14px}
+.p16{ font-size: 16px}
+.p18{ font-size: 18px}
+.mt20{ margin-top:20px; }
+.pb20{ padding-bottom:20px; }
+.pb60{ padding-bottom: 60px }
+.a_block{ display: block}
+.c9{ color: #999}
+.c6{ color: #666}
+.fw6{ font-weight: 600 }
+.borderTop{ border-top: 1px solid #eaeaea}
+.borderBot{ border-bottom: 1px solid #eaeaea; }
+/* clear */
+body:before, .fixed:before, .clearfix:before, .cf:before, #header:before, #header > .inner:before, #main:before, #main > .inner:before, #footer:before, #footer > .inner:before { content: ''; display: table }
+body:after, .fixed:after, .clearfix:after, .cf:after, #header:after, #header > .inner:after, #main:after, #main > .inner:after, #footer:after, #footer > .inner:after { content: ''; display: table; clear: both }
+
+.fixed, .clearfix, .cf, #header, #main, #footer { *zoom: 1 }
+.flex{ display: flex; align-items: center; }
+.clear, .cl { display: block!important; float: none!important; clear: both; width: auto!important; max-width: none!important; min-width: 0!important; max-height: none!important; min-height: 0!important; overflow: hidden; margin: 0!important; padding: 0!important; border: 0 none!important; font-size: 0!important; line-height: 0!important }
+.fl{ float: left; }
+.fr{ float: right; }
+#tip-box{ display: none; height: 50px; line-height: 50px; }
+.wx_confirm_tit {
+    
+    font-size: 14px;
+    color: #fff;
+    background: rgba(0, 0, 0, .7);
+    position: fixed;
+    z-index: 9999;
+    top: 43%;
+    left: 20%;
+    /* right: 0; */
+    width: 60%;
+    margin: 0 auto;
+    border-radius: 4px;
+    text-align: center;
+}
+
+

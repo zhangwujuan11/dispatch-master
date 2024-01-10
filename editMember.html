@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>编辑用户信息</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>行驶证照</span></h3>
+            <ul class="item-lists">
+              <p class="markInfo grey">照片中需包含（双面，含有效期（未过期时间））</p>
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img src="images/example.jpg" width="100%" />
+                  <p>例图</p>
+                </div>
+                <!-- <div class="item-pic" @click="upImg">
+                                    <img :src="drivingPic ? drivingPic : `images/upload.jpg`" class="matchImg" width="100%" />
+                                </div> -->
+                <div class="item-pic">
+                  <img :src="drivingPic ? drivingPic : `images/upload.jpg`" class="matchImg" width="100%" />
+                  <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG"
+                    @change="btnUploadDriveImg()" />
+                  <div class="maskUploadImg" v-show="isShowMask">
+                    <span class="maskLoading"></span>
+                  </div>
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>车辆信息</span></h3>
+              <ul class="item-lists edit-lists">
+                <li class="item-list" @click="cngbandType">
+                  <em>车型</em>
+                  <p class="omit color-cfcfcd" >{{memberInfo.bandType}}</p>
+                </li>
+                <li class="item-list">
+                  <em>车牌号码</em>
+                  <p>
+                    <input type="text" name="" value="" placeholder="请输入车牌号码" @keyup="toUpperCase(carNo)"
+                      v-model="carNo" style="text-indent:50px">
+                    <select name="province" class="province" id="province" v-model="provSelected"
+                      @change="getProSelected">
+                      <option v-for="item in provList">{{item}}</option>
+                    </select>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>车身颜色</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.carColor" value="" placeholder="请输入车身颜色">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>车架号</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.vin" value="" placeholder="请输入车架号">
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>基本信息</span></h3>
+            <ul class="item-lists edit-lists">
+              <li class="item-list">
+                <em>姓名</em>
+                <p>
+                  <input type="text" name="" v-model="memberInfo.name" value="" placeholder="请输入车主真实姓名">
+                </p>
+              </li>
+              <li class="item-list">
+                <em>性别</em>
+                <ul class="sexSelect fixed">
+                  <li><i class="iconRadio"></i><span class="sex">男</span></li>
+                  <li><i class="iconRadio"></i><span class="sex">女</span></li>
+                  <input type="hidden" class="xingBie" name="" value="男" />
+                </ul>
+              </li>
+              <li class="item-list">
+                <em>联系方式</em>
+                <!-- <p>13555678942</p> -->
+                <p>
+                  <input type="text" name="" v-model="memberInfo.mobile"
+                    oninput="if(value.length>11) value=value.slice(0,11)"
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" value="" placeholder="请输入联系方式">
+                </p>
+              </li>
+              <li class="item-list">
+                <em>生日</em>
+                <p>
+                  <input type="date" name="" value="" v-model="memberInfo.birthday" placeholder="请输入生日">
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="startOrder fullBtn" @click="updateMember">确认编辑</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/editMember.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+
+
+  });
+</script>
+
+</html>

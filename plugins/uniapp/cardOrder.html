@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>权益领取</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+</head>
+ <style type="text/css">
+         [v-cloak]{
+             display: none;
+         }
+    </style>
+
+<body style="background:#efeff4">
+  <div id="app" v-cloak>
+    <div id="appContent">
+		<!-- <img class="clse" src="images/close.png" alt="">
+		<h3 class="item-tit">权益领取</h3> -->
+      <div style="width: 100%;display: flex;justify-content: center;flex-wrap: wrap;">
+		  <img class="banner" src="images/banner.png" alt="">
+		  <div class="formbox">
+			  <p class="tip">VIP信息</p>
+			  <form >
+				  <p>
+				  	<span>保险工单</span><input v-model="form.orderSn" type="text" placeholder="请输入保险工单"  disabled>
+				  </p>
+				  <p class="slphon">
+					  <span>车牌号码</span>  
+					  <input v-model="form.carNo" placeholder="请输入车牌号码" disabled>
+				  </p>
+				  <p>
+					  <span>产品名称</span>  
+					  <input v-model="form.productName" disabled>
+				  </p>
+				  <p>
+				  	<span>手机号&emsp;</span><input v-model="form.mobile" type="tel" placeholder="请输入手机号">
+				  </p>
+				  <p>
+				  	<span>车架号&emsp;</span><input v-model="form.vin" type="text" disabled>
+				  </p>
+			  </form>
+			  <p style="width: 100%;text-align: center;">
+				 <button class="blueGraShadow" @click="chekfobuy">确认购买</button>
+			  </p>
+		  </div>
+      </div>
+	  <p style="text-align: center;margin-top: 35px;">服务热线：<span style="color:blue">400-988-6868</span></p>
+    </div>
+	<!-- 蒙尘 -->
+	<div class="menchen" v-if="menchen">
+		<div class="mencon">
+			<img src="images/mencon.png" alt="">
+			<h4>
+				易道大咖会员须知 <br />
+				<span>请认真阅读并确认以下信息</span>
+			</h4>
+			<div class="textcon">
+				感谢您对我司的认可和信任，为了您更好的了解会员增值服务权益，请仔细阅读以下内容:<br />
+				1、会员卡在 2023年9月15日-2023年12月31日 间购买有效，有效期一年；<br />
+				2、易道大咖会员卡经福建易道大咖商业管理有限公司确认该次保险理赔赔款至易道大咖账号7日后生效；<br />
+				3、易道大咖门店在会员卡有效期内将为您免费提供一片上述车型部位和型号均相同配件玻璃的更换服务；<br />
+				4、易道大咖会员卡权益仅面向出险后更换福耀配件玻璃，不包含福耀天窗玻璃、特殊功能玻璃（镀膜、HUD、夹丝加热）；<br />
+				5、营运车辆及该次理赔款金额3000元及以上玻璃案件不享受易道大咖会员卡权益;<br />
+				6、易道大咖会员卡仅限于有效期内对应的玻璃产品发生单独破碎时使用；<br />
+				7、因发生不可抗力造成的玻璃破碎不在免费更换范围；<br />
+				8、会员卡最终解释权归福建易道大咖商业管理有限公司所有。<br />
+				<p style="width: 100%;display: flex;justify-content: center;">
+					<button class="blueGraShadow" @click="checkling">确认并购买</button>
+					<p @click="menchen=false" style="text-align: center;margin: 18px 0;">取消</p>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div id="tip-box">
+	  <div class="wx_confirm_tit" id="tip-mes"></div>
+	</div>
+  </div>
+</body>
+<!--   -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+	// document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/Servicetss.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/claimserve.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+  });
+</script>
+
+</html>
+<style>
+	.tabbox{
+			width: 100%;
+			color: #333333;
+			display: flex;
+			justify-content: space-around;
+		}
+	.item-tit{
+		line-height: 40px;
+		color: #333;
+		font-weight: 600;
+		text-align: center;
+		margin-bottom: 10px;
+	}	
+	
+	#appContent .clse{
+		position: absolute;
+		left: 20px;
+		top: 10px;
+		width: 18px;
+	}
+	.banner{
+		width: 100%;
+	}
+	.formbox{
+		width: 92%;
+		background-color: white;
+		border-radius: 20px;
+		margin-top: -43px;
+		padding:20px 15px;
+		box-sizing: border-box;
+	}
+	.formbox .tip{
+		font-weight: 800;
+		border-left: 4px solid #346AF6;
+		padding-left: 15px;
+		box-sizing: border-box;
+	}
+	form p span{
+		color: #666666;
+		margin-right: 12px;
+	}
+	form p {
+		margin-top: 20px;
+	}
+	form p input{
+		background-color:#F5F6F8; 
+		line-height: 40px;
+		width: 77%;
+		border-radius: 4px;
+		text-indent: 10px;
+		font-size: 14px;
+	}
+	form p select{
+		width: 15%;
+	}
+	.slphon{
+		display: flex;
+		align-items: center;
+	}
+	.slphon input{
+		width: 62%;
+		border-bottom-left-radius: 0;
+		border-top-left-radius: 0;
+	}
+	.slphon select{
+		color: #346AF6;
+		background-color:#F5F6F8;
+		line-height: 40px;
+		text-align: center;
+		height: 40px;
+		text-align-last: center;
+		font-size: 14px;
+		 appearance:button;   
+		-moz-appearance:button;   
+		-webkit-appearance:button;
+		border-radius: 0;
+		-webkit-border-radius: 0;
+		-moz-border-radius: 0;
+		-khtml-border-radius: 0;
+		font-weight: 800;
+	}
+	select option{
+	    text-align: center;
+	}
+	.blueGraShadow {
+	    background: linear-gradient(left, #359cff, #65b4ff);
+	    background: -ms-linear-gradient(left, #359cff, #65b4ff);
+	    background: -moz-linear-gradient(left, #359cff, #65b4ff);
+	    /* Safari 5.1+, Chrome 10+ */
+	    background: -webkit-linear-gradient(left, #359cff, #65b4ff);
+	    /* Opera 11.10+ */
+	    background: -o-linear-gradient(left, #359cff, #65b4ff);
+	    -webkit-box-shadow: 0 0 5px 5px #d9ecff;
+	    -moz-box-shadow: 0 0 5px 5px #d9ecff;
+	    box-shadow: 0 0 5px 5px #d9ecff;
+		color: white;
+		width: 92%;
+		text-align: center;
+		line-height: 40px;
+		border-radius: 25px;
+		font-size: 16px;
+		margin-top: 20px;
+	}
+	.menchen{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: rgba(0,0,0,0.6);
+		z-index: 999;
+	}
+	.mencon{
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		background: linear-gradient(180deg, #D9EBFF 0%, #FFFFFF 15%, #FFFFFF 100%);
+		border-radius: 20px 20px 0px 0px;
+	}
+	.mencon img{
+		width: 40%;
+		margin-top: -40px;
+		position: absolute;
+		right: 0;
+	}
+	.mencon h4{
+		font-size:22px;
+		font-weight:800;
+		color:#3368F5;
+		padding-left:30px;
+		margin-top:30px;
+		margin-bottom: 18px;
+	}
+	.mencon h4 span{
+		color:#333333;
+		font-size:14px;
+	}
+	.textcon{
+		font-size:12px;
+		color:#707070;
+		text-indent:20px;
+		line-height:22px;
+		padding:0 15px;
+		overflow-y: scroll;
+	}
+	.textcon span{
+		color: #3368F5;
+		border-bottom:1px solid  #3368F5 ;
+	}
+option{
+		width: 50px !important;
+	}
+	[v-cloak] {
+	    display: none;
+	  }
+</style>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>理赔查勘</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <link rel="stylesheet" type="text/css" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="plugins/cropper/cropper.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="plugins/cropper/main.css" rel="stylesheet">
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+ <!-- <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script> -->
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+
+      <div class="step1">
+        <div class="innerCont pb40">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>理赔信息</span></h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>报案号</em>
+                  <p>
+                    <input type="text" v-model="orderInfo.caseSn" placeholder="请输入报案号">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>承保保险公司</em>
+                  <!-- <p @click="toSafe" class="color-cfcfcd">
+                    <label id="choose-safe">请选择保险公司</label>
+                  </p> -->
+                  <select v-model="orderInfo.userType" style="width: 72%;
+                    background: #f4f6f8;
+                    border-radius: 6px;
+                    margin: 5px 0 0 -10px;
+                    padding: 9px 10px 9px 0;
+                    font-size: 14px;
+                    text-indent: 10px;
+                    border: none;"
+                    >
+                    <option :value="item.value" v-for="(item, index) in claimList">{{item.text}}</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>车辆报损信息</span></h3>
+              <ul class="item-lists pb10">
+                <li class="item-list">
+                  <em>车牌号</em>
+                  <div style="width: 69%;display: flex;" class="color-cfcfcd">
+                    <input type="text" v-model="orderInfo.carNo" placeholder="请输入车牌号" style="width: 90%;"
+                      @keyup="toUpperCase(orderInfo.carNo)">
+                    <div class="vin_choose" style="margin-top: -3px;">
+                      <img src="images/xsz.png" class="vinImg" style="width: 31px;height: 25px;" />
+                      <input accept="image/*" type="file" class="vinUploadImg" id="uploadIMG"
+                        @change="btnUploadDriveImg()" style="width: 30px;height: 30px;" @click="authority" />
+                    </div>
+                  </div>
+                </li>
+                <li class="item-list">
+                  <em>姓名</em>
+                  <p>
+                    <input type="text" v-model="orderInfo.userName" placeholder="请输入姓名">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>车架号（VIN）</em>
+                  <p>
+                    <input type="text" v-model="orderInfo.vin" placeholder="请输入VIN码">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>破损部位</em>
+                  <!-- <p @click="toPosition" class="color-cfcfcd">
+                    <label id="choose-position">{{orderInfo.changePart == '' ? '请选择破损部位' :orderInfo.changePart}}</label>
+                  </p> -->
+                  <select v-model="orderInfo.changePart" style="width: 72%;
+                    background: #f4f6f8;
+                    border-radius: 6px;
+                    margin: 5px 0 0 -10px;
+                    padding: 9px 10px 9px 0;
+                    font-size: 14px;
+                    text-indent: 10px;
+                    border: none;"
+                    >
+                    <option :value="item.text" v-for="(item, index) in sigParts">{{item.text}}</option>
+                  </select>
+                </li>
+                <li class="item-list">
+                  <em>OE码</em>
+                  <p>
+                    <input type="text" v-model="orderInfo.oeNumber" placeholder="请输入OE码">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>CARG编码</em>
+                  <p>
+                    <input type="text" v-model="orderInfo.carg" placeholder="请输入CARG编码">
+                  </p>
+
+                </li>
+                <li class="item-list">
+                  <em>联系方式</em>
+                  <p>
+                    <input type="text" v-model="orderInfo.mobile" placeholder="请输入联系方式" maxlength="11">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>服务类型</em>
+                  <!-- <p @click="toService" class="color-cfcfcd">
+                    <label id="choose-service">请选择服务类型</label>
+                  </p> -->
+                  <select v-model="orderInfo.serviceType" style="width: 72%;
+                    background: #f4f6f8;
+                    border-radius: 6px;
+                    margin: 5px 0 0 -10px;
+                    padding: 9px 10px 9px 0;
+                    font-size: 14px;
+                    text-indent: 10px;
+                    border: none;"
+                    >
+                    <option :value="item.value" v-for="(item, index) in serviceList">{{item.text}}</option>
+                  </select>
+                </li>
+                <li class="item-list">
+                  <em>更换玻璃类型</em>
+                  <!-- <p @click="toGlass" class="color-cfcfcd">
+                    <label id="choose-glass">请选择玻璃类型</label>
+                  </p> -->
+                  <select v-model="orderInfo.productBrand" style="width: 72%;
+                  background: #f4f6f8;
+                  border-radius: 6px;
+                  margin: 5px 0 0 -10px;
+                  padding: 9px 10px 9px 0;
+                  font-size: 14px;
+                  text-indent: 10px;
+                  border: none;"
+                  >
+                  <option :value="item.text" v-for="(item, index) in glassList">{{item.text}}</option>
+                </select>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item" v-show="orderAuditList">
+              <h3 class="item-tit"><span>查勘定损照片</span></h3>
+              <ul class="item-lists" v-for="(item,index) in orderAuditList">
+                <h3 class="tit-require pt10">
+                  <em class="red">*</em>
+                  <span class="sBlue">{{item.name}}</span>
+                </h3>
+                <p class="markInfo grey">{{item.remarks}}</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img :src="item.imgurl" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic upLoadImgs" :checkItemId="item.checkItemId" :orderSn="item.orderSn">
+                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar"
+                      :checkItemId="item.checkItemId" :orderSn="item.orderSn" width="100%" />
+                    <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG"
+                      @change="btnUploadFile(index)" @click="authority" />
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>不通过</span>
+                      <p>重新上传</p>
+                    </div>
+                  </div>
+                  <div v-show="item.auditStatus==-1" class="markInfo red">
+                    {{item.auditDes}}
+                  </div>
+                </div>
+              </ul>
+            </div>
+            <div class="no-data" v-show="!orderAuditList.length">
+              暂无审核信息
+            </div>
+          </div>
+
+        </div>
+        <div class="btns">
+          <button class="startOrder fullBtn" @click="subAdd">提交审核</button>
+        </div>
+      </div>
+
+
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type="text/javascript" src="plugins/mescroll/mescroll.min.js" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.7"></script>
+<script type='text/javascript' src="js/base64.js"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script type="text/javascript" src="./plugins/cropper/jquery.min.js"></script>
+<script type="text/javascript" src="./plugins/cropper/bootstrap.min.js"></script>
+<script type="text/javascript" src="./plugins/cropper/cropper.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/orderRepair.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+  });
+</script>
+
+</html>

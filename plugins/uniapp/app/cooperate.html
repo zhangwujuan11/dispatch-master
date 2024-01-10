@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>法律声明及隐私权政策</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    .noticeCont {
+      position: relative;
+    }
+
+    .cope1 {
+      background: url(./images/auth.png) no-repeat;
+      background-size: 100% 100%;
+      height: 100vh;
+    }
+  </style>
+  <script>
+    var img_url = './images/auth.png?' + Date.parse(new Date());
+    // 创建对象
+    var img = new Image();
+    img.src = img_url;
+    img.onload = function () {
+      var obj = document.getElementsByClassName("cope1");
+      obj[0].style.height = img.height / 2 - 1400 + 'px';
+    };
+  </script>
+</head>
+
+<body>
+  <div class="noticeCont">
+    <div class="innerNotice">
+      <p class="cope1"></p>
+
+    </div>
+  </div>
+</body>
+
+</html>

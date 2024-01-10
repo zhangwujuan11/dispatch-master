@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>修复权益</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+</head>
+<style type="text/css">
+	[v-cloak]{
+		display: none;
+	}
+</style>
+<body style="background:white">
+  <div id="app" v-cloak>
+    <div id="appContent" style="display: none;">
+      <div>
+		  <div style="padding: 10px 0;display: flex;justify-content: space-around;width: 100%;position: fixed;top: 0;left: 0;background-color: white;">
+			  <input type="text" placeholder="请输入手机号" v-model="applyPhone"/>
+			  <select name="" style="width: 30%;" v-model="status">
+			  	<option value="">全部</option>
+			  	<option value="2">已取消</option>
+			  	<option value="1">已核销</option>
+			  	<option value="0">未核销</option>
+			  </select>
+			  <button class="blueGraShadow" @click="getdatalist">查询</button>
+		  </div>
+      <ul class="datalist" v-if="datas.length > 0">
+      	<li v-for="(item,index) in datas" :key="index"  :class="item.status=='0'?'working':'worked'" @click="gopage(item.ticketId,item.status)">
+			<div class="litop">
+				<div style="width: calc(100% - 50px);"  @click="showercored(item)">
+					<p style="width: 100%;display: flex;justify-content:left;align-items: center;">
+						<span style="font-size:16px;font-weight: 800;margin-right: 10px;overflow: hidden;white-space:nowrap;text-overflow: ellipsis;">
+						玻璃修复券
+						</span>
+						<span :class="item.status=='0'?'orgin':'orgined'">{{item.shopName}}</span>
+					</p>
+					<p>券码：{{item.ticketId}}</p>
+					<p>车牌号：{{item.carRentalVehicleNo}}</p>
+				</div>
+				<div class="qrcodebox">
+					<img  v-if="item.status=='0'" src="images/qrcode.png" alt="">
+					<img style="width: 40px;" v-if="item.status=='2'" src="images/quxiao.png" alt="">
+					<img style="width: 40px;" v-if="item.status=='1'" src="images/yishiyong.png" alt="">
+				</div>
+			</div>
+			<div class="lidown">
+				<p>
+					<span>
+						工单号：{{item.orderSn || "--"}}
+					</span>
+					<span>
+						<img src="images/phone.png" alt="">
+						{{item.applyPhone}}
+					</span>
+				</p>
+			</div>
+			<!-- <p class="remarke">备注: &nbsp;{{item.remark}}</p> -->
+		</li>
+      </ul>
+	  <div style="width: 100%;display: flex;justify-content: center;flex-wrap: wrap;background-color: white;padding-top:100px;" v-if="datas.length <= 0">
+	  	<img style="width: 50%;" src="images/nodata.png" alt="">
+	  	<p style="width: 100%;text-align: center;margin-bottom: 30px;">暂无相关数据哦~</p>
+	  </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script type='text/javascript' src="js/jswx.js"></script>
+<script type='text/javascript' src="js/qrcode.js"></script>
+<script>
+	document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+	document.write("<script type='text/javascript' src='js/glassave.js?v=" + Date.now() + "'><\/script>");
+</script>
+<style>
+	.tabbox{
+		width: 100%;
+		color: #333333;
+		display: flex;
+		justify-content: space-around;
+		position: fixed;
+		top: 0;
+		left: 0;
+		background-color: #EDEDED;
+	}
+	.item-tit{
+		line-height: 40px;
+		color: #333;
+		font-weight: 600;
+		text-align: center;
+		margin-bottom: 10px;
+	}	
+	#appContent .clse{
+		position: absolute;
+		left: 20px;
+		top: 10px;
+		width: 18px;
+	}
+	.bgImgSet{
+		font-weight: 800;
+		border-bottom: 2px solid  #3366F5;
+	}
+	.tabbox button{
+		padding: 15px 0;
+	}
+	.datalist{
+		width: 100%;
+		background-color: white;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		padding-bottom: 90px;
+		padding-top:50px;
+	}
+	.datalist li{
+		width: 97%;
+		height: 210px;
+		font-size: 14px;
+		line-height: 32px;
+	}
+	.datalist .litop{
+		display: flex;
+		justify-content: space-between;
+		padding: 25px 30px;
+		align-items: center;
+	}
+	.datalist .working{
+		background: url("images/working.png") no-repeat;
+		background-size: 100% 104%;
+	}
+	.datalist .worked{
+		background: url("images/worked.png") no-repeat;
+		background-size: 100% 104%;
+	}
+	.litop{
+		color: white;
+	}
+	.qrcodebox{
+		width: 61px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+	.qrcodebox img{
+		width: 28px;
+	}
+	.lidown img{
+		width: 18px;
+		height: 18px;
+	}
+	.lidown{
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		padding: 0 25px;
+		box-sizing: border-box;
+		font-size: 14px;
+	}
+	.lidown p{
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.lidown p span{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.lidown p span img{
+		margin-right: 4px;
+	}
+	.remarke{
+		width: 88%;
+		padding: 0 25px;
+		font-size: 14px;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	.blueGraShadow {
+	    background: linear-gradient(left, #359cff, #65b4ff);
+	    background: -ms-linear-gradient(left, #359cff, #65b4ff);
+	    background: -moz-linear-gradient(left, #359cff, #65b4ff);
+	    /* Safari 5.1+, Chrome 10+ */
+	    background: -webkit-linear-gradient(left, #359cff, #65b4ff);
+	    /* Opera 11.10+ */
+	    background: -o-linear-gradient(left, #359cff, #65b4ff);
+		color: white;
+		text-align: center;
+		border-radius: 5px;
+		font-size: 14px;
+		padding: 6px 10px;
+	}
+	.inner-item{
+		display: flex;
+		justify-content: center;
+		padding: 20px 0;
+		position: fixed;
+		bottom: -1px;
+		width:100%;
+		height: 50px;
+		background-color: white;
+	}
+	.menchen{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0,0.6);
+		z-index: 999;
+		top: 0;
+		left: 0;
+	}
+	.textcon{
+		font-size:12px;
+		color:#707070;
+		text-indent:20px;
+		padding:0 15px;
+		overflow-y: scroll;
+	}
+	.textcon span{
+		color: #3368F5;
+		border-bottom:1px solid  #3368F5 ;
+	}
+	.codebox{
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		margin-top:39%;
+	}
+	.ininbox{
+		width: 80%;
+		background-color: white;
+		border-radius: 10px;
+		font-size: 16px;
+		line-height: 32px;
+		position: relative;
+	}
+	.showclose{
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		right: 25px;
+		top: 20px;
+	}
+	.ininbox h4{
+		text-align: center;
+		font-size: 16px;
+		font-weight: 800;
+		margin: 18px 0;
+	}
+	.orgin{
+		background-color:#FB940E;
+		border-radius: 18px;
+		padding:0 3px;
+		font-size: 12px;
+		display: block;
+		max-width: 55%;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		text-align: center;
+		line-height: 25px;
+	}
+	.orgined{
+		background-color:#B5BCC4;
+		border-radius: 18px;
+		padding:0 3px;
+		font-size: 12px;
+		display: block;
+		max-width: 55%;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		text-align: center;
+		line-height: 25px;
+	}
+	[v-cloak] {
+		display: none;
+	}
+	.textcon{
+		font-size:12px;
+		color:#707070;
+		text-indent:20px;
+		padding:20px;
+	}
+	.textcon span{
+		color: #3368F5;
+		border-bottom:1px solid  #3368F5 ;
+	}
+	input,select{
+		border: 1px solid #333;
+		padding: 8px 10px;
+	}
+</style>
+</html>

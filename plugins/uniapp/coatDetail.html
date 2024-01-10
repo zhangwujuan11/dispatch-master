@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>镀膜补贴详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont" :class="{ 'pb40': memberInfo.orderStatus == 100 || memberInfo.orderStatus == 106}">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>基本信息</span></h3>
+            <ul class="item-lists pb10">
+
+              <li class="item-list">
+                <em>客户姓名</em>
+                <p><i class="icon_star"></i><span>{{memberInfo.userName}}</span></p>
+              </li>
+              <li class="item-list">
+                <em>申请时间</em>
+                <p><span class="blue">2019-07-28</span></p>
+              </li>
+              <li class="item-list">
+                <em>联系方式</em>
+                <p>{{memberInfo.mobile}}</p>
+              </li>
+              <li class="item-list">
+                <em>车牌号码</em>
+                <p class="blue">{{memberInfo.carNo}}</p>
+              </li>
+              <li class="item-list">
+                <em>车辆车型</em>
+                <p>{{memberInfo.carType}}</p>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>服务信息</span></h3>
+            <ul class="item-lists pb10">
+              <li class="item-list"
+                v-show="memberInfo.orderStatus != 100 && memberInfo.orderStatus != 101 && memberInfo.orderStatus != 106">
+                <em>防伪编码</em>
+                <p><span class="blue">{{memberInfo.securityCode}}</span></p>
+              </li>
+              <li class="item-list"
+                v-show="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                <em>防伪编码</em>
+                <p><input type="" name="" Code" class="blue"> </p>
+              </li>
+              <li class="item-list"
+                v-show="memberInfo.orderStatus != 100 && memberInfo.orderStatus != 101 && memberInfo.orderStatus != 106">
+                <em>本厂编码</em>
+                <p><span class="blue">{{memberInfo.factoryCode}}</span></p>
+              </li>
+              <li class="item-list"
+                v-show="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                <em>本厂编码</em>
+                <p>
+                  <input type="" name="" ode" class="blue">
+                </p>
+              </li>
+              <li class="item-list">
+                <em>店员姓名</em>
+                <p><i class="icon_star"></i><span class="blue">{{memberInfo.personName}}</span></p>
+              </li>
+              <li class="item-list">
+                <em>手机号码</em>
+                <p>{{memberInfo.personMobile}}</p>
+              </li>
+              <li class="item-list">
+                <em>岗位</em>
+                <p class="omit">{{memberInfo.job}}</p>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item" v-show="orderAuditList">
+            <h3 class="item-tit"><span>审核信息</span></h3>
+            <ul class="item-lists" v-for="(item,index) in orderAuditList">
+              <h3 class="tit-require pt10">
+                <em class="red">*</em>
+                <span class="sBlue">{{item.name}}</span>
+              </h3>
+              <p class="markInfo grey">{{item.remarks}}</p>
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img :src="item.imgurl" width="100%" />
+                  <p>例图</p>
+                </div>
+                <div class="item-pic upLoadImgs"
+                  v-show="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106"
+                  :checkItemId="item.checkItemId" :orderSn="item.id">
+                  <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%"
+                    :checkItemId="item.checkItemId" :orderSn="item.id" />
+                  <input accept="image/*" type="file" class="addUploadImg" @change="btnUploadFile(index)" />
+                  <div class="maskUploadImg" style="display: none">
+                    <span class="maskLoading"></span>
+                  </div>
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <p>重新上传</p>
+                  </div>
+                </div>
+                <div class="item-pic"
+                  v-show="memberInfo.orderStatus != 100 && memberInfo.orderStatus != 101 && memberInfo.orderStatus != 106"
+                  :checkItemId="item.checkItemId" :orderSn="item.id">
+                  <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%" />
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <!-- <p>重新上传</p> -->
+                  </div>
+                </div>
+                <div v-show="item.auditStatus==-1" class="markInfo red">
+                  {{item.auditDes}}
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="btns"
+        v-show="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+        <button class="startOrder fullBtn" @click="add">提交审核</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/coatDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

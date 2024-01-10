@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>工单</title>
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div v-show="step1">
+        <div class="saleFich">
+          <span class="icon-style icon_tl"></span>
+          <span class="icon-style icon_tr"></span>
+          <span class="icon-style icon_bl"></span>
+          <span class="icon-style icon_br"></span>
+          <div class="topSale">
+            <img src="images/icon/logo.png" width="40%">
+            <h2 style="font-weight: bold;">核销修复券</h2>
+          </div>
+          <div class="item-sale">
+            <div class="inner-item">
+              <ul class="item-lists">
+                <li class="item-list">
+                  <!-- <span class="red iconD">*</span> -->
+                  <em>客户名称：</em>
+                  <p>
+                    <input v-model="customerdata.applyName" type="text" name="" disabled/>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>车牌号码：</em>
+                  <p>
+                    <input type="text" v-model="customerdata.carRentalVehicleNo">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>联系电话：</em>
+                  <p>
+                    <input type="text" v-model="customerdata.applyPhone"/>
+                  </p>
+                </li>
+				<li class="item-list" >
+				  <em>部位：</em>
+				  <p style="width: 69%;height: 30px;">
+					  <select class="province" style="width:100%;border-bottom:2px solid #333333;"  v-model="form.changePart">
+					    <option v-for="(item,index) in positiondata" :key="index" :value="item.name" >{{item.name}}</option>
+					  </select>
+					  <span class="icon_down" style="right: 10px;"></span>
+				  </p>
+				</li>
+              </ul>
+            </div>
+          </div>
+		  <div class="item-sale">
+		    <div class="inner-item">
+		   <ul class="item-lists">
+			   <li class="item-list" >
+			    <em>修复：</em>
+			   	<div class="nowapp">
+			   		<label><input name="Fruit" type="radio" v-model="form.repair" :value="0" style="width:15px;height:15px;-webkit-appearance:auto;"/>可修复</label>
+			   		<label><input name="Fruit" type="radio" v-model="form.repair" :value="1" style="width:15px;height:15px;-webkit-appearance:auto;"/>不可修复</label>
+			   	</div>
+			   </li>
+			   <li class="item-list" style="align-items: baseline;" v-if="form.repair == 1">
+			       <em>不可修复原因：</em>
+			   	<div class="nowap">
+			   		<label><input name="no" type="radio" v-model="form.reason" value="破损点超出修复范围" style="width:15px;height:15px;-webkit-appearance:auto;"/>破损点超出修复范围</label>
+			   		<label><input name="no" type="radio" v-model="form.reason" value="破损点在主视区" style="width:15px;height:15px;-webkit-appearance:auto;"/>破损点在主视区 </label> 
+			   		<label><input name="no" type="radio" v-model="form.reason" value="破损点于黑边处无法修复" style="width:15px;height:15px;-webkit-appearance:auto;"/>破损点于黑边处无法修复 </label> 
+			   		<label><input name="no" type="radio" v-model="form.reason" value="其他" style="width:15px;height:15px;-webkit-appearance:auto;"/>其他（原因必填)</label> 
+			   	</div>
+			   </li>
+			  <li class="item-list" v-if="form.reason == '其他'">
+			       <em>不可修复原因：</em>
+			   	<p>
+			   	  <input type="text" v-model="reason" placeholder="请输入不可修复原因" />
+			   	</p>
+			   </li>
+			   <li class="item-list" v-if="form.repair == 1">
+			     <em>增加勾选项目：</em>
+			     <p style="width: 69%;height: 30px;">
+			   	<select class="province"  style="width: 100%;border-bottom:2px solid #333333;" v-model="form.items">
+					<!-- <option value="">请选择</option> -->
+			   	  <option value="0">更换理赔（自动配单）</option>
+			   	  <option value="1">其他方出险</option>
+			   	  <option value="2">自费更换</option>
+			   	</select>
+			   	<span class="icon_down" style="right: 10px;"></span>  
+			     </p>
+			   </li>
+		   </ul>
+		   </div>
+		   </div>
+          <div class="item-sale" v-if="form.items == '0' && form.repair == 1">
+            <div class="inner-item">
+              <h3 class="item-tit" style="position: relative;">
+                商品信息
+              </h3>
+              <ul class="item-lists" v-if="isFy">
+                <li class="item-list">
+                  <em>商品名称：</em>
+                  <p @click="toProName('proName')" style="border-bottom:2px solid #333333; padding: 0 0 6px 10px;">
+                    {{ form.productName ?  form.productName : '请选择商品名称'}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>商品编码：</em>
+                  <p>
+                    <input type="text" v-model="form.carg" name="" disabled />
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+		  <div class="item-sale" v-if="form.repair == 1">
+		    <div class="inner-item">
+		      <h3 class="item-tit" style="position: relative;">
+		        破损照片
+		      </h3>
+		    </div>
+			<div class="item-pic upLoadImgs">
+				<li class="item-list">
+				  <em>破损全车照(日期码)：</em>
+				   <img :src="form.img?form.img:`images/upload.jpg`" class="picFullcar" width="100%"/>
+				   <input accept="image/*" type="file" class="addUploadImg" @change="btnUploadFile()" />
+				</li>
+				<li class="item-list">
+				   <em>破损点特写：</em>
+					<img :src="form.img2?form.img2:`images/upload.jpg`" class="picFullcar" width="100%"/>
+					<input accept="image/*" type="file" class="addUploadImg" @change="btnUploadFiletwo()"/>
+				 </li>
+				 <li class="item-list">
+				    <em>VIN码：</em>
+				 	<img :src="form.imgVin?form.imgVin:`images/upload.jpg`" class="picFullcar" width="100%"/>
+				 	<input accept="image/*" type="file" class="addUploadImg" @change="btnUploadFilethree()"/>
+				  </li>
+			</div>
+		  </div>
+		  
+          <div class="blackHr"></div>
+          <div class="btn-subSale">
+            <button class="subSale blueGraShadow" @click="add">核销提交</button>
+          </div>
+        </div>
+      </div>
+      <!-- 选择商品或者防伪码 -->
+     <div v-show="step4" style="background:#efeff4">
+        <div class="search">
+          <span class="icon_search"></span>
+          <input type="txet" v-model="kw" class="pro-search"
+            style="width: 100%; height: 20px; line-height: 20px; padding:12px 0; text-indent: 32px; color: #333" name=""
+            @input="search(kw)" :placeholder="searchType == 'proName' ?  `搜索商品名称` : `搜索太阳膜防伪码`">
+        </div>
+        <div class="excellContent">
+          <div class="mp60">
+            <div id="mescroll" class="mescroll">
+              <ul class="wasteLists fixed" id="dataList">
+                <li class="wasteList" v-if="searchType == 'proName'" v-for="pl in prolist" @click="surSrh(pl)">
+                  <p>{{pl.glassName}}</p>
+                  <p class="grey">商品编码： [ {{pl.carg}} ] </p>
+                </li>
+                <li class="wasteList" v-if="searchType == 'securityCode'" v-for="pl in prolist" @click="surSrh(pl)">
+                  <p>防伪编码： {{pl.securityCode}}</p>
+                  <p class="grey">规格信息：{{pl.productName}}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sWoqMKR8epDqBxzlRxqqEpfP"></script>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=2.4"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/glassorder.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>
+<style  scoped>
+	.nowap{
+		width: 69%;
+		display: flex;
+		flex-direction: column;
+		margin: 20px 0;
+		line-height: 30px;
+	}
+	.nowap label{
+		display: flex;
+		align-items: center;
+	}
+	.nowap label input{
+		margin-right: 8px;
+	}
+	.nowapp{
+		display: flex;
+		width: 69%;
+		margin-top: 12px;
+	}
+	.nowapp label{
+		width: 50%;
+		display: flex;
+		align-items: center;
+	}
+	.nowapp label input{
+		margin-right: 8px;
+	}
+</style>

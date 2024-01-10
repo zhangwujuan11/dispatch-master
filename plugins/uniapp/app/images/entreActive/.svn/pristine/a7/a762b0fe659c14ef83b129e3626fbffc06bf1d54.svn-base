@@ -1,0 +1,66 @@
+.center {
+    padding: 20px 0 20px 3%;
+}
+.c-pic{
+    padding: 20px 0 20px 0;
+}
+.lists {
+    margin-bottom: 10px;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+}
+
+.item-list {
+
+    display: inline-block;
+    width: 30%;
+    margin-right: 2%;
+    border-radius: 6px;
+    vertical-align: middle;
+    /*-webkit-animation: living 1.2s linear;
+    animation: living 1.2s linear;*/
+}
+
+.blue1 {
+    /*background: #2d5aff;*/
+    background: #ff9a2d;
+}
+
+.blue2 {
+    /*background: #2d87ff;*/
+    background: #ffb22d;
+}
+
+.blue3 {
+    /*background: #2faeff;*/
+    background: #ffcc2f;
+}
+
+.item-list img {
+    width: 50px;
+    height: 50px;
+}
+
+.bot {
+    /*position: fixed;
+    bottom: 10px;
+    left: 0;
+    width: 100%;*/
+}
+
+@keyframes living {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(0.8);
+        opacity: 1;
+        /*圆形放大的同时，透明度逐渐减小为0*/
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+}

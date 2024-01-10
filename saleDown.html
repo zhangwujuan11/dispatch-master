@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>销售单下载</title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div id="appContent">
+      <div class="saleSch">
+        <dl class="fixed">
+          <dt>客户类型</dt>
+          <dd>
+            <p style="position: relative;">
+              <select v-model="userType">
+                <option value="">全部客户类型</option>
+                <option value="1">保险公司客户</option>
+                <option value="2">零售客户</option>
+                <option value="3">修理厂客户</option>
+                <option value="4">4S店客户</option>
+                <option value="5">车队客户</option>
+              </select>
+              <span class="icon-down"></span>
+            </p>
+          </dd>
+        </dl>
+        <dl class="fixed">
+          <dt>销售日期</dt>
+          <dd>
+            <div class="saleChoix">
+              <p style="position: relative;">
+                <em style="color:#333">起</em>
+                <label id="startDate"> {{startDate ? startDate : `请选择日期`}}</label>
+                <!-- <span class="icon-down"></span> -->
+              </p>
+              <p>&nbsp;&nbsp;|&nbsp;</p>
+              <p>
+                <em style="color:#333">止</em>
+                <label id="endDate">{{endDate ? endDate : `请选择日期`}}</label>
+                <!--  <span class="icon-down"></span> -->
+              </p>
+            </div>
+          </dd>
+        </dl>
+      </div>
+      <div class="btn-subSale">
+        <button class="subSale blueGraShadow p16" @click="search">销售单下载</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+    <div class="mask" id="mask"></div>
+    <div class="_loading" id="loading"><img src="images/loading.gif" /></div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/saleDown.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

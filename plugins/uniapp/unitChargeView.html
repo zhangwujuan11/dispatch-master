@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>结算单位详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40 shopCont">
+        <div class="item-info">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>结算单位信息</span></h3>
+              <ul class="item-lists edit-lists charge-lists">
+                <li class="item-list">
+                  <em>结算方式</em>
+                  <p>{{ memberInfo.settletmentMethod==1 ? "自开" : "一级代开"}}</p>
+                </li>
+                <li class="item-list">
+                  <em>结算单位</em>
+                  <p>
+                    {{memberInfo.settlementName}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>纳税人识别号</em>
+                  <p>
+                    {{memberInfo.nsrsbh}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>联系方式</em>
+                  <p>
+                    {{memberInfo.telephone}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>注册地址</em>
+                  <p>
+                    {{memberInfo.companyAddress}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>开户行名称</em>
+                  <p>
+                    {{memberInfo.bankName}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>开户行账号</em>
+                  <p>
+                    {{memberInfo.bankNo}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>电子邮箱</em>
+                  <p>
+                    {{memberInfo.email}}
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/unitChargeView.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+
+
+  });
+</script>
+
+</html>

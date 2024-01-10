@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>销售单详情</title>
+  <!-- <link rel="stylesheet" href="css/mui.min.css" /> -->
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/test.css?v=1.1" />
+  <link rel="stylesheet" type="text/css" href="css/common.css" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div>
+        <div class="saleFich">
+          <span class="icon-style icon_tl"></span>
+          <span class="icon-style icon_tr"></span>
+          <span class="icon-style icon_bl"></span>
+          <span class="icon-style icon_br"></span>
+          <div class="topSale">
+            <img src="images/icon/logo.png" width="40%">
+            <h1>销 售 单</h1>
+          </div>
+          <div class="item-sale item-sale-detail">
+            <div class="inner-item">
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>销售单号：</em>
+                  <p>
+                    <b>{{saleInfo.orderSn}}</b>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>销售时间：</em>
+                  <p>
+                    {{saleInfo.saleDate}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>客户类型：</em>
+                  <p>
+                    {{saleInfo.userTypeName}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>客户名称：</em>
+                  <p>
+                    {{saleInfo.userName}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>车牌号码：</em>
+                  <p>
+                    {{saleInfo.carNo}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>联系电话：</em>
+                  <p>
+                    {{saleInfo.mobile}}
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-sale item-sale-detail">
+            <div class="inner-item">
+              <h3 class="item-tit">商品信息</h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>商品名称：</em>
+                  <p>
+                    {{saleInfo.productBrand == 1 ? saleInfo.productName : saleInfo.productFl}}
+                  </p>
+                </li>
+                <li class="item-list" v-if="saleInfo.productBrand==1">
+                  <em>商品编码：</em>
+                  <p>
+                    {{saleInfo.productSn}}
+                  </p>
+                </li>
+
+                <li class="item-list" v-if="saleInfo.productBrand==1 && saleInfo.carType">
+                  <em>车辆车型：</em>
+                  <p>
+                    {{saleInfo.carType}}
+                  </p>
+                </li>
+                <li class="item-list" v-if="saleInfo.productBrand==2">
+                  <em>商品品牌：</em>
+                  <p>
+                    {{saleInfo.carType}}
+                  </p>
+                </li>
+                <li class="item-list" v-if="saleInfo.productBrand==1">
+                  <em>零售价：</em>
+                  <p class="p16 red">
+                    ¥ {{saleInfo.retailPrice}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>数 量：</em>
+                  <p>
+                    {{saleInfo.totalSum}}
+                  </p>
+                </li>
+                <li class="item-list" v-if=" saleInfo.productName !==`非玻产品`">
+                  <em>辅 料：</em>
+                  <p>
+                    {{saleInfo.productFl}}
+                  </p>
+                </li>
+                <li class="item-list" v-if=" saleInfo.productFl ==`太阳膜` &&  saleInfo.securityCode">
+                  <em>防伪编码：</em>
+                  <p>
+                    {{saleInfo.securityCode}}
+                  </p>
+                </li>
+
+                <li class="item-list" v-if=" saleInfo.productFl ==`太阳膜` &&  saleInfo.productAttr">
+                  <em>规格信息：</em>
+                  <p>
+                    {{saleInfo.productAttr}}
+                  </p>
+                </li>
+
+                <li class="item-list" v-if="saleInfo.productFl ==`太阳膜` && saleInfo.keepYears">
+                  <em>质保年限：</em>
+                  <p>
+                    {{saleInfo.keepYears}}
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-sale item-sale-detail">
+            <div class="inner-item">
+              <h3 class="item-tit">商品费用</h3>
+              <ul class="item-lists pb10">
+                <li class="item-list">
+                  <em>商品金额：</em>
+                  <p style="text-align:right">
+                    <b class="red p16">¥ {{saleInfo.totalPrice}}</b>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="blackHr"></div>
+          <div class="item-sale" style="margin:20px; border:1px solid #333">
+            <!-- <div class="inner-item" style="padding:10px 16px"> -->
+            <ul class="item-lists">
+              <!-- <li class="item-list" style="border-bottom:1px solid #333; padding:0 10px">
+                                <em>业务员：</em>
+                                <p>
+                                    {{saleInfo.salesPerson}}
+                                </p>
+                            </li> -->
+              <li class="item-list" style="border-bottom:1px solid #333; padding:0 10px ">
+                <!-- <span class="red iconD">*</span> -->
+                <em>安装技师：</em>
+                <p>
+                  {{saleInfo.personName}}
+                </p>
+              </li>
+              <li class="item-list" style="border-bottom:1px solid #333; padding:0 10px">
+                <em>付款方式：</em>
+                <p>
+                  {{saleInfo.payMethodValue}}
+                </p>
+
+              </li>
+              <div v-if="saleInfo.payCode" style="width: 70%; margin: 0px auto 0">
+                <p style="line-height: 50px; text-align: center;">付款码</p>
+                <img :src="saleInfo.payCode" width="100%" />
+              </div>
+              <li class="item-list" style=" padding:0 10px">
+                <em>备注信息：</em>
+                <p>
+                  {{saleInfo.remarks ? saleInfo.remarks : `暂无`}}
+                </p>
+              </li>
+            </ul>
+          </div>
+          <div class="btn-subSale">
+            <button class="subSale blueGraShadow p16" @click="genCode">查看销售单二维码</button>
+          </div>
+        </div>
+        <div class="saleWare" @click="toSaleWarePage"></div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<!-- <script type='text/javascript' src="js/jswx.js?v=2.3"></script> -->
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/saleDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

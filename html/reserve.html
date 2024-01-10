@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" /> -->
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>预约服务</title>
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div v-show="step1" class="reserve-cont">
+        <div class="reserve-top">
+          <img src="images/service.png" height="54px" />
+        </div>
+        <div class="reserve-bot">
+          <img src="images/options.png" height="120px" />
+        </div>
+        <div class="innerCont pb40">
+          <div class="item-info" style="padding-top: 10px; padding-bottom: 80px">
+            <div class="inner-item">
+              <!-- <h3 class="item-tit"><span>客户信息</span></h3> -->
+              <ul class="item-lists pb10">
+                <li class="item-list" style="position:relative">
+                  <span class="red iconD">*</span>
+                  <em>客户姓名</em>
+                  <p>
+                    <input type="text" name="" v-model="name" placeholder="请输入客户姓名">
+                  </p>
+                </li>
+                <li class="item-list" style="position:relative">
+                  <span class="red iconD">*</span>
+                  <em>联系方式</em>
+                  <p>
+                    <input type="number" name="" v-model="mobile" placeholder="请输入联系电话"
+                      oninput="if(value.length>11) value=value.slice(0,11)"
+                      onKeyUp="this.value=this.value.replace(/[^\d]/g, '')">
+                  </p>
+                </li>
+                <li class="item-list" style="position:relative">
+                  <span class="red iconD">*</span>
+                  <em>服务类型</em>
+                  <p>
+                    <select v-model="serviceType">
+                      <option value="">请选择服务类型 </option>
+                      <option value="1">拆装</option>
+                      <option value="2">更换</option>
+                      <option value="3">修复</option>
+                      <option value="4">贴膜</option>
+                      <option value="0">其他</option>
+                    </select>
+                    <span class="icon_down" style="right:21px; top:21px "></span>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>车型信息</em>
+                  <p>
+                    <!-- <input type="text" name="" v-model="carType" placeholder="请选择车辆车型" readonly="readonly" @click="cngCarType()"> -->
+
+                    <span @click="cngCarType()" style=" background: #f4f6f8;margin: 5px 0 0 -10px;padding: 9px 10px;width: 100%; border-radius: 5px;
+">
+                      {{carType ? carType : "请选择车型信息"}}
+                    </span>
+                    <span class="icon_down" style="right:21px; top:21px "></span>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>车牌号码</em>
+                  <p>
+                    <input type="text" name="" value="" placeholder="请输入车牌号码" @keyup="toUpperCase(carNo)"
+                      v-model="carNo" style="text-indent:50px">
+                    <select name="province" class="province blue" id="province" v-model="provSelected"
+                      style="left:-6px; top:13px; font-weight: 600">
+                      <option v-for="item in provList">{{item.code}}</option>
+                    </select>
+                    <span class="icon_down icon_down_p" style="left:24px; top:21px"></span>
+                  </p>
+                </li>
+
+                <li class="item-list" style="position:relative">
+                  <!-- <span class="red iconD">*</span> -->
+                  <em>备注信息</em>
+                  <p>
+                    <input type="text" name="" v-model="remarks" placeholder="请输入备注信息">
+                  </p>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="btns" style="z-index: 2">
+          <button class="startOrder fullBtn" @click="add">提交</button>
+        </div>
+      </div>
+      <div v-show="step2" style="background:#fff">
+        <section class="aui-flexView">
+          <header class="aui-navBar aui-navBar-fixed b-line">
+            <a href="javascript:;" class="aui-navBar-item">
+              <i class="icon icon-return"></i>
+            </a>
+            <div class="aui-center">
+              <span class="aui-center-title">选择品牌</span>
+            </div>
+            <a href="javascript:;" class="aui-navBar-item">
+              <i class="icon icon-sys"></i>
+            </a>
+          </header>
+          <section class="aui-scrollView">
+            <div id="showLetter" class="showLetter">
+              <span>A</span>
+            </div>
+            <div class="letter">
+              <ul>
+                <li v-for="item in arrWords">
+                  <a href="javascript:;">{{item}}</a>
+                </li>
+              </ul>
+            </div>
+            <div class="container">
+              <div class="city">
+                <div class="city-list" v-for="iWord in arrWords">
+                  <span class="city-letter b-line" :id="iWord+`1`">{{iWord}}</span>
+                  <a href="javascript:;" v-for="item in carList" class="aui-flex" v-show="item.firstletter==iWord"
+                    :realId="item.id" @click="cngCar(item)">
+                    <div class="aui-brand-logo">
+                      <img :src="item.img" alt="">
+                    </div>
+                    <div class="aui-flex-box">
+                      <h3>{{item.name}}</h3>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+      <div v-show="step3" style="background:#fff">
+        <section class="aui-flexView">
+          <header class="aui-navBar aui-navBar-fixed b-line">
+            <a href="javascript:;" class="aui-navBar-item">
+              <i class="icon icon-return"></i>
+            </a>
+            <div class="aui-center">
+              <span class="aui-center-title">选择车型</span>
+            </div>
+            <a href="javascript:;" class="aui-navBar-item">
+              <i class="icon icon-sys"></i>
+            </a>
+          </header>
+          <section class="aui-scrollView">
+            <div class="container">
+              <div class="city">
+                <div class="city-list">
+                  <a href="javascript:;" class="aui-flex" v-for="item in carTypeList" @click="surCarType(item)">
+                    <div class="aui-flex-box">
+                      <h3>{{item.fullName}}</h3>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div class="mask" @click="hideMask"></div>
+          <div class="showCarType">
+            <ul class="carTypeLists" style="height:100%">
+              <li class="carTypeList" v-for="item in carInfoList" :carInfoId="item.id" @click="selCarType(item)">
+                {{item.fullName}}</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sWoqMKR8epDqBxzlRxqqEpfP"></script>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/reserve.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

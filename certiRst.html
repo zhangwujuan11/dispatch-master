@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>证书查询结果</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="enterLists" style="margin:20px auto 0">
+        <ul class="item-certis">
+          <li class="item-certi" v-for="(item,index) in rstData" :key="index">
+            <h3 class="item-tit"><span>{{item.shopName}}</span></h3>
+            <h4>{{item.certificateName}}</h4>
+            <div class="certi-info">
+              <div class="item-context">
+                <span class="grey">证书编号</span>
+                <p>{{item.certificateCode}}</p>
+              </div>
+              <div class="certPic" @click="showBigImg(item.certificateImg)">
+                <img :src="item.certificateImg" height="140px">
+                <p class="viewCert">查看证书</p>
+              </div>
+            </div>
+            <div class="opts-cert">
+              <p @click="toCertiShopRst(item,index)">查看门店销售授权书</p>
+              <span>|</span>
+              <p @click="toCertiMemRst(item,index)">查看员工技能认证</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!-- <div class="bot-data grey">咨询电话：400-988-6868</div> -->
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+    <div class="maskBigPic" v-show="isShow" @click="hideMask"></div>
+    <div class="closeBigPic closeCerBigPic" v-show="isShow" @click="hideMask"></div>
+    <div class="showBigPic showCerBigPic" v-show="isShow"><img :src="bigPic" width="100%" /></div>
+  </div>
+</body>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.7"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=2.3"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/certiRst.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

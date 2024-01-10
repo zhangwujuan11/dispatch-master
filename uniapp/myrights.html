@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>我的权益</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+</head>
+ <style type="text/css">
+         [v-cloak]{
+             display: none;
+         }
+    </style>
+
+<body style="background:white">
+  <div id="app" v-cloak>
+    <div id="appContent" style="display: none;">
+		<!-- <img class="clse" src="images/close.png" alt="">
+		<h3 class="item-tit">我的权益</h3> -->
+      <div class="">
+		  <div class="tabbox">
+			  <button :class="active?'bgImgSet':''" @click="choose(1)">可使用</button>
+			  <button :class="active2?'bgImgSet':''" @click="choose(2)">已使用</button>
+			  <button :class="active3?'bgImgSet':''" @click="choose(3)">已失效</button>
+		  </div>
+		  
+      <ul class="datalist" v-if="datas.length > 0">
+      	<li v-for="(item,index) in datas" :key="index"  :class="item.status=='1'?'working':'worked'">
+			<div class="litop">
+				<div style="width: calc(100% - 50px);"  @click="showercored(item)">
+					<p style="width: 100%;display: flex;justify-content:left;align-items: center;">
+						<span style="font-size:16px;font-weight: 800;margin-right: 10px;overflow: hidden;white-space:nowrap;text-overflow: ellipsis;">
+						{{item.title}}
+						</span>
+						<span :class="item.status=='1'?'orgin':'orgined'">{{item.shopName}}</span>
+					</p>
+					<p>券码：{{item.couponCode}}</p>
+					<p>VIN码：{{item.vin}}</p>
+				</div>
+				<div class="qrcodebox"  @click="menchen=true">
+					<img  v-if="item.status=='1'" src="images/qrcode.png" alt="">
+					<img style="width: 40px;" v-if="item.status=='3'" src="images/shixiao.png" alt="">
+					<img style="width: 40px;" v-if="item.status=='2'" src="images/yishiyong.png" alt="">
+					<p>注意事项</p>
+				</div>
+			</div>
+			
+			<div class="lidown">
+				<p>
+					<span>
+						<img src="images/youxiaoqi.png" alt="">
+						{{item.startDate}} 至{{item.endDate}}
+					</span>
+					<span>
+						<img src="images/phone.png" alt="">
+						{{item.tel}}
+					</span>
+					
+				</p>
+				
+			</div>
+			<p class="remarke">备注: &nbsp;{{item.remark}}</p>
+		</li>
+		
+      </ul>
+	  <div style="width: 100%;display: flex;justify-content: center;flex-wrap: wrap;background-color: white;padding-top:100px;"  v-if="datas.length <= 0">
+	  	<img style="width: 50%;" src="images/nodata.png" alt="">
+	  	<p style="width: 100%;text-align: center;margin-bottom: 30px;">暂无相关数据哦~</p>
+	  </div>
+        <div class="inner-item">
+          <button class="blueGraShadow" @click="gopage">购买权益</button>
+        </div>
+      </div>
+    </div>
+	
+	<div class="menchen" v-if="closemenchen">
+		  <div class="codebox">
+			  <div class="ininbox">
+				 <!-- <img class="showclose" @click="closssemenchen()" src="images/close.png" alt="">
+				  <h4>{{codeinfo.title}}</h4>
+				  <p style="display: flex;justify-content: center;margin-bottom: 30px;" id="Qrcode">
+				  </p>
+				   <p style="padding-left: 30px;">券  码：{{codeinfo.couponCode}}</p>
+				   <p style="padding-left: 30px;margin-bottom: 20px;">VIN码：{{codeinfo.vin}}</p> -->
+				   <div class="textcon" style="line-height: 28px;text-indent:0px;">
+				   	1、为您本次更换的福耀玻璃提供保障。保障玻璃单独破损后提供免费修复一次或到易道大咖指定门店免费更换相同品质福耀玻璃一次。该次更换后会员权益终止。<br />
+				   	2、VIP价格享受太阳膜型号（HX7035）贴膜服务：前、后挡膜200元/张，门窗150元/张。<br />
+				   <!-- 	3、原更换门店名称（现有设置不变）。<br />
+				   	4、{{thisdatainfo.startDate}}至{{item.endDate}}。<br /> -->
+				   	3、{{thisdatainfo.changePart}}。<br />
+				   </div>
+				   <div style="width: 100%;display: flex;justify-content: center;">
+				   	<p @click="closemenchen=false" style="text-align: center;margin: 18px 0;" class="blueGraShadow">取消</p>
+				   </div>
+			  </div>
+		  </div>
+	 </div>
+	 
+	 <!-- 蒙尘 -->
+	 <div class="menchen" v-if="menchen">
+	 	<div class="mencon">
+	 		<img src="images/mencon.png" alt="">
+	 		<h4>
+	 			易道大咖会员须知 <br />
+	 			<span>请认真阅读并确认以下信息</span>
+	 		</h4>
+	 		<div class="textcon" style="line-height: 23px;">
+	 			感谢您对我司的认可和信任，为了您更好的了解会员增值服务权益，请仔细阅读以下内容:<br />
+	 			1、会员卡在 2023年9月15日-2023年12月31日 间购买有效，有效期一年；<br />
+	 			2、易道大咖会员卡经福建易道大咖商业管理有限公司确认该次保险理赔赔款至易道大咖账号7日后生效；<br />
+	 			3、易道大咖门店在会员卡有效期内将为您免费提供一片上述车型部位和型号均相同配件玻璃的更换服务；<br />
+	 			4、易道大咖会员卡权益仅面向出险后更换福耀配件玻璃，不包含福耀天窗玻璃、特殊功能玻璃（镀膜、HUD、夹丝加热）；<br />
+	 			5、营运车辆及该次理赔款金额3000元及以上玻璃案件不享受易道大咖会员卡权益;<br />
+	 			6、易道大咖会员卡仅限于有效期内对应的玻璃产品发生单独破碎时使用；<br />
+	 			7、因发生不可抗力造成的玻璃破碎不在免费更换范围；<br />
+	 			8、会员卡最终解释权归福建易道大咖商业管理有限公司所有。<br />
+	 			<p style="width: 100%;display: flex;justify-content: center;">
+					<button class="blueGraShadow" @click="menchen=false">取消</button>
+	 			</p>
+	 		</div>
+	 	</div>
+	 </div>
+  </div>
+</body>
+<!--   -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<!-- <script src="../plugins/lazyload/lazyload.js"></script> -->
+<script type='text/javascript' src="js/jswx.js"></script>
+<script type='text/javascript' src="js/qrcode.js"></script>
+<script>
+	document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+   document.write("<script type='text/javascript' src='js/Servicetss.js?v=" + Date.now() + "'><\/script>");
+  // document.write("<script type='text/javascript' src='js/advicetss.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/myserve.js?v=" + Date.now() + "'><\/script>");
+ 
+</script>
+<script>
+  $(function () {
+    // $('input,select').on('blur', function () {
+    //   var _self = this;
+    //   setTimeout(function () {
+    //     window.scroll(0, $(_self).offset().top);
+    //   }, 1)
+    // })
+	
+	
+  })
+</script>
+
+<style>
+	.tabbox{
+			width: 100%;
+			color: #333333;
+			display: flex;
+			justify-content: space-around;
+			position: fixed;
+			top: 0;
+			left: 0;
+			background-color: #EDEDED;
+		}
+	.item-tit{
+		line-height: 40px;
+		color: #333;
+		font-weight: 600;
+		text-align: center;
+		margin-bottom: 10px;
+	}	
+	
+	#appContent .clse{
+		position: absolute;
+		left: 20px;
+		top: 10px;
+		width: 18px;
+	}
+	.bgImgSet{
+		font-weight: 800;
+		border-bottom: 2px solid  #3366F5;
+	}
+	.tabbox button{
+		padding: 15px 0;
+	}
+	.datalist{
+		width: 100%;
+		background-color: white;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		padding-bottom: 90px;
+		padding-top: 60px;
+	}
+	
+	.datalist li{
+		width: 97%;
+		height: 230px;
+		font-size: 14px;
+		line-height: 32px;
+	}
+	.datalist .litop{
+		display: flex;
+		justify-content: space-between;
+		padding: 25px 30px;
+		align-items: center;
+	}
+	.datalist .working{
+		background: url("images/working.png") no-repeat;
+		background-size: 100% 104%;
+	}
+	.datalist .worked{
+		background: url("images/worked.png") no-repeat;
+		background-size: 100% 104%;
+	}
+	.litop{
+		color: white;
+	}
+	.qrcodebox{
+		    width: 61px;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    flex-wrap: wrap;
+	}
+	.qrcodebox img{
+		width: 28px;
+	}
+	.lidown img{
+		width: 18px;
+		height: 18px;
+	}
+	.lidown{
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		padding: 0 25px;
+		box-sizing: border-box;
+		font-size: 14px;
+	}
+	.lidown p{
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.lidown p span{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.lidown p span img{
+		margin-right: 4px;
+	}
+	.remarke{
+		width: 88%;
+		padding: 0 25px;
+		font-size: 14px;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	.blueGraShadow {
+	    background: linear-gradient(left, #359cff, #65b4ff);
+	    background: -ms-linear-gradient(left, #359cff, #65b4ff);
+	    background: -moz-linear-gradient(left, #359cff, #65b4ff);
+	    /* Safari 5.1+, Chrome 10+ */
+	    background: -webkit-linear-gradient(left, #359cff, #65b4ff);
+	    /* Opera 11.10+ */
+	    background: -o-linear-gradient(left, #359cff, #65b4ff);
+	    -webkit-box-shadow: 0 0 5px 5px #d9ecff;
+	    -moz-box-shadow: 0 0 5px 5px #d9ecff;
+	    box-shadow: 0 0 5px 5px #d9ecff;
+		color: white;
+		width: 80%;
+		text-align: center;
+		line-height: 49px;
+		border-radius: 25px;
+		font-size: 16px;
+	}
+	.inner-item{
+		display: flex;
+		justify-content: center;
+		padding: 20px 0;
+		position: fixed;
+		bottom: -1px;
+		width:100%;
+		height: 50px;
+		background-color: white;
+	}
+	.menchen{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0,0.6);
+		z-index: 999;
+		top: 0;
+		left: 0;
+	}
+	.textcon{
+		font-size:12px;
+		color:#707070;
+		text-indent:20px;
+		padding:0 15px;
+		overflow-y: scroll;
+	}
+	.textcon span{
+		color: #3368F5;
+		border-bottom:1px solid  #3368F5 ;
+	}
+	.codebox{
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		margin-top:39%;
+	}
+	.ininbox{
+		width: 80%;
+		background-color: white;
+		border-radius: 10px;
+		font-size: 16px;
+		line-height: 32px;
+		position: relative;
+	}
+	.showclose{
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		right: 25px;
+		top: 20px;
+	}
+	.ininbox h4{
+		text-align: center;
+		font-size: 16px;
+		font-weight: 800;
+		margin: 18px 0;
+	}
+	.orgin{
+		background-color:#FB940E;
+		border-radius: 18px;
+		padding:0 3px;
+		font-size: 12px;
+		display: block;
+		max-width: 55%;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		text-align: center;
+		line-height: 25px;
+	}
+	.orgined{
+		background-color:#B5BCC4;
+		border-radius: 18px;
+		padding:0 3px;
+		font-size: 12px;
+		display: block;
+		max-width: 55%;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		text-align: center;
+		line-height: 25px;
+	}
+	[v-cloak] {
+		display: none;
+	}
+	.textcon{
+		font-size:12px;
+		color:#707070;
+		text-indent:20px;
+		padding:20px;
+	}
+	.textcon span{
+		color: #3368F5;
+		border-bottom:1px solid  #3368F5 ;
+	}
+	.mencon{
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		background: linear-gradient(180deg, #D9EBFF 0%, #FFFFFF 15%, #FFFFFF 100%);
+		border-radius: 20px 20px 0px 0px;
+	
+	}
+	.mencon img{
+		width: 40%;
+		margin-top: -40px;
+		position: absolute;
+		right: 0;
+	}
+	.mencon h4{
+		font-size:22px;
+		font-weight:800;
+		color:#3368F5;
+		padding-left:30px;
+		margin-top:30px;
+		margin-bottom: 18px;
+	}
+	.mencon h4 span{
+		color:#333333;
+		font-size:14px;
+	}
+</style>
+
+</html>

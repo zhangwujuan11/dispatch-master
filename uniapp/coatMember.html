@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>申请镀膜补贴</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="step1" v-show="!showStepTwo">
+        <div class="innerCont pb40" v-show="isMember">
+          <div class="item-info">
+            <div class="dayCode fixed">今日日期码： <em class="p18 blue">{{dateCode}}</em></div>
+            <div class="inner-item">
+              <h3 class="item-tit"><span>基本信息</span></h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>姓名</em>
+                  <p><i class="icon_star"></i><span>{{memberInfo.name}}</span></p>
+                </li>
+                <li class="item-list">
+                  <em>性别</em>
+                  <p>{{memberInfo.sex}}</p>
+                </li>
+                <li class="item-list">
+                  <em>客户类型</em>
+                  <p>{{memberInfo.typeName}}</p>
+                </li>
+                <li class="item-list">
+                  <em>联系方式</em>
+                  <p>{{memberInfo.mobile}}</p>
+                </li>
+                <li class="item-list">
+                  <em>生日</em>
+                  <p v-text="memberInfo.birthday ? memberInfo.birthday : `暂未填写`"></p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>车辆信息</span></h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>车牌号码</em>
+                  <p>{{memberInfo.carNo}}</p>
+                </li>
+                <li class="item-list">
+                  <em>车型</em>
+                  <p class="omit">{{memberInfo.bandType}}</p>
+                </li>
+                <li class="item-list">
+                  <em>车架号</em>
+                  <p>{{memberInfo.vin}}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- <div class="item-info" v-show="memberInfo.rightsSta">
+                        <div class="inner-item">
+                            <h3 class="item-tit"><span>权益信息</span></h3>
+                            <div class="cardInfo">
+                                <img src="images/card.jpg" width="100%">
+                                <div class="innerCardInfo">
+                                    <h3>会员卡</h3>
+                                    <p>{{memberInfo.rightsSta}}-{{memberInfo.rightsEnd}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>服务信息</span></h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>防伪编码</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.securityCode" placeholder="请输入新玻璃防伪编码">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>本厂编码</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.factoryCode" placeholder="请输入新玻璃本厂编码">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>服务店员</em>
+                  <p>
+                    <select="personId">
+                      <option value="">请选择服务店员</option>
+                      <option v-for="item in shopMemberList" :value="item.id ">{{item.name}} </option>
+                    </select>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+        <div class="non_reslut" v-show="!isMember">
+          <span class='icon_reserch'></span>
+          <p>对不起，无相应匹配数据</p>
+        </div>
+        <div class="btns">
+          <button class="startOrder fullBtn" @click="next">下一步</button>
+        </div>
+      </div>
+
+      <div class="step2" v-show="showStepTwo">
+        <div class="innerCont pb40">
+          <div class="item-info">
+            <div class="dayCode fixed">今日日期码： <em class="p18 blue">{{dateCode}}</em></div>
+            <div class="inner-item">
+              <h3 class="item-tit"><span>审核信息</span></h3>
+              <ul class="item-lists" v-for="(item,index) in orderAuditList">
+                <h3 class="tit-require pt10">
+                  <em class="red">*</em>
+                  <span class="sBlue">{{item.name}}</span>
+                </h3>
+                <p class="markInfo grey">{{item.remarks}}</p>
+                <div class="upDrive">
+                  <div class="item-pic ">
+                    <img :src="item.imgurl" width="100%" />
+                    <p>例图</p>
+                  </div>
+
+                  <div class="item-pic upLoadImgs" :checkItemId="item.checkItemId" :orderSn="item.orderSn">
+                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar"
+                      :checkItemId="item.checkItemId" :orderSn="item.orderSn" width="100%" />
+                    <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG"
+                      @change="btnUploadFile(index)" @click="authority" />
+                    <div class="maskUploadImg" v-show="item.isShowMask">
+                      <span class="maskLoading"></span>
+                    </div>
+
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>不通过</span>
+                      <p>重新上传</p>
+                    </div>
+                  </div>
+                  <div v-show="item.auditStatus==-1" class="markInfo red">
+                    {{item.auditDes}}
+                  </div>
+                </div>
+              </ul>
+              <div v-show="!orderAuditList.length" class="no-data">
+                暂无审核信息
+              </div>
+              <!-- <ul class="item-lists">
+                                <h3 class="tit-require">
+                                <em class="red">*</em>
+                                <span class="sBlue">保单照</span>
+                                </h3>
+                                <p class="markInfo grey">照片中需包含（双面，含有效期（未过期时间））</p>
+                                <div class="upDrive">
+                                    <div class="item-pic">
+                                        <img src="images/example.jpg" width="100%" />
+                                        <p>例图</p>
+                                    </div>
+                                    <div class="item-pic">
+                                        <img src="images/upload.jpg" width="100%" />
+                                    </div>
+                                </div>
+                            </ul> -->
+            </div>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="cancelOrder" @click="pre">上一步</button>
+          <button class="startOrder" @click="add">提交审核</button>
+        </div>
+      </div>
+      <!-- <div class="btns">
+                <button class="startOrder fullBtn" @click="add" v-show="isMember">权益</button>
+            </div> -->
+
+            <div style="display: none;" class="authority_mask" @click="hideAuthorityMask">
+              <div class="authority_mask_box">
+                <div>相机、储存空间/照片权限使用说明：</div>
+                <div>用于拍摄照片、扫码、上传图片等场景</div>
+              </div>
+            </div> 
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/coatMember.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

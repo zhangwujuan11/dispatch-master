@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>销售评价</title>
+  <!-- <link rel="stylesheet" href="css/mui.min.css" /> -->
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div>
+        <div class="saleFich">
+          <span class="icon-style icon_tl"></span>
+          <span class="icon-style icon_tr"></span>
+          <span class="icon-style icon_bl"></span>
+          <span class="icon-style icon_br"></span>
+          <div class="topSale">
+            <img src="images/icon/logo.png" width="40%">
+            <h1>销 售 评 价</h1>
+          </div>
+          <div class="item-sale item-sale-detail">
+            <div class="inner-item">
+              <ul class="item-lists">
+                <li class="item-list" @click="toDetatil(saleInfo.orderSn)">
+                  <em>销售单号：</em>
+                  <p>
+                    <b class="blue" style="text-decoration: underline;">{{saleInfo.orderSn}}</b>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>销售时间：</em>
+                  <p>
+                    {{saleInfo.saleDate}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>商品编码：</em>
+                  <p>
+                    {{saleInfo.productSn}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>商品名称：</em>
+                  <p>
+                    {{saleInfo.productName}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>商品金额：</em>
+                  <p>
+                    <b class="red p16">¥ {{saleInfo.totalPrice}}</b>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="blackHr"></div>
+          <div class="item-info">
+            <div class="inner-item" style="padding:0 10px">
+              <h3 class="item-tit"><span><label class="red">*</label><b> 商品评价</b></span></h3>
+              <!--评分-->
+              <div class='score' style="width:80%; margin:16px auto 0" v-if="!isOwer">
+                <div class='stars'>
+                  <div class="star" @click="starTap(index)" v-for="(item, index) in userStars" :key="index">
+                    <img :src="item" />
+                  </div>
+                </div>
+                <p class='rtxt' :class="wjxScore<3 ? `red` : `yellow`">{{wjxArrs[wjxScore] }}</p>
+              </div>
+              <div class='score' style="width:80%; margin:16px auto 0" v-else>
+                <div class='stars'>
+                  <div class="star" v-for="(item, index) in userStars" :key="index">
+                    <img :src="index < (commentVO.score) ? `images/sale/starOn.png` : `images/sale/star.png` " />
+                  </div>
+                </div>
+                <p class='rtxt' :class="commentVO.score<3 ? `red` : `yellow`">{{wjxArrs[commentVO.score-1] }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item" style="padding:0 10px">
+              <h3 class="item-tit"><span><b>服务评价</b></span></h3>
+              <!--评分-->
+              <div v-if="!isOwer">
+                <div class='score ser-evalu' v-for="(item,index) in serList" :key="index">
+                  <div class='left'>
+                    {{item.name}}
+                  </div>
+                  <div class='stars'>
+                    <div class="star" @click="starShow(index,subIndex)" v-for="(subItem,subIndex) in item.userStars"
+                      :key="subIndex">
+                      <img :src="subItem" />
+                    </div>
+                  </div>
+                  <p class='rtxt' :class="item.score<3 ? `red` : `yellow`">{{serArrs[item.score] }}</p>
+                </div>
+              </div>
+              <div v-else>
+                <div class='score ser-evalu' v-for="(item,index) in serList" :key="index">
+                  <div class='left'>
+                    {{item.name}}
+                  </div>
+                  <div class='stars'>
+                    <div class="star" v-for="(subItem,subIndex) in item.userStars" :key="subIndex">
+                      <!-- <img :src="subItem" /> -->
+                      <img :src="subIndex < (item.score) ? `images/sale/starOn.png` : `images/sale/star.png` " />
+                    </div>
+                  </div>
+                  <p class='rtxt' :class="item.score<3 ? `red` : `yellow`">{{serArrs[item.score] }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span><b>商品图片上传</b></span></h3>
+              <div class="item-pic" v-for="(item,index) in imgList" style="margin-top:20px">
+                <img :src="item.imgPath" class="matchImg" width="100%" />
+                <div v-if="!isOwer" class="closeImg" @click="delImg(index)"></div>
+              </div>
+              <div class="item-pic" v-if="imgList.length<9 && !isOwer" style="margin-top:20px">
+                <img src="images/upload.jpg" class="matchImg" width="100%" />
+                <input accept="image/*" multiple type="file" class="addUploadImg" @change="uploadProductImg()"
+                  id="uploadIMG" />
+                <div class="maskUploadImg" v-show="isShowMask">
+                  <span class="maskLoading"></span>
+                </div>
+              </div>
+              <!--评分-->
+              <!-- <ul class="item-lists edit-lists" style="margin-top:20px">
+                                <li class="item-list-full" v-if="!isOwer">
+                                    <textarea  class="advice-cont" v-model="content" style="width:100%; background:#f4f4f4" placeholder="请输入评价备注"></textarea>
+                                </li>
+                                <li class="item-list-full" v-else style="line-height: 24px">
+                                    {{commentVO.content ? commentVO.content : `暂无备注`}}
+                                </li>
+                            </ul> -->
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span><b>评价备注</b></span></h3>
+              <!--评分-->
+              <ul class="item-lists edit-lists" style="margin-top:20px">
+                <li class="item-list-full" v-if="!isOwer">
+                  <textarea class="advice-cont" v-model="content" style="width:100%; background:#f4f4f4"
+                    placeholder="请输入评价备注"></textarea>
+                </li>
+                <li class="item-list-full" v-else style="line-height: 24px">
+                  {{commentVO.content ? commentVO.content : `暂无备注`}}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="btn-subSale" v-show="!isOwer" @click="subAdd">
+            <button class="subSale blueGraShadow p16">立即评价</button>
+          </div>
+        </div>
+        <!-- <div class="saleWare" @click="toSaleWarePage"></div> -->
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=2.3"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/saleEvalu.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

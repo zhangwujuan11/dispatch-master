@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>作品上传</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div id="appContent ">
+      <div class="step1 artid">
+        <div class="innerCont pb40">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>报名信息</span></h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>选手姓名</em>
+                  <p>{{ personName }}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>作品</span></h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>CARG码</em>
+                  <p>
+                    <input type="text" v-model="joinInfo.carg1" placeholder="请输入CARG码"
+                      @keyup="toUpperCase(joinInfo.carg1)" class="chaxun" maxlength="12" />
+                  </p>
+                  <!-- <p v-else>{{ joinInfo.carg1 }}</p> -->
+                </li>
+                <li class="item-list">
+                  <em>网盘链接</em>
+                  <p>
+                    <input type="text" v-model="joinInfo.worksUrl1" placeholder="请输入网盘链接" class="chaxun" />
+                  </p>
+                  <!-- <p style="word-wrap: break-word;" v-else>{{ joinInfo.worksUrl1 }}</p> -->
+                </li>
+                <li class="item-list">
+                  <em>提取码</em>
+                  <p>
+                    <input type="text" v-model="joinInfo.worksPws1" placeholder="请输入提取码" class="chaxun" />
+                  </p>
+                  <!-- <p v-else>{{ joinInfo.worksPws1 }}</p> -->
+                </li>
+                <li class="item-list">
+                  <em>玻璃安装记录表</em>
+                </li>
+                <li class="flexWarp">
+                  <div class="axjl">
+                    <div class="item-pic litu">
+                      <img :src="itemName == '2022年CARG/AGTS安装大赛'? 'images/az.jpg':'images/xf.jpg'" @click="classopen"
+                        width="100%" />
+                      <label>
+                        <a :href="itemName == '2022年CARG/AGTS安装大赛' ? 'doc/cargaz.pdf' : 'doc/cargxf.pdf'"
+                          download="itemName == '2022年CARG/AGTS安装大赛' ? 'doc/cargaz.pdf' : 'doc/cargxf.pdf'">
+                          记录表下载</a></label>
+                    </div>
+                    <div class="item-pic" v-if="joinInfo.azjlImg1==''">
+                      <img :src="joinInfo.azjlImg1 ? joinInfo.azjlImg1 : 'images/upload.jpg'" class="picFullcar"
+                        width="100%" @click="onOpenSheets(1,false)" />
+                    </div>
+                    <div class="item-pic" v-else>
+                      <img :src="joinInfo.azjlImg1" class="picFullcar" width="100%" @click="onOpenSheets(1,true)" />
+                    </div>
+                  </div>
+                  <div class="axjl">
+                    要求:下载技师大赛《汽车玻理安装记录表)。
+                    按要求填写完整后拍胜上传。
+                  </div>
+                <li>
+              </ul>
+              <ul class="item-lists" v-if="joinInfo.checkList.length>0" v-for="(item,index) in joinInfo.checkList">
+                <h3 class="tit-require pt10">
+                  <em class="red">*</em>
+                  <span class="sBlue">{{item.name}}</span>
+                </h3>
+                <p class="markInfo grey">{{item.remarks}}</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img :src="item.imgurl" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic upLoadImgs">
+                    <img :src="item.checkItemImg ?item.checkItemImg :`images/upload.jpg`"
+                      @click="onSheets(2,false,index)" class="picFullcar" width="100%" />
+
+                    <div class="maskUploadImg" style="display: none">
+                      <span class="maskLoading"></span>
+                    </div>
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>不通过</span>
+                      <p>重新上传</p>
+                    </div>
+                  </div>
+                  <div v-show="item.auditStatus==-1" class="markInfo red">
+                    {{item.auditDes}}
+                  </div>
+                </div>
+              </ul>
+            </div>
+            <!-- <div class="inner-item">
+              <h3 class="item-tit"><span>作品B</span></h3>
+              <ul class="item-lists">
+                <li class="item-list">
+                  <em>CARG码</em>
+                  <p v-if="worksB == 0">
+                    <input type="text" v-model="joinInfo.carg2" placeholder="请输入CARG码" @keyup="toUpper(joinInfo.carg2)"
+                      class="chaxun" maxlength="12" />
+                  </p>
+                  <p v-else>{{ joinInfo.carg2 }}</p>
+                </li>
+                <li class="item-list">
+                  <em>网盘链接</em>
+                  <p v-if="worksB == 0">
+                    <input type="text" v-model="joinInfo.worksUrl2" placeholder="请输入网盘链接" class="chaxun" />
+                  </p>
+                  <p v-else>{{ joinInfo.worksUrl2 }}</p>
+                </li>
+                <li class="item-list">
+                  <em>提取码</em>
+                  <p v-if="worksB == 0">
+                    <input type="text" v-model="joinInfo.worksPws2" placeholder="请输入提取码" class="chaxun" />
+                  </p>
+                  <p style="word-wrap: break-word;" v-else>{{ joinInfo.worksPws2 }}</p>
+                </li>
+                <li class="item-list ">
+                  <em>玻璃安装记录表</em>
+                </li>
+                <li class="flexWarp">
+                  <div class="axjl">
+                    <div class="item-pic litu">
+                      <img :src="itemName == '2022年CARG/AGTS安装大赛'? 'images/az.jpg':'images/xf.jpg'" @click="classopen"
+                        width="100%" />
+                      <label>
+                        <a :href="itemName == '2022年CARG/AGTS安装大赛' ? 'doc/cargaz.pdf' : 'doc/cargxf.pdf'"
+                          download="itemName == '2022CARG/AGTS年安装大赛' ? 'doc/cargaz.pdf' : 'doc/cargxf.pdf'">
+                          记录表下载</a></label>
+                    </div>
+                    <div class="item-pic" v-if="worksB == 0">
+                      <img :src="joinInfo.azjlImg2 ? joinInfo.azjlImg2 : 'images/upload.jpg'" class="picFullcar"
+                        width="100%" @click="onOpenSheets(2,false)" />
+                    </div>
+                    <div class="item-pic" v-else>
+                      <img :src="joinInfo.azjlImg2" class="picFullcar" width="100%" @click="onOpenSheets(2,true)" />
+                    </div>
+                  </div>
+                  <div class="axjl">
+                    要求:下载技师大赛《汽车玻理安装记录表)。
+                    按要求填写完整后拍胜上传。
+                  </div>
+                </li>
+              </ul>
+            </div> -->
+            <div class="inner-item">
+              <h3 class="item-tit"><span>网盘操作教程</span></h3>
+              <ul class="artupsycm">
+                <li>
+                  <span>1.百度网盘下载教程。</span>
+                  <a href="https://www.idongde.com/20137522d95282fe.shtml">
+                    https://www.idongde.com/20137522d95282fe.shtml
+                  </a>
+                </li>
+                <li>
+                  <span> 2.百度网盘上传视频教程。</span>
+                  <a href="https://jingyan.baidu.com/article/39810a235e583eb636fda6ee.html">
+                    https://jingyan.baidu.com/article/39810a235e583eb636fda6ee.html
+                  </a>
+                </li>
+                <li>
+                  <span>3.百度网盘复制分享的资源链接教程。</span>
+                  <a href="https://jingyan.baidu.com/article/1709ad809c598d0735c4f043.html">
+                    https://jingyan.baidu.com/article/1709ad809c598d0735c4f043.html
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="jsBtn" @click="onSubmit">提交</button>
+        </div>
+
+        <div class="seemark mark">
+          <div v-if="markImgShow == false">
+            <div class="imgselect">
+              <li @click="onOpenCamera">拍照</li>
+              <li @click="onselecePhoto">选择图片</li>
+              <li v-show="openShow" @click="seeImg">查看图片</li>
+            </div>
+            <div class="quxiao" @click="cancel">取消</div>
+          </div>
+          <div class="markImgs" @click="()=>{markImgShow = false; sheetVisible = false}" v-else>
+            <span> x </span>
+            <img :src="markImg">
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+
+  </div>
+</body>
+<script type="text/javascript" src="js/varInfo.js"></script>
+<script type="text/javascript" src="plugins/vue/vue.js"></script>
+<script type="text/javascript" src="plugins/mescroll/mescroll.min.js"></script>
+<script type='text/javascript' src="plugins/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/jswx.js?v=0.1"></script>
+<script type='text/javascript' src="plugins/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="plugins/common.js?v=0.6"></script>
+<script type='text/javascript' src="plugins/Service.js?v=0.6"></script>
+<script type="text/javascript" src="plugins/lazyload/lazyload.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
+<script>
+  // var vConsole = new VConsole();
+  document.write("<script type='text/javascript' src='js/artificerUpload.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

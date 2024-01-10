@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>充值</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+ <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="balance">
+        我的余额: <span>{{shopBalance}}</span>
+      </div>
+      <div class="recharge">
+        <div class="recharge-list">
+          <h3>请选择充值金额</h3>
+          <ul class="">
+
+            <li v-for="(item,index) in czList" :key="index" @click="onCzItem(item,index)"
+              :class="{activeItem : activeIndexs == index+1}">{{item.name}}元</li>
+            <!--  -->
+          </ul>
+        </div>
+        <div class="item-lists" style="padding: 10px 15px;">
+          <li class="item-list">
+            <em style="line-height:20px; width: 150px;color: #333333;">自定义充值金额</em>
+            <p style="display: flex;align-items: center;background: #f4f6f8; padding:0 10px;">
+              <input type="text" v-model="price" placeholder="请输入金额"
+                style="text-align: right; padding-right: 10px;margin:0;">
+              <span>元</span>
+            </p>
+          </li>
+        </div>
+        <div class="czbtn">
+          <button class="startOrder fullBtn" @click="addPay" style="font-size: 20px">充值</button>
+          <div style="text-align: center;">最终解释权归易道大咖所有</div>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<!--   -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.8"></script>
+<!--  -->
+<script type="text/javascript" src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/recharge1.js?v=" + Date.now() + "'><\/script>");
+  var vConsole = new VConsole();
+</script>
+
+</html>

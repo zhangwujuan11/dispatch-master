@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>VIN查询结果</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <link rel="stylesheet" href="css/swiper.min.css">
+</head>
+
+<body>
+  <div id="app" class="vinDoms">
+    <div class="vin_query">
+      <!-- <input v-model="vinSearch" maxlength="18" type="text" @keyup="toUpperCase(vinSearch)"
+                onKeyUp="value=value.replace(/[\W]/g,'')" placeholder="请输入VIN查询" class="vin_search"> -->
+      <input v-model="vinSearch" maxlength="18" @keyup="toUpperCase(vinSearch)" type="url" style="ime-mode:disabled"
+        placeholder="请输入VIN查询" class="vin_search">
+      <div class="collect" @click="onIconSearch">
+        <img style="height: 100%;width: 100%;" src="images/vin/search.png">
+      </div>
+    </div>
+    <div v-if="vinData.length>=1">
+      <div v-for="(items,index) of vinData" :key="index" class="vinResultss" v-if="index<=4"
+        style="margin-bottom: 15px;">
+        <div class="swiper-container vin_swiper" :class="[`swiper-container${index}`]" v-if="items.carImgs.length>0">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(item,index) of items.carImgs" :key="index">
+              <img :src="item" width="100%" height="100%" />
+            </div>
+            <span class="angle"></span>
+          </div>
+        </div>
+        <div class="glass_details">
+          <div class="glassDet">
+            <li class="glass_Det_tou">{{items.glassName}}</li>
+            <div class="glass_div1">
+              <li class="glass_item">
+                <span>车型</span>
+                <span class="glass_item_right">{{items.carInfoName}}</span>
+              </li>
+              <li class="glass_item">
+                <span>年款</span>
+                <span class="glass_item_right">{{items.yearType}}</span>
+              </li>
+              <li class="glass_item">
+                <span>主机厂</span>
+                <span class="glass_item_right">{{items.manufactureName}}</span>
+              </li>
+              <li class="glass_item" style="border-bottom: none;">
+                <span>底盘号</span>
+                <span class="glass_item_right">{{items.chassisNumber}}</span>
+              </li>
+            </div>
+            <div class="glass_div2">
+              <li class="glass_item">
+                <span>主机厂零件号</span>
+                <span class="glass_item_right">{{items.oenum}}</span>
+              </li>
+              <li class="glass_item">
+                <span>CARG码</span>
+                <span class="glass_item_right">{{items.carg}}</span>
+              </li>
+              <li class="glass_item" v-if="accountType !== 7">
+                <span>本厂编码</span>
+                <span class="glass_item_right">{{items.gysPartsSn}}</span>
+              </li>
+              <!-- <li class="glass_item">
+                <span>北美编码</span>
+                <span class="glass_item_right"></span>
+              </li>
+              <li class="glass_item" style="border-bottom: none;">
+                <span>欧洲编码</span>
+                <span class="glass_item_right"></span>
+              </li> -->
+            </div>
+            <div class="glass_div3">
+              <div v-if="accountType == 110">
+                <li class="glass_item">
+                  <span>4S店裸玻璃价格</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.price4s}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>易道零售指导价</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.retailPrice}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>创配保险总价</span>
+                  <span style="color: #FF5454;font-weight: bold;">￥{{items.claimPrice}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>创配裸玻璃价格</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.nakedPrice}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>创配辅料费用</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.materialPrice}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>创配工时费用</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.workPrice}}</span>
+                </li>
+              </div>
+              <div v-else-if="accountType == 7 ">
+                <li class="glass_item">
+                  <span>4S店裸玻璃价格</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.price4s}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>保险总价</span>
+                  <span style="color: #FF5454;font-weight: bold;">￥{{items.claimPrice}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>易道裸玻璃价格</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.nakedPrice}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>辅料费用</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.materialPrice}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>工时费用</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.workPrice}}</span>
+                </li>
+              </div>
+              <div v-else>
+                <li class="glass_item">
+                  <span>零售指导价</span>
+                  <span style="color: #FF5454;font-weight: bold;">￥{{items.retailPrice}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>4S店单独玻璃价格</span>
+                  <span style="color: #1685F7;font-weight: bold;">￥{{items.price4s}}</span>
+                </li>
+                <li class="glass_item">
+                  <span>保险总价</span>
+                  <span style="color: #FF5454;font-weight: bold;">￥{{items.claimPrice}}</span>
+                </li>
+              </div>
+              <li class="glass_item" style="border-bottom: none;" v-if="accountType !== 7">
+                <span>库存</span>
+                <span style="color: #1685F7;font-weight: bold;">{{items.storeNum}}</span>
+              </li>
+            </div>
+          </div>
+          <!-- <div class="carInfo">
+                <p>适配车型</p>
+                {{vinData.carInfoName}}
+            </div> -->
+
+        </div>
+      </div>
+
+      <div class="recovery" style="color:#0A80CB;">
+        该结果是根据VIN号规则解析，准确率80%
+        <!-- <span style="color:#FF5454;padding-right: 15px;" @click="clickRecovery">纠错</span> -->
+      </div>
+      <div class="vin_foolter" v-if="accountType !== 7">
+        <div class="single singleNative" @click="reds()">生成销售单</div>
+        <!-- <div v-for="(list,index) in navLists" class="single" :class="{ singleNative:changeRed == index}"
+                @click="reds(index)">{{list.text}}</div> -->
+      </div>
+    </div>
+    <div v-show="isShow" style="text-align: center;line-height: 100px;font-size: 20px;">暂无数据</div>
+
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/swiper.min.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=2.3"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/vinResults.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    setTimeout(function () {
+      var swiper = new Swiper('.swiper-container', {
+        direction: 'horizontal',
+        loop: true,
+        autoplay: 2000,
+        slidesPerView: "auto",
+        centeredSlides: true,
+        spaceBetween: 10
+      });
+
+    }, 3500)
+  });
+</script>
+
+</html>

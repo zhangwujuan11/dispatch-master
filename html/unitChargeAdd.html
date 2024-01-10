@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>新增/编辑结算单位</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40 shopCont">
+        <div class="item-info" style="background: rgba(255,255,255,.4); line-height: 32px; text-align: center;">
+          <p class="red"><b>需要开13%税点的增值税专票</b></p>
+        </div>
+        <div class="item-info">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>结算单位信息</span></h3>
+              <ul class="item-lists edit-lists charge-lists">
+                <li class="item-list">
+                  <em>结算方式</em>
+                  <ul class="sexSelect fixed">
+                    <li @click="sinFlagTrue"><i class="iconRadio" :class="singleFlag ? `iconOk` :``"></i><span
+                        class="sex">一级代开</span></li>
+                    <li @click="sinFlagFalse"><i class="iconRadio" :class="!singleFlag ? `iconOk` :``"></i><span
+                        class="sex">自开</span></li>
+                  </ul>
+                </li>
+                <li class="item-list">
+                  <em>结算单位</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.settlementName" value="" placeholder="请输入单位抬头">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>纳税人识别号</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.nsrsbh" value="" placeholder="请输入纳税人识别号">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>联系方式</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.telephone" value="" placeholder="请输入联系方式"
+                      oninput="if(value.length>11) value=value.slice(0,11)"
+                      onKeyUp="this.value=this.value.replace(/[^\d]/g, '')">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>注册地址</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.companyAddress  " value="" placeholder="注册地址（非必填）">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>开户行名称</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.bankName " value="" placeholder="开户行名称（非必填）">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>开户行账号</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.bankNo " value="" placeholder="开户行账号（非必填）">
+                  </p>
+                </li>
+
+                <li class="item-list">
+                  <em>电子邮箱</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.email" value="" placeholder="电子邮箱（非必填）">
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="startOrder fullBtn" @click="updateMember">保存</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/unitChargeAdd.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+
+
+  });
+</script>
+
+</html>

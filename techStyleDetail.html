@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>技师风采详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent" v-html="compe">
+      <!-- <div>
+                <img src="images/active/top1.jpg" width="100%" />
+            </div>
+            <div class="voteD-info">
+                <div class="inner-voteD-info">
+                    <div class="voteD-name">
+                        <h3>{{info.no}}号 {{info.personName}}</h3>
+                        <p class="voteD-nameShadow"></p>
+                    </div>
+                    <div class="voteD-shop">{{info.shopName}}</div>
+                    <div class="voteD-pImg">
+                        <img :src="info.personImg" width="100%" />
+                    </div>
+                    <div class="voteD-detail">
+                        {{info.personIntro}}
+                    </div>
+                    <div class="vote-top">
+                        <div class="vote-rank">
+                            <div class="vote-count voteD-count">
+                                <dl>
+                                    <dd>当前票</dd>
+                                    <dt style="text-align: center;">{{info.voteNum}}</dt>
+                                </dl>
+                                <dl>
+                                    <dd>排名</dd>
+                                    <dt style="text-align: center;">{{info.ranking}}</dt>
+                                </dl>
+                                <dl>
+                                    <dd>距上一名</dd>
+                                    <dt style="text-align: center;">{{info.lastOne}}</dt>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div @click="toVote(info)">
+                <button class="btn-vote blueGraShadow">投TA一票</button>
+            </div>
+            <div @click="toShare">
+                <button class="btn-vote btn-vote-help">帮TA拉票</button>
+            </div>
+            <div class="toBack" @click="toBack"> < 返回</div>
+            <div class="maskBigPic" v-show="showImgCode"></div> -->
+      <!-- <div class="img-code" v-show="showImgCode">
+                <img id="codeT3" :src="codePath ">
+                <select id="codeSelect" style="display: none;"></select>
+            </div> -->
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jaliswall.js"></script>
+<script type='text/javascript' src="http://v.bootstrapmb.com/2019/9/fep716068/js/jquery.masonry.min.js"></script>
+<script type="text/javascript" src="js/jquery.masonry.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/techStyleDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

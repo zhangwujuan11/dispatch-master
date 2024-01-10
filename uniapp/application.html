@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>申请记录</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+</head>
+ <style type="text/css">
+         [v-cloak]{
+             display: none;
+         }
+    </style>
+
+<body style="background:#efeff4">
+  <div id="app" v-cloak>
+    <div id="appContent">
+		<!-- <img class="clse" src="images/close.png" alt="">
+		<h3 class="item-tit">申请记录</h3> -->
+      <div>
+      <ul class="datalist" v-if="datas.length > 0">
+      	<li v-for="(item,index) in datas" :key="index" @click="godetail(item.id)">
+			<div class="litop">
+				<div>
+					<p class="timeshoose">
+						<span>{{item.applyDate}}</span>
+						<span :class="item.auditStatus=='0'?'bule':item.auditStatus=='1'?'green':'red'">{{item.auditStatus | status}}</span>
+					</p>
+					<div class="licon">
+						<img src="images/people.png" alt="">
+						<div>
+							<p>车牌号码 :{{item.carNo}}</p>
+							<p>保险工单 :{{item.orderNo}}</p>
+							<p>车架号 :{{item.vin}}</p>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+		</li>
+      </ul>
+	  <div style="width: 100%;display: flex;justify-content: center;flex-wrap: wrap;margin-top:100px;"  v-if="datas.length <= 0">
+	  	<img style="width: 50%;" src="images/nodata.png" alt="">
+	  	<p style="width: 100%;text-align: center;margin-bottom: 30px;">暂无相关数据哦~</p>
+	  </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!--   -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+	document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/Servicetss.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/applicationtss.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+
+
+  });
+</script>
+
+</html>
+<style>
+	.tabbox{
+		width: 100%;
+		color: #333333;
+		display: flex;
+		justify-content: space-around;
+		}
+	.item-tit{
+		line-height: 40px;
+		color: #333;
+		font-weight: 600;
+		text-align: center;
+		margin-bottom: 10px;
+	}	
+	
+	#appContent .clse{
+		position: absolute;
+		left: 20px;
+		top: 10px;
+		width: 18px;
+	}
+	.bgImgSet{
+		font-weight: 800;
+		border-bottom: 2px solid  #3366F5;
+	}
+	.tabbox button{
+		padding: 15px 0;
+	}
+	.datalist{
+		width: 100%;
+		background-color: white;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		padding-bottom: 50px;
+	}
+	
+	.datalist li{
+		width: 90%;
+		margin-top: 20px;
+		height: 160px;
+		font-size: 14px;
+		line-height: 32px;
+		box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.2)  ;
+		border-radius: 8px;
+		padding: 15px 25px;
+		box-sizing: border-box;
+		overflow: hidden;
+	}
+	.timeshoose{
+		display: flex;
+		justify-content: space-between;
+	}
+	.timeshoose span{
+		display: block;
+	}
+	.licon{
+		display: flex;
+		align-content: center;
+	}
+	.licon img{
+		width: 90px;
+		height: 90px;
+	}
+	.licon p{
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 100%;
+	}
+	.bule{
+		color: #3366F5;
+	}
+	.green{
+		color: green;
+	}
+	.red{
+		color: red;
+	}
+	[v-cloak] {
+	    display: none;
+	  }
+</style>

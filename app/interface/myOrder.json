@@ -1,0 +1,27 @@
+{
+    "retCode": 200,
+    "retMsg": "成功",
+    "page_size": 5,
+    "page_no": 1,
+    "total_item": 1,
+    "total_page": 1,
+    "data": [
+    {
+        "id": 1,
+        "parkSn": 1288102,
+        "uniToken": "a35c0606-3c05-4d92-b957-dd48dc25c86b",
+        "level": "AU",
+        "orderType": 1,
+        "buyerId": 1003,
+        "buyerName": "13500000000",
+        "orderTime": "2017-10-20 20:02:57",
+        "price": 12000,
+        "profit": 5,
+        "status": 1,
+        "statusDesc": "未支付",
+        "createTime": "2017-10-20 20:02:57",
+        "updateTime": "2017-10-20 20:02:57",
+        "yn": 1
+    }],
+    "success": true
+}

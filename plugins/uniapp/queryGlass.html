@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>玻璃查询</title>
+  <!-- <link rel="stylesheet" href="css/mui.min.css" /> -->
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <div id="appContent">
+      <div v-show="step1">
+        <div class="textLogo">
+          <img src="images/top.jpg" width="100%" />
+        </div>
+        <div class="loginForm">
+          <div class="item-form">
+            <input type="text" v-model="carType" placeholder="输入车型如：奥迪" class="" />
+            <span class="icon_car"></span>
+            <span class="cngType blue" @click="cngCarType">选择车型</span>
+          </div>
+          <div class="item-form">
+            <!-- <select v-model="parts">
+                            <option value="">请选择部位</option>
+                            <option value="前挡">前挡</option>
+                            <option value="后挡">后挡</option>
+                            <option value="左后">左后</option>
+                            <option value="右后">右后</option>
+                            <option value="左前">左前</option>
+                            <option value="右前">右前</option>
+                            <option value="天窗">天窗</option>
+                        </select> -->
+            <input type="text" v-model="parts" placeholder="请选择部位" class="" readonly="" @click="openWinMask" />
+            <span class="icon_part"></span>
+          </div>
+          <div class="item-form">
+            <!-- <input type="text" v-model="yearType" placeholder="输入年款如：17"  class=""/>
+                    <span class="icon_year"></span> -->
+            <input type="text" v-model="yearType" placeholder="年款如：19" class="" id="choose-year" readonly="" />
+            <span class="icon_year"></span>
+          </div>
+          <div>
+            <button class="submit blueGraShadow" @click="queryGlass">玻璃查询</button>
+          </div>
+          <div class="winMask" v-show="isShowWinMask">
+            <div class="mark" @click="closeWinMask"></div>
+            <div class="open-glass">
+              <div class="inner-open-glass">
+                <span class="closs-glass" @click="closeWinMask"></span>
+                <div class="glass-info">
+                  <img src="images/match/glass.jpg" width="100%">
+                  <span class="glass-option" :class="`go`+ index" v-for="(item,index) in glassOptions"
+                    @click="cngGlass(item)"></span>
+                  <!-- <span class="glass-option go1">后挡</span>
+                                    <span class="glass-option go2">左后</span>
+                                    <span class="glass-option go3">右后</span>
+                                    <span class="glass-option go4">左前</span>
+                                    <span class="glass-option go5">右前</span>
+                                    <span class="glass-option go6">天窗</span> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-show="step2">
+        <section class="aui-flexView">
+          <header class="aui-navBar aui-navBar-fixed b-line">
+            <a href="javascript:;" class="aui-navBar-item">
+              <i class="icon icon-return"></i>
+            </a>
+            <div class="aui-center">
+              <span class="aui-center-title">选择品牌</span>
+            </div>
+            <a href="javascript:;" class="aui-navBar-item">
+              <i class="icon icon-sys"></i>
+            </a>
+          </header>
+          <section class="aui-scrollView">
+            <div id="showLetter" class="showLetter">
+              <span>A</span>
+            </div>
+            <div class="letter">
+              <ul>
+                <li v-for="item in arrWords">
+                  <a href="javascript:;">{{item}}</a>
+                </li>
+              </ul>
+            </div>
+            <div class="container">
+              <div class="city">
+                <div class="city-list" v-for="iWord in arrWords">
+                  <span class="city-letter b-line" :id="iWord+`1`">{{iWord}}</span>
+                  <a href="javascript:;" v-for="item in carList" class="aui-flex" v-show="item.firstletter==iWord"
+                    :realId="item.id" @click="cngCar(item)">
+                    <div class="aui-brand-logo">
+                      <img :src="item.img" alt="">
+                    </div>
+                    <div class="aui-flex-box">
+                      <h3>{{item.name}}</h3>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+      <div v-show="step3">
+        <section class="aui-flexView">
+          <header class="aui-navBar aui-navBar-fixed b-line">
+            <a href="javascript:;" class="aui-navBar-item">
+              <i class="icon icon-return"></i>
+            </a>
+            <div class="aui-center">
+              <span class="aui-center-title">选择车型</span>
+            </div>
+            <a href="javascript:;" class="aui-navBar-item">
+              <i class="icon icon-sys"></i>
+            </a>
+          </header>
+          <section class="aui-scrollView">
+            <div class="container">
+              <div class="city">
+                <div class="city-list">
+                  <a href="javascript:;" class="aui-flex" v-for="item in carTypeList" @click="surCarType(item)">
+                    <div class="aui-flex-box">
+                      <h3>{{item.fullName}}</h3>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type="text/javascript" src="js/years.js?v=1.0"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/queryGlass.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+  });
+</script>
+
+</html>

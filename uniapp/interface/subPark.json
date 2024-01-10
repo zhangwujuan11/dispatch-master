@@ -1,0 +1,105 @@
+{
+    "retCode": 200,
+    "retMsg": "成功",
+    "data":
+    {
+        "icon": "1101100",
+        "uniToken": "8f043bd4-d814-42ee-a3cb-8e1a2b7bb612",
+        "level": "AU",
+        "status": 1,
+        "statusDesc": "新建",
+        "saledCount": 0,
+        "unSaledCount": 0,
+        "postions": [
+        {
+            "parkSn": 1101101,
+            "uniToken": "d0881f8b-64b2-40e1-85f1-b5e462bdd369",
+            "parentSn": 1101100,
+            "price": 12000,
+            "buyerId": 1003,
+            "buyerName": "13500000000",
+            "saled": true
+        },
+        {
+            "parkSn": 1101102,
+            "uniToken": "104154a6-4210-46c0-ba76-644a9a9e486d",
+            "parentSn": 1101100,
+            "price": 12000,
+            "buyerId": 1005,
+            "buyerName": "13800000000",
+            "saled": true
+        },
+        {
+            "parkSn": 1101103,
+            "uniToken": "d9c25f5f-90a1-4361-b7e3-7863b3857db1",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101104,
+            "uniToken": "ad6eaf54-e104-4160-b01e-34223cf18514",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101105,
+            "uniToken": "0b27f7ed-a918-4b8b-a042-01adb5d98f4c",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101106,
+            "uniToken": "462e98f3-9190-499a-9ff2-2c1037bf1607",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101107,
+            "uniToken": "212f1d4d-33ff-4e2d-b9b4-cbf53df0abb6",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101108,
+            "uniToken": "27b6c56f-6f2c-4983-a564-50d98ff441d4",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101109,
+            "uniToken": "3b0457b2-c0f8-4a62-bee9-95aff73d09b1",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101110,
+            "uniToken": "78c77021-dd67-436a-a3d0-ee181d8d56c4",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101111,
+            "uniToken": "23f751bf-45dd-4509-8c69-6a7f966365b7",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        },
+        {
+            "parkSn": 1101112,
+            "uniToken": "17257067-06f4-40e8-a8ce-1846d4bc2495",
+            "parentSn": 1101100,
+            "price": 12000,
+            "saled": false
+        }],
+        "allSaled": true
+    },
+    "success": true
+}

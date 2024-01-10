@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>权益服务</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="css/swiper.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <style type="text/css">
+    .swiper-button-prev,
+    .swiper-button-next {
+      display: block;
+      background: url(images/rightService/left.png) center no-repeat;
+      position: absolute;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+      z-index: 10;
+      cursor: pointer;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .swiper-button-next {
+      background: url(images/rightService/right.png) center no-repeat;
+      background-size: contain;
+    }
+  </style>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div id="appContent">
+      <div class="textLogo">
+        <img src="images/entreTop.jpg" width="100%" />
+      </div>
+      <div class="rightService" style="width: 96%; padding-bottom: 60px">
+        <ul class="rightServiceLists fixed" style="padding:0">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>推荐权益</span></h3>
+            <li class="item-rgt" v-for="item in cardList">
+              <div class="item-rgt-img" @click="viewDetail(item.id)">
+                <img :src="item.imgurl ? item.imgurl : `images/rightService/card1.png`" width="100%" />
+              </div>
+              <div class="item-rgt-info"  @click="viewDetail(item.id)">
+                <h3>{{item.title}}</h3>
+                <!-- <p>{{ item.range=="1" ? "30万以下车型" : "30万以上(含)车型"}}</p> -->
+                <p class="service-year">保障期限：1年 </p>
+              </div>
+              <div class="item-rgt-buy">
+                <h3 class="red" v-show="item.priceMin != item.priceMax">
+                  ¥{{item.priceMin}}-{{item.priceMax}}</h3>
+                <h3 class="red" v-show="item.priceMin == item.priceMax">¥{{item.priceMin}}</h3>
+                <p class="btn-rgt-buy" @click="buyCard(item.id)">购买</p>
+              </div>
+            </li>
+            <div class="no-data" v-show="!cardList.length">暂无权益卡信息</div>
+          </div>
+        </ul>
+      </div>
+      <!-- <div style="padding-bottom:20px; margin-top:-20px">
+                <div style="padding:8px 0 24px 0 ">
+                    <div class="speTitle" style="height: 50px; line-height: 50px; ">
+                        <h3>权益订单</h3>
+                    </div>
+                </div>
+                <div class="shopOrder">
+                    <div class="innerShopOrder">
+                        <ul class="shopOrderList fixed">
+                            <li class="item-shopOrder" @click="toCardOrderList">
+                                <h3><span class="icon-order"></span></h3>
+                                <p>权益订单</p>
+                            </li>
+                            <li class="item-shopOrder" @click="toCardPayOrderList">
+                                <h3><span class="icon-pay"></span></h3>
+                                <p>待付款</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div> -->
+      <div class="btns">
+        <button class="startOrder" @click="toCardOrderList">权益订单</button>
+        <button class="cancelOrder" @click="toCardPayOrderList">待付款</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script src="js/swiper.min.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Servicetss.js?v=" + Date.now() + "'><\/script>");
+  // document.write("<script type='text/javascript' src='js/rightService.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/vipServe.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

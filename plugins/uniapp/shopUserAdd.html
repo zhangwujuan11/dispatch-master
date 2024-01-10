@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>新增/编辑店员</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40 shopCont">
+        <div class="item-info">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>店员信息</span></h3>
+              <ul class="item-lists edit-lists">
+                <li class="item-list">
+                  <em>店员姓名</em>
+                  <p v-if="typeEdit !== 'edit'">
+                    <input type="text" v-model="memberInfo.name" value="" placeholder="请输入店员姓名">
+                  </p>
+                  <p v-else>
+                    {{memberInfo.name}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>手机号码</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.phone " value="" placeholder="请输入手机号码"
+                      oninput="if(value.length>11) value=value.slice(0,11)"
+                      onKeyUp="this.value=this.value.replace(/[^\d]/g, '')">
+                  </p>
+
+                </li>
+                <li class="item-list">
+                  <em>&nbsp;&nbsp;</em>
+                  <p><span class="grey">手机号码将作为员工</span><em style="color: #333">登录帐号</em><span
+                      class="grey">，默认首次登录默认密码为手机号后六位，添加成功后请尽快修改密码</span></p>
+                </li>
+                <li class="item-list">
+                  <em>店员性别</em>
+                  <ul class="sexSelect fixed">
+                    <li @click="sexFlagTrue"><i class="iconRadio" :class="sexFlag ? `iconOk` :``"></i><span
+                        class="sex">男</span></li>
+                    <li @click="sexFlagFalse"><i class="iconRadio" :class="!sexFlag ? `iconOk` :``"></i><span
+                        class="sex">女</span></li>
+                  </ul>
+                </li>
+
+                <li class="item-list">
+                  <em>身份证号</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.cardId " value="" placeholder="请输入身份证号"
+                      oninput="if(value.length>18) value=value.slice(0,18)">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>所属岗位</em>
+                  <p>
+                    <select v-model="memberInfo.job">
+                      <option value="">请选择所属岗位</option>
+                      <option value="10">店长</option>
+                      <option value="11">技师</option>
+                      <option value="12">前台</option>
+                      <option value="14">贴膜技术</option>
+                      <option value="15">裁判员</option>
+                      <option value="34">培训讲师</option>
+                      <option value="13">其他</option>
+                    </select>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>开户行名称</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.bankName " value="" placeholder="请输入开户行名称">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>开户行卡号</em>
+                  <p>
+                    <input type="text" name="" v-model="memberInfo.bankNo " value="" placeholder="请输入开户行卡号">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>店员照片</em>
+                  <p class="item-pic upLoadImg">
+                    <img :src="memberInfo.icon?memberInfo.icon:`images/upload.jpg`" class="picFullcar" width="100%" />
+                    <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG"
+                      @change="btnUploadFile(1,'')" />
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="inner-item">
+            <h3 class="item-tit"><span>持证信息</span></h3>
+            <ul class="item-lists edit-lists">
+              <li class="item-list">
+                <em>是否持证</em>
+                <ul class="sexSelect fixed">
+                  <li @click="sinFlagTrue"><i class="iconRadio" :class="singleFlag ? `iconOk` :``"></i><span
+                      class="sex">是</span></li>
+                  <li @click="sinFlagFalse"><i class="iconRadio" :class="!singleFlag ? `iconOk` :``"></i><span
+                      class="sex">否</span></li>
+                </ul>
+              </li>
+              <div class="item-fac" v-show="singleFlag" v-for="(item,index) in certificateDtoList">
+                <li class="item-list">
+                  <em>证书名称</em>
+                  <p>
+                    <input type="text" name="" v-model="item.name" value="" placeholder="请输入证书名称">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>证书级别</em>
+                  <!-- p>
+                    <<input type="text" name="" v-model="item." value="" placeholder="请输入证书级别">
+                  </p> -->
+                  <p @click="toGrade(index)" class="color-cfcfcd">
+                    <label id="choose-grade">{{item.grade ? item.grade :'请选择证书级别'}}</label>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>发证日期</em>
+                  <p>
+                    <input type="date" name="" value="" v-model="item.issueDate" placeholder="请输入发证日期">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>证书照片</em>
+                  <p class="item-pic upLoadImgs">
+                    <img :src="item.certificateImg?item.certificateImg:`images/upload.jpg`" class="picFullcar"
+                      width="100%" />
+                    <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG"
+                      @change="btnUploadFile(2,index)" />
+                  </p>
+                </li>
+              </div>
+            </ul>
+            <div class="item-info" v-show="singleFlag">
+              <div class="inner-item">
+                <button class="logout" @click="addCert">+ 添加证书</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="startOrder fullBtn" @click="updateMember">保存</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/shopUserAdd.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+
+
+  });
+</script>
+
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>活动报名</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+    <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+    <script>
+      document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <div id="appContent">
+            <div class="step1" v-show="!isShowTwo && !isShowShopUser">
+              
+                <div style="background:#f8f8f8">
+                    <div class="innerCont shopCont" style="margin: 0 auto">
+                        <div class="item-info" :class=" activeInfo.shopLimitCount <= (newMemberList.length + memberList.length ) ? `pb40` : `` ">
+                            <div class="inner-item">
+                                <h3 class="item-tit"><span>门店报名信息（共{{activeInfo.singedCount}}人参加活动）</span></h3>
+                                <div class="active-user" v-for="(item,index) in memberList">
+                                    <ul class="item-lists">
+                                        <li class="item-list">
+                                            <em>店员姓名</em>
+                                            <p>
+                                                <span class="blue">{{item.personName}}</span>
+                                                <span>（{{item.jobValue}}）</span>
+                                            </p>
+                                        </li>
+                                        <li class="item-list">
+                                            <em>手机号码</em>
+                                            <p>{{item.phone}}</p>
+                                        </li>
+                                        <li class="item-list">
+                                            <em>参与活动项目</em>
+                                            <p>
+                                                {{item.itemName}}
+                                            </p>
+                                        </li>
+                                        <li class="item-list"  v-if="activeInfo.joinFlag == 1">
+                                            <em>参赛照片</em>
+                                            <p v-if="!item.isEdit">
+                                                <img :src="item.personImg?item.personImg:`images/upload.jpg`" class="picFullcar"  width="100%" />
+                                            </p>
+                                            <div v-if="item.isEdit" class="upDrive" style="width: 69%; margin-left: auto; position: relative;">
+                                                    <div class="item-pic upLoadImgs" style="margin-left: 0" >
+                                                        <img :src="item.personImg?item.personImg:`images/upload.jpg`" class="picFullcar"  width="100%" />
+                                                        <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG" @change="btnUploadFile(index,1)" />
+                                                        <div class="maskUploadImg" v-show="item.isShowMask">
+                                                            <span class="maskLoading"></span>
+                                                        </div>
+                                                        <div class="noPass"  >
+                                                            <p>修改参赛照片</p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div v-show="item.auditStatus==-1" class="markInfo red">
+                                                        {{item.auditDes}}
+                                                    </div> -->
+                                                </div>
+                                        </li>
+                                        <li class="item-list"  v-if="activeInfo.joinFlag == 1">
+                                            <em>店员简介</em>
+                                            <p v-if="!item.isEdit">
+                                                {{item.personIntro}}
+                                            </p>
+
+                                            <p v-else>
+                                                <textarea class="activeIv" v-model="item.personIntro" placeholder="请填写何时加入福耀门店？从事汽车玻璃安装技术几年？持有什么证书？参加过什么培训？获得过什么荣誉和奖励？有什么特长和爱好？说说您的参赛想法："></textarea>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                    <div class="order-bottom" style="border:none; height: 22px; padding:5px 0 0 0; ">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <div class="item-option">
+                                                <div v-if="!activeInfo.freeFlag">
+                                                    <em class="red" v-if="item.payStatus == 0">未支付</em>
+                                                    <em class="blue" v-else-if="item.payStatus == 1">已支付</em>
+                                                    <em class="green" v-else-if="item.payStatus == 3">退款中</em>
+                                                </div>
+                                            </div>
+
+                                            <div class="item-option" @click="editActive(item,index)" style="padding:0">
+                                                <span class="icon-edit"></span>
+                                                <em class="blue" v-if="">{{ item.isEdit ? '确认编辑' : '编辑信息' }} 
+                                                </em>
+                                            </div>
+
+
+                                            <div class="item-option" @click="cancelActive(item)" style="padding:0">
+                                                <span class="icon-del"></span>
+                                                <em class="red">取消报名</em>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="active-user" v-for="(item,index) in newMemberList">
+                                    <ul class="item-lists">
+                                        <li class="item-list">
+                                            <em>店员姓名</em>
+                                            <p>
+                                                <span class="blue">{{item.personName}}</span>
+                                                <span>（{{item.jobValue}}）</span>
+                                            </p>
+                                        </li>
+                                        <li class="item-list">
+                                            <em>手机号码</em>
+                                            <p>{{item.phone}}</p>
+                                        </li>
+                                        <li class="item-list">
+                                            <em style="line-height:20px; width:68px">参与活动项目</em>
+                                            <p>
+                                                <select v-model="item.itemId">
+                                                    <option value="">请选择参与活动项目</option>
+                                                    <option :value="item.id" v-for="item in itemsVOList">
+                                                        {{item.name}}
+                                                    </option>
+                                                </select>
+                                            </p>
+                                        </li>
+                                        <li class="item-list" v-if="activeInfo.joinFlag == 1">
+                                            <em style="line-height:20px; width:68px">参赛照片</em>
+                                                <div class="upDrive" style="width: 69%; margin-left: auto; position: relative;">
+                                                    <div class="item-pic upLoadImgs" style="margin-left: 0" >
+                                                        <img :src="item.personImg?item.personImg:`images/upload.jpg`" class="picFullcar"  width="100%" />
+                                                        <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG" @change="btnUploadFile(index,2)" />
+                                                        <div class="maskUploadImg" v-show="item.isShowMask">
+                                                            <span class="maskLoading"></span>
+                                                        </div>
+                                                       <!--  <div class="noPass" v-show="item.auditStatus==-1">
+                                                            <span>不通过</span>
+                                                            <p>重新上传</p>
+                                                        </div> -->
+                                                    </div>
+                                                    <!-- <div v-show="item.auditStatus==-1" class="markInfo red">
+                                                        {{item.auditDes}}
+                                                    </div> -->
+                                                </div>
+                                        </li>
+
+                                        <li class="item-list" v-if="activeInfo.joinFlag == 1">
+                                            <em>店员简介</em>
+                                            <p>
+                                                <textarea class="activeIv" v-model="item.personIntro" placeholder="请填写何时加入福耀门店？从事汽车玻璃安装技术几年？持有什么证书？参加过什么培训？获得过什么荣誉和奖励？有什么特长和爱好？说说您的参赛想法："></textarea>
+                                            </p>
+                                        </li>
+                                        
+                                    </ul>
+                                    <div class="order-bottom" style="border:none; height: 22px ">
+                                        <div style="display: flex; justify-content: flex-end;">
+                                            <!-- <button class="orderBtn redBorder">取消报名</button> -->
+                                            <div class="item-option" style="    margin-top:4px" @click="cancelShopUser(index,item)">
+                                                <span class="icon-del"></span>
+                                                <em class="red">取消报名</em>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="order-bottom" style="border:none; ">
+                                        <div @click="cancelShopUser(index,item)">
+                                            <button class="orderBtn redBorder">取消报名</button>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="no-data" v-show="!memberList.length && !newMemberList.length">暂无报名店员信息</div>
+                            </div>
+                        </div>
+                        <div class="item-info" v-show="activeInfo.shopLimitCount > (newMemberList.length + memberList.length )" style="background:#f8f8f8" :class=" ((surpluCount || restPay.length) && (newMemberList.length || memberList.length) ) ? `pb50` : `pb10`">
+                            <div class="inner-item" style="background: #fff">
+                                <button class="logout" @click="selShopUser">选择店员</button>
+                            </div>
+                        </div>
+                        <div class="btns" v-if="(surpluCount || restPay.length) && (newMemberList.length || memberList.length)">
+                            <button class="startOrder fullBtn" @click="surShopUserInfo">确认报名</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-show="isShowShopUser" style="background: #f8f8f8">
+                <div class="innerCont pb40 shopCont" style="margin: 0 auto 40px; padding:10px 0">
+                    <!-- 选择店员 -->
+                    <div class="item-info" v-for="item in pdlist">
+                        <div class="inner-item">
+                            <ul class="item-lists" @click="getSelectUser(item)">
+                                <li class="item-list">
+                                    <em>店员姓名</em>
+                                    <p>
+                                        <span class="blue">{{item.name}}</span>
+                                        <span>（{{item.jobValue}}）</span>
+                                    </p>
+                                </li>
+                                <li class="item-list">
+                                    <em>手机号</em>
+                                    <p>{{item.phone}}</p>
+                                </li>
+                                <span class="icon_check " :class=" item.selFlag ?  `icon_check_on` : ``"></span>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="no-data" v-show="!pdlist.length">
+                        <span>暂无店员信息</span> <a href="shopUserManager.html" class="blue">去添加</a>
+                    </div>
+                </div>
+                <div class="btns">
+                    <button class="cancelOrder" @click="cancelUerSel()">返回</button>
+                    <button class="startOrder " @click="surUserSel()">确认选择</button>
+                </div>
+            </div>
+            <div class="step2" v-show="isShowTwo">
+                <div class="payStatus">
+                    <img src="images/activeOk.png" width="31%" />
+                    <h3>报名提交成功</h3>
+                    <!-- <p v-show="payInfo.freeSum">免费名额：<em class="blue p18">{{payInfo.freeSum}} </em>人</p> -->
+                    <p>
+                        <span>支付名额：<em class="blue p18">{{payInfo.sum}} </em>人</span>
+                        <span v-show="payInfo.freeSum">（含 {{payInfo.freeSum}} 人名额）</span>
+                    </p>
+                    <p>支付金额：
+                        <em class="red p18">¥ {{payInfo.price}}</em>
+                    </p>
+                </div>
+                <div class="showPayOrder">
+                    <button class="submit blueGraShadow" @click="payOrder">立即支付</button>
+                    <button class="btn-reg" @click="pre">返回</button>
+                </div>
+            </div>
+        </div>
+        <div id="tip-box">
+            <div class="wx_confirm_tit" id="tip-mes"></div>
+        </div>
+        <!-- <div class="mask" id="mask" @click="hideMask"></div>
+        <div class="_loading" id="loading"><img src="images/loading.gif" /></div> -->
+    </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script src="plugins/lazyload/lazyload.js"></script>
+<script type='text/javascript' src="js/jswx.js?v=1.1"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/activeSignUp.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

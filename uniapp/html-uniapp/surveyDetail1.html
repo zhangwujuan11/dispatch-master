@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>勘验单详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <link rel="stylesheet" type="text/css" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont" v-show="step1"
+        :class="{ 'pb40': memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106}">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>基本信息</span></h3>
+            <ul class="item-lists pb10">
+              <li class="item-list">
+                <em>客户姓名</em>
+                <p><i class="icon_star"></i><span>{{memberInfo.userName}}</span></p>
+              </li>
+              <li class="item-list">
+                <em>联系方式</em>
+                <p>{{memberInfo.mobile}}</p>
+              </li>
+              <li class="item-list">
+                <em>车牌号码</em>
+                <p>{{memberInfo.carNo}}</p>
+              </li>
+              <li class="item-list">
+                <em>车辆车型</em>
+                <p>{{memberInfo.carType}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info" v-show="memberInfo.orderType != 100">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>{{searchName}}</span></h3>
+            <ul class="item-lists pb10">
+              <li class="item-list">
+                <em>预约时间</em>
+                <p>{{memberInfo.appointmentTime}}</p>
+              </li>
+              <li class="item-list">
+                <em>指导价</em>
+                <p>{{memberInfo.guidancePrice}}</p>
+              </li>
+              <li class="item-list" v-if="memberInfo.caseSn">
+                <em>报案号</em>
+                <p>{{memberInfo.caseSn}}</p>
+              </li>
+              <li class="item-list" v-if="memberInfo.insuranceCompany">
+                <em>保险公司</em>
+                <p>{{memberInfo.insuranceCompany}}</p>
+              </li>
+              <li class="item-list">
+                <em>破损原因</em>
+                <p
+                  v-if="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                  <input type="text" v-model="damageReasons" placeholder="请查看车身是否受损，如受损请立刻反馈客服并暂不提供服务。">
+                </p>
+                <p v-else>{{damageReasons}}</p>
+              </li>
+              <li class="item-list">
+                <em>建议维修方案</em>
+                <p @click="toRepair" class="color-cfcfcd"
+                  v-if="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                  <label id="choose-repair">{{memberInfo.suggestType == '' ? '请选择维修方案':memberInfo.suggestType }}</label>
+                </p>
+                <p v-else>{{memberInfo.suggestType}}</p>
+              </li>
+              <li class="item-list">
+                <em>维修方案备注</em>
+                <p
+                  v-if="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                  <input type="text" v-model="memberInfo.suggestDes" placeholder="请输入维修方案备注">
+                </p>
+                <p v-else>{{memberInfo.suggestDes}}</p>
+              </li>
+              <li class="item-list">
+                <em>维修或更换部位</em>
+                <p @click="toPosition" class="color-cfcfcd"
+                  v-if="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                  <label
+                    id="choose-position">{{memberInfo.changePart == '' ? '请选择维修或更换的部位' :memberInfo.changePart}}</label>
+                </p>
+                <p v-else>{{memberInfo.changePart}}</p>
+              </li>
+              <li class="item-list">
+                <em>商品品牌</em>
+                <p @click="toGoods" class="color-cfcfcd"
+                  v-if=" memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                  <label id="choose-goods">{{ memberInfo.productBrand == '' ?'请选择商品' : memberInfo.productBrand}}</label>
+                </p>
+                <p v-else>{{memberInfo.productBrand}}</p>
+              </li>
+              <li class="item-list">
+                <em>商品名称</em>
+                <div class="glassss"
+                  v-if="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                  <input type="text" v-model="memberInfo.productName" placeholder="请输入或选择商品" class="chaxun">
+                  <div class="serleglass" @click="toProName('proName')">选择商品</div>
+                </div>
+                <p v-else>{{memberInfo.productName}}</p>
+              </li>
+              <li class="item-list">
+                <em>CARG码</em>
+                <p
+                  v-if="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                  <input type="text" v-model="memberInfo.carg" placeholder="请输入CARG码">
+                </p>
+                <p v-else>{{memberInfo.carg}}</p>
+              </li>
+              <li class="item-list">
+                <em>服务金额</em>
+                <p
+                  v-if="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106">
+                  <input type="number" v-model="memberInfo.servicePrice" placeholder="请输入服务金额"
+                    oninput="value = value.replace(/[^0-9]/g,'')">
+                </p>
+                <p v-else>{{memberInfo.servicePrice}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info" v-show="memberInfo.orderType == 100">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>破损原因</span></h3>
+            <ul class="item-lists">
+              <div class="cont-refuse cont-worn" v-show="memberInfo.orderStatus == 101">
+                <textarea placeholder="请查看车身是否受损，如受损请立刻反馈客服并暂不提供服务。" v-model="damageReasons"
+                  style=" border-radius: 6px; width: 90%; padding: 10px 5%"></textarea>
+              </div>
+              <div class="cont-refuse cont-worn" v-show="memberInfo.orderStatus != 100">
+                <p class="mt10" style="line-height:22px; border-radius: 6px; width: 90%; padding: 10px 5%">
+                  {{ memberInfo.damageReasons }}</p>
+              </div>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item" v-show="memberInfo.orderAuditList">
+            <h3 class="item-tit"><span>破损照片</span></h3>
+            <ul class="item-lists" v-for="(item,index) in memberInfo.orderAuditList">
+              <h3 class="tit-require pt10">
+                <em class="red">*</em>
+                <span class="sBlue">{{item.name}}</span>
+              </h3>
+              <p class="markInfo grey">{{item.remarks}}</p>
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img :src="item.imgurl" width="100%" />
+                  <p>例图</p>
+                </div>
+                <div class="item-pic upLoadImgs"
+                  v-show="memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106"
+                  :checkItemId="item.checkItemId" :orderSn="memberInfo.orderSn">
+                  <!-- <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%" />
+                                    <div class="noPass" v-show="item.auditStatus==-1">
+                                        <span>不通过</span>
+                                        <p>重新上传</p>
+                                    </div> -->
+                  <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%"
+                    :checkItemId="item.checkItemId" :orderSn="memberInfo.orderSn" />
+                  <input accept="image/*" name="image" type="file" class="addUploadImg"
+                    @change="btnUploadFile(index)" />
+                  <div class="maskUploadImg" style="display: none">
+                    <span class="maskLoading"></span>
+                  </div>
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <p>重新上传</p>
+                  </div>
+                </div>
+                <div class="item-pic"
+                  v-show="memberInfo.orderStatus != 100 && memberInfo.orderStatus != 101 && memberInfo.orderStatus != 106"
+                  :checkItemId="item.checkItemId" :orderSn="item.id">
+                  <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%" />
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <!-- <p>重新上传</p> -->
+                  </div>
+                </div>
+                <div v-show="item.auditStatus==-1" class="markInfo red">
+                  {{item.auditDes}}
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="btns" v-show="step1 && (memberInfo.orderStatus == 100 || memberInfo.orderStatus == 101 || memberInfo.orderStatus == 106)">
+        <button class="startOrder fullBtn" @click="add">提交勘验单</button>
+      </div>
+      <div v-show="step4" style="background:#efeff4">
+        <div class="search">
+          <span class="icon_search"></span>
+          <input type="txet" v-model="kw" class="pro-search"
+            style="width: 100%; height: 20px; line-height: 20px; padding:12px 0; text-indent: 32px; color: #333" name=""
+            @input="search(kw)" :placeholder="searchType == 'proName' ?  `搜索商品名称` : `搜索太阳膜防伪码`">
+        </div>
+        <div class="excellContent">
+          <div class="mp60">
+            <div id="mescroll" class="mescroll">
+              <ul class="wasteLists fixed" id="dataList">
+                <li class="wasteList" v-for="pl in prolist" @click="surSrh(pl)">
+                  <p>{{pl.glassName}}</p>
+                  <p class="grey">商品编码： [ {{pl.carg}} ] </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+  
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/surveyDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

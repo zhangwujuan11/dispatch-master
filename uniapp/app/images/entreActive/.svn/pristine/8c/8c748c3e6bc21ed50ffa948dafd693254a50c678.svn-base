@@ -1,0 +1,28 @@
+var temp_url = decodeURI(window.location.href),
+    tempJson = fn.unEscapeToJson(temp_url);
+var userInfo = { token: "" };
+var vm = new Vue({
+    el: '#app',
+    data() {
+        return {
+
+        }
+    },
+    methods: {
+    	navTo(url){
+    		window.location.href = url
+    	}
+
+    },
+    mounted: function() {
+
+        $('.item-list').css("height", $('.item-list').width() + 'px');
+        $('.item-list img').css("margin-top", parseInt(($('.item-list').width() - 66) / 2) + 'px');
+        $(window).resize(function() {
+            $('.item-list').css("height", $('.item-list').width() + 'px');
+            $('.item-list img').css("margin-top", parseInt(($('.item-list').width() - 66) / 2) + 'px');
+        });
+
+
+    }
+})

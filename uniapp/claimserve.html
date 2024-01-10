@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>订单确认</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="css/swiper.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <style type="text/css">
+    .swiper-button-prev,
+    .swiper-button-next {
+      display: block;
+      background: url(images/rightService/left.png) center no-repeat;
+      position: absolute;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+      z-index: 10;
+      cursor: pointer;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .swiper-button-next {
+      background: url(images/rightService/right.png) center no-repeat;
+      background-size: contain;
+    }
+  </style>
+</head>
+
+<body style="background:#fff">
+  <div id="app">
+    <div id="appContent">
+      <!-- Swiper -->
+      <div class="cardCont cardOrder">
+        <div class="swiper-slide">
+          <img :src="rightCardDetail.imgurl ? rightCardDetail.imgurl : `images/rightService/card1.png`" width="100%">
+          <div class="card-title">
+            <!-- <h3>无忧膜力卡</h3> -->
+            <p>{{rightCardDetail.range=="1" ? "适用30万以下车型" : "适用30万以上（含）车型"}}</p>
+            <p class="cardPrice">
+              <em>¥</em> <span class="p18"
+                v-show="rightCardDetail.priceMin !=rightCardDetail.priceMax">{{parseInt(rightCardDetail.priceMin)}}-{{parseInt(rightCardDetail.priceMax)}}</span>
+              <span class="p18"
+                v-show="rightCardDetail.priceMin ==rightCardDetail.priceMax">{{parseInt(rightCardDetail.priceMin)}}</span>
+            </p>
+          </div>
+          <div class="card-detail">
+            <p v-show="rightCardDetail.yearMin != rightCardDetail.yearMax">
+              保障期限：{{rightCardDetail.yearMin}}-{{rightCardDetail.yearMax}}年</p>
+            <p v-show="rightCardDetail.yearMin == rightCardDetail.yearMax">保障期限：{{rightCardDetail.yearMin}}年</p>
+          </div>
+        </div>
+      </div>
+      <div class="innerCardOrder">
+        <div class="greyHr"></div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>保障内容</span></h3>
+            <ul class="item-lists">
+              <li class="item-list" v-for="item in safeguards">
+                <em style=" width:100%;">{{item.name}}</em>
+                <p class="blue">{{item.num}} {{item.unit}} （年）</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="greyHr"></div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>享受权益车辆信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>车主姓名</em>
+                <p class="blue">
+                  {{userInfo.name}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>手机号码</em>
+                <p>
+                  {{userInfo.mobile}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>车主性别</em>
+                <p>{{userInfo.sex}}</p>
+              </li>
+              <li class="item-list" v-show="userInfo.birthday">
+                <em>生日时间</em>
+                <p>
+                  {{userInfo.birthday}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>车牌号码</em>
+                <p class="blue">
+                  {{userInfo.carNo}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>车辆车型</em>
+                <p>
+                  {{userInfo.bandType}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>车身颜色</em>
+                <p>
+                  {{userInfo.carColor}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>VIN码</em>
+                <p>
+                  {{userInfo.vin}}
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="greyHr"></div>
+        <div class="item-info">
+          <div class="inner-item" v-show="info.orderAuditList">
+            <h3 class="item-tit"><span>权益审核信息</span></h3>
+            <ul class="item-lists" v-for="(item,index) in info.orderAuditList">
+              <h3 class="tit-require pt10">
+                <em class="red">*</em>
+                <span class="sBlue">{{item.name}}</span>
+              </h3>
+              <p class="markInfo grey">{{item.remarks}}</p>
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img :src="item.imgurl" width="100%" />
+                  <p>例图</p>
+                </div>
+                <!-- <div class="item-pic upLoadImgs" v-show="info.status == 0 || info.status == -1"  :checkItemId="item.checkItemId" :orderSn="info.orderSn" @click="upImg(index)">
+                                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%" />
+                                    <div class="noPass" v-show="item.auditStatus==-1">
+                                        <span>不通过{{index}}</span>
+                                        <p>重新上传</p>
+                                    </div>
+                                </div> -->
+                <div class="item-pic upLoadImgs" v-show="info.status == 0 || info.status == -1"
+                  :checkItemId="item.checkItemId" :orderSn="info.orderSn" @click="upImg(index)">
+                  <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%"
+                    :checkItemId="item.checkItemId" :orderSn="info.orderSn" />
+                  <input accept="image/*" type="file" class="addUploadImg" @change="btnUploadFile(index)" @click="authority"/>
+                  <div class="maskUploadImg" style="display: none">
+                    <span class="maskLoading"></span>
+                  </div>
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <p>重新上传</p>
+                  </div>
+                </div>
+                <div class="item-pic" v-show="info.status != 0 && info.status != -1" :checkItemId="item.checkItemId"
+                  :orderSn="info.orderSn">
+                  <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%" />
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <p>重新上传</p>
+                  </div>
+                </div>
+                <div v-show="item.auditStatus==-1" class="markInfo red">
+                  {{item.auditDes}}
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+        <div class="greyHr"></div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>支付信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>权益卡名称</em>
+                <p>
+                  {{rightCardDetail.title}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>保障期限</em>
+                <p>
+                  {{info.year}} 年
+                </p>
+              </li>
+              <li class="item-list">
+                <em>实付金额(元)</em>
+                <p class="p18 red">
+                  ¥ {{info.price}}
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- <div class="item-info" v-show="paySucMsg">
+                <div class="inner-item">
+                    <div >{{paySucMsg}}</div>
+                </div>
+            </div> -->
+      </div>
+      <div class="btns" v-show="info.payStatus == 0">
+        <button class="startOrder" @click="payCardOption">立即支付</button>
+        <button class="cancelOrder" @click="codePay">收款码</button>
+      </div>
+      <div class="btns" v-show="info.payStatus == 1 && (info.status == 0 || info.status == -1)">
+        <button class="startOrder fullBtn" @click="add">提交权益审核信息</button>
+      </div>
+
+      <div style="display: none;" class="authority_mask" @click="hideAuthorityMask">
+        <div class="authority_mask_box">
+          <div>相机、储存空间/照片权限使用说明：</div>
+          <div>用于拍摄照片、扫码、上传图片等场景</div>
+        </div>
+      </div> 
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script src="js/swiper.min.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/cardOrder.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

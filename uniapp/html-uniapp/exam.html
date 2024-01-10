@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>考试测评</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div>
+      <div class="questions" style="padding-bottom:100px">
+        <input type="hidden" class="postion" value="" />
+        <input type="hidden" class="answerStartTime" value="" />
+        <input type="hidden" class="time" value="" />
+        <div class="questionList" id="choice">
+
+          <!-- <dl class="question singleAnswer" realId='3'>
+                        <dt>1.物流运输是链接生产和消费的纽带，与我们的工作、生活息息相关。您属于？</dt>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">A</em>、货运物流业从业者</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">B</em>、生产制造业从业者</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">C</em>、批发零售业从业者</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">D</em>、国际贸易从业者</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">E</em>、农林牧渔业从业者</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">F</em>、普通消费者</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">G</em>、其他
+                                <input type='text' class="unKnowInput" value="" />
+                            </p>
+                        </dd>
+                        <input type="hidden" class="getSingleAnswer" textSingleAnswer="" value="" />
+                    </dl>
+                    <dl class="question mulAnswer" realId='5'>
+                        <dt>3.物流成本既包括运输、保管等“看得见”的成本，也包括利息、货损等“看不见”的成本。您认为，近年来物流成本中增长较快的是哪些？（最多选三项）</dt>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">A</em>、铁路运输成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">B</em>、公路运输成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">C</em>、水路运输成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">D</em>、配送成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">E</em>、仓储成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">G</em>、信息及相关服务成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">H</em>、利息成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">I</em>、货物损耗成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">J</em>、保险成本</p>
+                        </dd>
+                        <dd>
+                            <i class="iconRadio"></i>
+                            <p><em class="test">K</em>、其他
+                                <input type='text' class="unKnowInput" value="" />
+                            </p>
+                        </dd>
+                        <input type="hidden" class="getMulAnswer" textMulAnswer="" value="" />
+                    </dl> -->
+
+        </div>
+      </div>
+      <div class="qfooter">
+        <div class="inner-info">
+          <div class="questionInfo">
+            <i class="iconInfo"></i>
+            <span> <em class="currentNum">0</em> / <em class="totalNum">0</em></span>
+            <div class="restTime" id="countdown">剩余时间：<span class="restMin blue">00</span> 分 <span
+                class="restSec blue">00</span> 秒</div>
+          </div>
+
+          <button class="sucPaper queSub">提 交</button>
+        </div>
+      </div>
+      <!-- <div class="btns">
+                    <button class="startOrder fullBtn" >提交</button>
+                </div> -->
+    </div>
+  </div>
+  <div id="tip-box">
+    <div class="wx_confirm_tit" id="tip-mes"></div>
+  </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/exam.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

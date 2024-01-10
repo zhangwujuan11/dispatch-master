@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>收款码列表</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40 shopCont">
+        <ul>
+          <div class="item-info" v-for="item in pdlist">
+            <div class="inner-item">
+              <ul class="item-lists">
+                <div class="upDrive codePay">
+                  <div class="item-pic">
+                    <b>{{item.payMethodValue}}付款码</b>
+                  </div>
+                  <div class="item-pic">
+                    <img :src="item.payCodeImg" class="picFullcar" width="100%" />
+                  </div>
+                </div>
+              </ul>
+              <div class="order-bottom">
+                <div>
+                  <button class="orderBtn blueBorder" @click="edit(item.id)">编辑</button>
+                  <button class="orderBtn redBorder" @click="del(item.id)">删除</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="no-data" v-if="!pdlist.length">
+            暂无付款码信息
+          </div>
+        </ul>
+      </div>
+      <div class="btns">
+        <button class="startOrder fullBtn" @click="add()">添加收款码</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/codePay.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

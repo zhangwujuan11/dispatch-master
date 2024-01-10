@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>结算单位</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <!-- 头部信息结束 -->
+    <div class="content nobottom orderList_content">
+      <!-- <p style="line-height:50px; color:#999; text-align:center">仅展示最近90个自然日的申请</p> -->
+      <div id="mescroll" class="notice-content selService-content mescroll" style="top:0">
+        <!-- 待支付 -->
+        <ul id="dataList" class="order-items dataList">
+          <li class="settleList chargeList" v-for="item in pdlist">
+            <!-- <div class="icon-select">
+                            <span class="icon-radio" :class="item.flagSel ? `icon-radio-ok` : `` "></span>
+                        </div> -->
+            <div class="settleInfo">
+              <div class="settle-context" @click="toView(item.settlementId)">
+                <div class="item-info">
+                  <label class="grey">结算单位：</label>
+                  <span>{{item.settlementName}}</span>
+                </div>
+                <div class="item-info">
+                  <label class="grey">纳税人识别号：</label>
+                  <span>{{item.nsrsbh}}</span>
+                </div>
+                <!--        <div class="item-info">
+                                    <label class="grey">结算方式：</label>
+                                    <span>{{ item.settletmentMethod==1 ? "自开" : "一级代开"}}</span>
+                                </div> -->
+                <div class="set-prix">
+                  <span class="grey showMore"> </span>
+                </div>
+              </div>
+            </div>
+            <div class="order-bottom unit-bottom">
+              <div>
+                <button class="orderBtn blueBorder" @click="edit(item.settlementId)">编辑</button>
+                <button class="orderBtn redBorder" @click="del(item.settlementId)">删除</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="startOrder fullBtn" @click="addUnitCharge">添加结算单位</button>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/unitCharge.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

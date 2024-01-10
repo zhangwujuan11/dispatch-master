@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>技能大赛列表</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <div id="appContent">
+      <div class="pb40">
+        <div class="greyBg" style="height:10px"></div>
+        <div id="mescroll" class="notice-content selService-content mescroll" style="top:0">
+          <!-- 待支付 -->
+          <ul id="dataList" style="display: block; background:#fff; padding: 0 10px">
+            <li class="matchList" v-for="item in pdlist" @click="viewDetail(item)">
+              <div class="item-matchList">
+                <p>{{item.userName}} </p>
+                <p>（{{item.mobile}}）</p>
+              </div>
+              <div class="item-matchList" style="flex-direction:column">
+                <p>
+                  <label class="grey">服务技师：</label>
+                  <span class="blue">{{item.personName}}</span>
+                </p>
+                <p>
+                  <label class="grey">服务时间：</label>
+                  <span>{{item.createDate}}</span>
+                </p>
+              </div>
+              <div class="item-matchList">
+                <span class="matchShowMore"></span>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="startOrder fullBtn" @click="add()">参加技能大赛</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/matchSkillList.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

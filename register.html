@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>我的门店</title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>基本信息</span></h3>
+            <ul class="item-lists reg-lists">
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em>门店名称</em>
+                <p>
+                  <input type="text" name="" v-model="shopInfo.name" value="" placeholder="请按营业执照上的名称填写" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em style="line-height:20px; width:68px">联系电话</em>
+                <p>
+                  <input type="number" v-model="shopInfo.linktel" name="" value="" placeholder="请输入联系电话"
+                    oninput="if(value.length>11) value=value.slice(0,11)" placeholder="请输入联系电话" class=""
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em style="line-height:20px; width:68px">统一社会信用代码</em>
+                <p>
+                  <input type="text" v-model="shopInfo.nsrsbh" name="" value="" placeholder="请输入统一社会信用代码" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em>销售区域</em>
+                <p>
+                  <input type="text" v-model="shopInfo.saleArea" name="" value="" placeholder="请输入销售区域" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em>法人代表</em>
+                <p>
+                  <input type="text" v-model="shopInfo.legalPerson" name="" value="" placeholder="请输入法人代表" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em>负责人姓名</em>
+                <p>
+                  <input type="text" v-model="shopInfo.chargeName" name="" value="" placeholder="请输入负责人姓名" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em style="line-height:20px; width:68px">负责人联系电话</em>
+                <p>
+                  <input type="text" v-model="shopInfo.chargeMobile" name="" value="" placeholder="请输入负责人联系电话"
+                    oninput="if(value.length>11) value=value.slice(0,11)" placeholder="请输入负责人联系电话" class=""
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em style="line-height:20px; width:68px">短信验证码</em>
+                <p>
+                  <input type="text" v-model="shopInfo.verifyCode" name="" value="" />
+                  <button v-show="showSendBtn == 0" id="sendCode" class="sendCode disalbed">获取验证码</button>
+                  <button v-show="showSendBtn == 1" id="sendCode" class="sendCode" @click="sendCode">获取验证码</button>
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em>负责人微信</em>
+                <p>
+                  <input type="text" v-model="shopInfo.chargeWx" name="" value="" placeholder="请输入负责人微信" />
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>门店信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em>省市区</em>
+                <p id="choose-city">
+                  <span class="choice" v-show="!shopInfo.zone">请选择 <i class="iconfont icon-arrow-right"
+                      style="font-size: 16px;"></i></span>
+                  <span class="choice" v-show="shopInfo.zone">{{shopInfo.province}} {{shopInfo.city}} {{shopInfo.zone}}
+                    <i class="iconfont icon-arrow-right" style="font-size: 16px;"></i></span>
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em>详细地址</em>
+                <p>
+                  <input type="text" v-model="shopInfo.address" name="" value="" id="address" placeholder="请输入详细地址" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em>门店数量</em>
+                <p>
+                  <input type="number" v-model="shopInfo.shopNum" name="" value="" placeholder="请输入门店数量"
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em style="line-height:20px; width:68px">门店面积(m²)</em>
+                <p>
+                  <input type="number" v-model="shopInfo.warehousesArea" name="" value="" placeholder="请输入门店面积(m²)"
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em style="line-height:20px; width:68px">安装工位(个)</em>
+                <p>
+                  <input type="number" v-model="shopInfo.azgwNum" name="" value="" placeholder="请输入安装工位(个)"
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <label class="red"> * </label>
+                <em style="line-height:20px; width:68px">安装技师(个)</em>
+                <p>
+                  <input type="number" v-model="shopInfo.azjsNum" name="" value="" placeholder="请输入安装技师(个)"
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <em>营业时间</em>
+                <p>
+                  <span class="choice">
+                    <em style="color:#333">早</em>
+                    <label id="openb" v-text="shopInfo.openb ? shopInfo.openb : `请选择`">
+                    </label>
+                    <em style="color:#333">晚</em>
+                    <label id="opene" v-text="shopInfo.opene ? shopInfo.opene : `请选择`">
+                    </label>
+
+                  </span>
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:68px">户外安装工具车(辆)</em>
+                <p>
+                  <input type="number" v-model="shopInfo.hwazgjcNum" name="" value="" placeholder="请输入户外安装工具车(辆)"
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <em>仓库数量</em>
+                <p>
+                  <input type="number" v-model="shopInfo.warehousesNum" name="" value="" id="address"
+                    placeholder="请输入仓库数量" onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <em>仓库面积</em>
+                <p>
+                  <input type="number" v-model="shopInfo.warehousesArea" name="" value="" placeholder="请输入仓库面积"
+                    onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:68px">库存情况(万元)</em>
+                <p>
+                  <input type="number" v-model="shopInfo.stores" name="" value="" id="address" placeholder="请输入详细地址" />
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- <div class="item-info">
+                    <div class="inner-item">
+                        <h3 class="item-tit"><span>门店图片</span></h3>
+                        <ul class="item-lists">
+                            <div class="upDrive">
+                                <div class="item-pic">
+                                    <img src="images/store-1.png" width="100%" />
+                                    <p>示例：休息区</p>
+                                </div>
+                                <div class="item-pic" @click="upImg(imgShopOne)">
+                                    <img :src="imgShopOne.imgPath ? imgShopOne.imgPath : `images/upload.jpg`" width="100%" />
+                                </div>
+                            </div>
+                        </ul>
+                        <ul class="item-lists">
+                            <div class="upDrive">
+                                <div class="item-pic">
+                                    <img src="images/store-2.png" width="100%" />
+                                    <p>示例：门头</p>
+                                </div>
+                                <div class="item-pic" @click="upImg(imgShopTwo)">
+                                    <img :src="imgShopTwo.imgPath ? imgShopTwo.imgPath : `images/upload.jpg`" width="100%" />
+                                </div>
+                            </div>
+                        </ul>
+                        <ul class="item-lists">
+                            <div class="upDrive">
+                                <div class="item-pic">
+                                    <img src="images/store-3.jpg" width="100%" />
+                                    <p>示例：前台区</p>
+                                </div>
+                                <div class="item-pic" @click="upImg(imgShopThree)">
+                                    <img :src="imgShopThree.imgPath ? imgShopThree.imgPath : `images/upload.jpg`" width="100%" />
+                                </div>
+                            </div>
+                        </ul>
+                        <ul class="item-lists">
+                            <div class="upDrive">
+                                <div class="item-pic">
+                                    <img src="images/store-4.png" width="100%" />
+                                    <p>示例：施工区</p>
+                                </div>
+                                <div class="item-pic" @click="upImg(imgShopFour)">
+                                    <img :src="imgShopFour.imgPath ? imgShopFour.imgPath : `images/upload.jpg`" width="100%" />
+                                </div>
+                            </div>
+                        </ul>
+                        <ul class="item-lists">
+                            <div class="upDrive">
+                                <div class="item-pic">
+                                    <img src="images/store-5.png" width="100%" />
+                                    <p>示例：团队</p>
+                                </div>
+                                <div class="item-pic" @click="upImg(imgShopFive)">
+                                    <img :src="imgShopFive.imgPath ? imgShopFive.imgPath : `images/upload.jpg`" width="100%" />
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+                </div> -->
+        <div class="agreeInfo">
+          <span class="icon_radio" @click="cngAgree" :class="agreeFlag ? `icon_ok` : ``"></span>
+          <label @click="cngAgree">我已阅读并同意</label>
+          <a class="blue" href="noticeDetail.html">《法律声明及隐私权政策》</a>
+          <label>和</label>
+          <a class="blue" :href="webHost +`doc/cooperate.pdf` ">《协作门店合作协议》</a>
+          <label>内容</label>
+        </div>
+      </div>
+      <div class="btns" @click="editShop">
+        <button class="startOrder fullBtn">立即提交</button>
+      </div>
+      <div id="container" style="position: absolute; width: 0;  height: 0; overflow:hidden;">
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type="text/javascript" src="js/city.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<!-- <script type='text/javascript' src="js/jswx.js"></script> -->
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/register.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

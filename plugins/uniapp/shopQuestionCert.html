@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>门店问题改进</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="">
+        <div class="shopHead">
+          <dl class="shop-title">
+            <dt><img src="images/logo.png"></dt>
+            <dd style="width: 70%">
+              <h3 class="omit">{{shopInfo.shopName}}</h3>
+              <!-- <p style="width:58px">
+                                <span >认证门店</span>
+                            </p> -->
+            </dd>
+          </dl>
+        </div>
+        <ul class="shopNav fixed">
+          <li @click="toShopCert">门店资质认证</li>
+          <li @click="toUserCert">店员认证</li>
+          <li class="on">门店问题改进</li>
+        </ul>
+        <div class="innerCont">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>提交状态</span></h3>
+              <div class="steps" v-show="shopInfo.status!=103 && shopInfo.status!=106 ">
+                <div class="steps-status">
+                  <div class="step-line"></div>
+                  <div class="current-step-line" style="width:96%"></div>
+                  <div class="icon-step icon-step-0 on"></div>
+                  <div class="icon-step icon-step-3 " :class=" shopInfo.status==104 ? `on` : ``"></div>
+                </div>
+                <ul class="step-staus-des fixed">
+                  <li class="on">
+                    <h4>提交改进</h4>
+                  </li>
+                  <li :class=" shopInfo.status==104  ? `on` : ``" style="margin-left: 50%">
+                    <h4>审核通过</h4>
+                  </li>
+                </ul>
+              </div>
+              <div class="steps" v-show="shopInfo.status==103 || shopInfo.status==106 ">
+                <div class="steps-status">
+                  <div class="step-line"></div>
+                  <div class="current-step-line" style="width:96%"></div>
+                  <div class="icon-step icon-step-0 on"></div>
+                  <div class="icon-step icon-step-3 "
+                    :class=" (shopInfo.status==103 || shopInfo.status==106 ) ? `on` : ``"></div>
+                </div>
+                <ul class="step-staus-des fixed">
+                  <li class="on">
+                    <h4>提交改进</h4>
+                  </li>
+                  <li :class=" (shopInfo.status==103 || shopInfo.status==106 ) ? `on` : ``" style="margin-left: 50%">
+                    <h4 v-show="shopInfo.status==106">审核不通过</h4>
+                    <h4 v-show="shopInfo.status==103">取消</h4>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="item-info pb40">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>门店图片改进</span></h3>
+              <ul class="item-lists" v-for="(item,index) in shopInfo.shopImgList">
+                <h3 class="tit-require pt10">
+                  <em class="red">*</em>
+                  <span class="sBlue">{{item.name}}</span>
+                </h3>
+                <p class="markInfo grey">{{item.remarks}}</p>
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img :src="item.imgurl" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic upLoadImgs"
+                    v-show="shopInfo.status == 100 || shopInfo.status == 101 || shopInfo.status == 106"
+                    :checkItemId="item.checkItemId" :orderSn="item.id">
+                    <!-- <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%" />
+                                        <div class="noPass" v-show="item.auditStatus==-1">
+                                            <span>不通过</span>
+                                            <p>重新上传</p>
+                                        </div> -->
+                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%"
+                      :checkItemId="item.checkItemId" :orderSn="item.id" />
+                    <input accept="image/*" type="file" class="addUploadImg" @change="btnUploadFile(index)" />
+                    <div class="maskUploadImg" style="display: none">
+                      <span class="maskLoading"></span>
+                    </div>
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>不通过</span>
+                      <p>重新上传</p>
+                    </div>
+                  </div>
+                  <div class="item-pic"
+                    v-show="shopInfo.status != 100 && shopInfo.status != 101 && shopInfo.status != 106"
+                    :checkItemId="item.checkItemId" :orderSn="item.id">
+                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar"
+                      width="100%" />
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>不通过</span>
+                      <!-- <p>重新上传</p> -->
+                    </div>
+                  </div>
+                  <div v-show="item.auditStatus==-1" class="markInfo red">
+                    {{item.auditDes}}
+                  </div>
+                </div>
+              </ul>
+              <div class="dataMsg" v-show="shopInfo.auditDec"
+                style="margin-top:10px; border-top:1px dashed #ececec;  padding:5px 0 20px; color: #999">
+                <p class="p1">备注信息：</p>
+                <p class="p2 red"><span>{{shopInfo.auditDec}}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btns"
+      v-show="(shopInfo.status == 100 || shopInfo.status == 101 || shopInfo.status == 106) && (accountType!=4 && accountType!=6)">
+      <button class="startOrder fullBtn" @click="add">提交</button>
+    </div>
+  </div>
+  <div id="tip-box">
+    <div class="wx_confirm_tit" id="tip-mes"></div>
+  </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/shopQuestionCert.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

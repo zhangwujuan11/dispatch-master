@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>门店资质认证</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <!-- <link rel="stylesheet" href="css/mui.min.css" /> -->
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <!-- <div id="appContent"> -->
+    <div class="" v-show="!isShowSelUser">
+      <div class="shopHead">
+        <dl class="shop-title">
+          <dt><img src="images/logo.png"></dt>
+          <dd style="width: 70%">
+            <h3 class="omit">{{shopInfo.shopName}}</h3>
+          </dd>
+        </dl>
+      </div>
+      <ul class="shopNav fixed">
+        <li class="on">门店资质认证</li>
+        <li @click="toUserCert">店员认证</li>
+        <li @click="toQuestionCert">门店问题改进</li>
+      </ul>
+      <div class="innerCont">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>提交状态</span></h3>
+            <div class="steps" v-show="shopInfo.status!=103 && shopInfo.status!=106 ">
+              <div class="steps-status">
+                <div class="step-line"></div>
+                <div class="current-step-line current-step-line1" v-show="shopInfo.status==100"></div>
+                <div class="current-step-line current-step-line1" v-show="shopInfo.status==105" style="width:66%">
+                </div>
+                <div class="current-step-line current-step-line1" v-show="shopInfo.status==104" style="width:96%">
+                </div>
+                <div class="icon-step icon-step-0 on"></div>
+                <div class="icon-step icon-step-11" :class="shopInfo.payStatus==1 ? `on` : ``"></div>
+                <div class="icon-step icon-step-22"
+                  :class="(shopInfo.status==105 || shopInfo.status==105 || shopInfo.status==104)? `on` : ``">
+                </div>
+                <div class="icon-step icon-step-33"
+                  :class="(shopInfo.status==105 || shopInfo.status==104 ) ? `on` : ``"></div>
+                <div class="icon-step icon-step-44" :class="shopInfo.status==104 ? `on` : ``"></div>
+              </div>
+              <ul class="step-staus-des step_staus_des1 fixed">
+                <li class="on">
+                  <h4>提交申请</h4>
+                  <!--  <p>2019-05-10 01:10:40</p> -->
+                </li>
+                <li :class="shopInfo.payStatus==1 ? `on` : ``">
+                  <h4>付款</h4>
+                </li>
+                <li :class="(shopInfo.status==105 || shopInfo.status==105 || shopInfo.status==104) ? `on` : ``">
+                  <h4>资料审核</h4>
+                  <!-- <p>2019-05-10 01:10:40</p> -->
+                </li>
+                <li :class="(shopInfo.status==105 || shopInfo.status==104 ) ? `on` : ``">
+                  <h4>门店签约</h4>
+                  <!-- <p>2019-05-10 01:10:40</p> -->
+                </li>
+                <li :class="shopInfo.status==104 ? `on` : ``">
+                  <h4>认证成功</h4>
+                  <!--  <p>2019-05-10 01:10:40</p> -->
+                </li>
+              </ul>
+            </div>
+            <div class="steps" v-show="shopInfo.status==103 || shopInfo.status==106 ">
+              <div class="steps-status">
+                <div class="step-line"></div>
+                <div class="current-step-line" style="width:96%"></div>
+                <div class="icon-step icon-step-0 on"></div>
+                <div class="icon-step icon-step-3 "
+                  :class=" (shopInfo.status==103 || shopInfo.status==106 ) ? `on` : ``"></div>
+              </div>
+              <ul class="step-staus-des fixed">
+                <li class="on">
+                  <h4>提交申请</h4>
+                </li>
+                <li :class=" (shopInfo.status==103 || shopInfo.status==106 ) ? `on` : ``" style="margin-left: 50%">
+                  <h4 v-show="shopInfo.status==106">审核不通过</h4>
+                  <h4 v-show="shopInfo.status==103">取消</h4>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>门店基本信息</span></h3>
+            <ul class="item-lists normalShopLists" :class="showMoreCharge ? `showMordLists` : ``">
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">* </a>门店名称</em>
+                <p>
+                  <input type="text" v-model="shopInfo.shopName" :value="shopInfo.shopName" placeholder="暂无填写"
+                    v-if="shopInfo.payStatus !=1 && shopInfo.status == 100 || shopInfo.isExpire ==1 ||shopInfo.status == 106">
+                  <span v-else>{{shopInfo.shopName}}</span>
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">*</a> 经营地址</em>
+                <p>
+                  <input type="text" v-model="shopInfo.address" :value="shopInfo.address" placeholder="暂无填写"
+                    v-if="shopInfo.payStatus !=1 && shopInfo.status == 100 || shopInfo.isExpire ==1 ||shopInfo.status == 106">
+                  <span v-else>{{shopInfo.address}}</span>
+                </p>
+              </li>
+
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">*</a> 法人代表</em>
+                <p>
+                  <input type="text" v-model="shopInfo.legalPerson" :value="shopInfo.legalPerson" placeholder="暂无填写"
+                    v-if="shopInfo.payStatus !=1 && shopInfo.status == 100 || shopInfo.isExpire ==1 ||shopInfo.status == 106">
+                  <span v-else>{{shopInfo.legalPerson}}</span>
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">*</a> 法人联系电话</em>
+                <p>
+                  <input type="number" v-model="shopInfo.legalPersonTel" maxlength="11" minlength="11"
+                    :value="shopInfo.legalPersonTel" placeholder="暂无填写"
+                    v-if="shopInfo.payStatus !=1 && shopInfo.status == 100 || shopInfo.isExpire ==1 ||shopInfo.status == 106">
+                  <span v-else>{{shopInfo.legalPersonTel}}</span>
+                </p>
+              </li>
+
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">*</a> 负责人姓名</em>
+                <p>
+                  <input type="text" v-model="shopInfo.chargeName" :value="shopInfo.chargeName" placeholder="暂无填写"
+                    v-if="shopInfo.payStatus !=1 && shopInfo.status == 100 || shopInfo.isExpire ==1 ||shopInfo.status == 106">
+                  <span v-else>{{shopInfo.chargeName}}</span>
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">*</a> 负责人电话</em>
+                <p>
+                  <input type="number" v-model="shopInfo.chargeMobile" maxlength="11" minlength="11"
+                    :value="shopInfo.chargeMobile" placeholder="暂无填写"
+                    v-if="shopInfo.payStatus !=1 && shopInfo.status == 100 || shopInfo.isExpire ==1 ||shopInfo.status == 106">
+                  <span v-else>{{shopInfo.chargeMobile}}</span>
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">*</a> 认证年度</em>
+
+                <!-- <p @click="toAuditYear" class="color-cfcfcd" v-if="shopInfo.payStatus !=1 && shopInfo.status == 100">
+                  <label id="choose-year">请选择认证年度</label>
+                  <label id="choose-year">{{shopInfo.auditYear?shopInfo.auditYear:'请选择认证年度'}}</label> 
+                </p> -->
+                <p>
+                  {{shopInfo.auditYear}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">*</a> 认证级别</em>
+                <!-- <p @click="toLevel" class="color-cfcfcd" v-if="shopInfo.payStatus !=1 && shopInfo.status == 100">
+                  <label id="choose-level">请选择认证级别</label>
+                  <label id="choose-level">{{shopInfo.levelName ?shopInfo.levelName:'请选择认证级别' }}</label> 
+                </p> -->
+                <p>
+                  A类认证
+                  <!-- {{shopInfo.level == 0 ? 'A类认证':'C类认证'}} -->
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"><a class="red">*</a> 销售区域</em>
+                <p @click="toCngType" class="color-cfcfcd" v-if="shopInfo.payStatus !=1 && shopInfo.status == 100 ||shopInfo.status == 106">
+                  <label id="choose-city">请选择区域</label>
+                </p>
+                <p v-else>
+                  {{shopInfo.saleProvince}}-{{shopInfo.saleCity}}-{{shopInfo.saleArea}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px">合同任务金额</em>
+                <p>
+                  {{shopInfo.taskPrice}}
+                </p>
+              </li>
+            </ul>
+
+            <div class="showDown" @click="showMore">
+              <span class="grey"> {{showMoreCharge ? "收 起 ↑" : "展开更多信息 ↓"}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-info pb20">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>门店图片</span></h3>
+            <ul :class="showShop ? `` : `showShopdata`">
+              <h3 class="tit-require ">
+                <em class="red">* 必传照片</em>
+                <div class="sBlue">门头照、营业执照、安装工位照</div>
+              </h3>
+              <li class="item-lists" v-for="(item,index) in shopInfo.shopImgList" :key="index"
+                v-if="item.checkItemId === 35 || item.checkItemId === 37 || item.checkItemId === 39">
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img :src="item.imgurl" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic upLoadImgs"
+                    v-show="shopInfo.status == 100 || shopInfo.status == 101 || shopInfo.status == 105 ||shopInfo.status == 106 || shopInfo.isExpire ==1 || shopInfo.zgFlag == 1"
+                    :checkItemId="item.checkItemId" :orderSn="item.checkItemId">
+                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%"
+                      :checkItemId="item.checkItemId" :orderSn="item.checkItemId" />
+                    <input accept="image/*" type="file" class="addUploadImg" @change="btnUploadFile(index)" />
+
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>待整改</span>
+                      <p>重新上传</p>
+                    </div>
+                  </div>
+                  <div class="item-pic"
+                    v-show="shopInfo.status != 100 && shopInfo.status != 101 && shopInfo.status != 106 &&shopInfo.status != 105 && shopInfo.zgFlag != 1"
+                    :checkItemId="item.checkItemId" :orderSn="item.checkItemId">
+                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar"
+                      width="100%" />
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>待整改</span>
+                    </div>
+                  </div>
+                  <div v-show="item.auditStatus==-1" class="markInfo red">
+                    {{item.auditDes}}
+                  </div>
+                </div>
+              </li>
+              <h3 class="tit-require ">
+                <em class="red">选传照片</em>
+                <div class="sBlue">休息室、技师照、贴膜车间、前台团队照</div>
+              </h3>
+              <li class="item-lists" v-for="(item,index) in shopInfo.shopImgList"
+                v-if="item.checkItemId === 36 || item.checkItemId === 38 || item.checkItemId === 40">
+                <div class="upDrive">
+                  <div class="item-pic">
+                    <img :src="item.imgurl" width="100%" />
+                    <p>例图</p>
+                  </div>
+                  <div class="item-pic upLoadImgs"
+                    v-show="shopInfo.status == 100 || shopInfo.status == 101 ||shopInfo.status == 105 || shopInfo.status == 106 || shopInfo.isExpire == 1 || shopInfo.zgFlag === 1"
+                    :checkItemId="item.checkItemId" :orderSn="item.id">
+                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%"
+                      :checkItemId="item.checkItemId" :orderSn="item.id" />
+                    <input accept="image/*" type="file" class="addUploadImg" @change="btnUploadFile(index)" />
+
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>待整改</span>
+                      <p>重新上传</p>
+                    </div>
+                  </div>
+                  <div class="item-pic"
+                    v-show="shopInfo.status != 100 && shopInfo.status != 101 && shopInfo.status != 106&&shopInfo.status != 105 && shopInfo.zgFlag != 1"
+                    :checkItemId="item.checkItemId" :orderSn="item.id">
+                    <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar"
+                      width="100%" />
+                    <div class="noPass" v-show="item.auditStatus==-1">
+                      <span>待整改</span>
+                    </div>
+                  </div>
+                  <div v-show="item.auditStatus==-1" class="markInfo red">
+                    {{item.auditDes}}
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <div class="showDown" @click="()=>{showShop = !showShop}">
+              <span class="grey"> {{showShop ? "收 起 ↑" : "展开更多信息 ↓"}}</span>
+            </div>
+            <div class="dataMsg" v-show="shopInfo.auditDec"
+              style="margin-top:10px; border-top:1px dashed #ececec;  padding:5px 0 20px; color: #999">
+              <p class="p1">备注信息：</p>
+              <p class="p2 red"><span>{{shopInfo.auditDec}}</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="agreeInfo" v-show="shopInfo.payStatus !=1" >
+          <span class="icon_radio " :class=" agree ? `icon_ok` : ``" @click="toAgree"></span>
+          <label @click="toAgree">我已阅读并同意</label>
+          <a class="blue" :href="webHost +`doc/auth2023.pdf` ">《认证门店合作协议》</a>
+          <a class="blue" :href="webHost +`doc/letter.pdf`">《总对总业务合作的确认函》</a>
+        </div>
+        <div class="innerCont pb40">
+          <div class="item-info">
+            <div class="inner-item" >
+              <h3 class="item-tit"><span>付款信息 </span></h3>
+              <ul class="item-lists">
+                <li class="item-list" v-if="shopInfo.status != 106">
+                  <em>费用</em>
+                  <p class="p14">
+                    {{ shopType==102 ?   `门店认证费用` : `门店服务费用` }}
+                  </p>
+                </li>
+                <li class="item-list" v-if="shopInfo.payStatus !=1 && shopInfo.isExpire != 1 ">
+                  <em>支付方式</em>
+                  <ul class="sexSelect fixed">
+                    <li @click="cngPayMode('onLine')">
+                      <i class="iconRadio" :class="shopInfo.payMethod ==1 ? `iconOk` : ` `"></i>
+                      <span class="sex">线上</span>
+                    </li>
+                  </ul>
+                </li>
+                <!-- <li class="item-list">
+                  <em>支付方式</em>
+                  <ul class="sexSelect fixed" v-if="shopInfo.payStatus !=1 || shopInfo.isExpire ==1 ">
+                    <li @click="cngPayMode('onLine')">
+                      <i class="iconRadio" :class="shopInfo.payMethod ==1 ? `iconOk` : ` `"></i>
+                      <span class="sex">线上</span>
+                    </li>
+                     <li @click="cngPayMode('offLine')">
+                      <i class="iconRadio" :class="shopInfo.payMethod ==2 ? `iconOk` : ` `"></i>
+                      <span class="sex">线下</span>
+                    </li> 
+                  </ul>
+                  <ul class="sexSelect fixed" >
+                    <li v-if="shopInfo.payMethod ==1">
+                      <i class="iconRadio iconOk"></i><span class="sex">线上</span>
+                    </li>
+                    <li v-if="shopInfo.payMethod ==2">
+                      <i class="iconRadio iconOk"></i><span class="sex">线下</span>
+                    </li>
+                  </ul>
+                </li> -->
+
+                <li class="item-list" v-show="shopInfo.payStatus ==1 && shopInfo.status == 105 ">
+                  <em>付款时间</em>
+                  <p class="p14">
+                    {{shopInfo.payTime}}
+                  </p>
+                </li>
+                <li class="item-list" v-if="shopInfo.status != 106">
+                  <em>认证金额</em>
+                  <p class="blue p14">
+                    {{shopInfo.auditPrice}}
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btns" v-show="shopInfo.status == 106 && accountType!=4 && accountType!=6">
+        <button class="startOrder fullBtn" @click="showModals('是否完善信息')">完善信息</button>
+      </div>
+      <div class="btns" v-show="shopInfo.payStatus !=1 && shopInfo.status == 100 && accountType!=4 && accountType!=6">
+        <button class="startOrder fullBtn" @click="showModals('确认付款')">确认付款</button>
+      </div>
+
+      <div class="btns" v-show="shopInfo.isExpire == 1">
+        <button class="startOrder fullBtn" @click="showModals('确认续签')">确认续签</button>
+      </div>
+      <div class="btns" v-show="shopInfo.payStatus == 1 && shopInfo.status == 105 ">
+        <button class="startOrder fullBtn" @click="toSignContract">合同签订</button>
+      </div>
+
+      <div class="btns" v-show="shopInfo.zgFlag == 1 ">
+        <button class="startOrder fullBtn" @click="toRectification">整改</button>
+      </div>
+      <!-- <div class="btns" v-show="shopInfo.status == 104 && shopInfo.shopType == 101">
+                    <button class="startOrder fullBtn" @click="upgrade">升级认证门店</button>
+                </div> -->
+    </div>
+    <!-- </div> -->
+    <div class="mask" id="mask" @click="hideMasks"></div>
+    <div class="showModal">
+      <div>{{ModalsTitle}}</div>
+      <ul>
+        <li class="orangeGradient" @click="hideMasks">取消</li>
+        <li class="startOrder fullBtn" @click="addPay">确认</li>
+      </ul>
+    </div>
+  </div>
+  <div id="tip-box">
+    <div class="wx_confirm_tit" id="tip-mes"></div>
+  </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script type='text/javascript' src="js/Service.js?v=0.8"></script>
+<script type='text/javascript' src="js/jswx.js"></script>
+<script type="text/javascript" src="js/city.js?v=3.3"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/shopQualApply.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

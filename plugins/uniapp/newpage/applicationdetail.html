@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>申请详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+		<!-- <img class="clse" src="images/close.png" alt="">
+		<h3 class="item-tit">申请详情</h3> -->
+      <div>
+      <ul class="datalist">
+      	<li>
+			<p> <span>车牌号码</span>  {{datainfo.carNo}}</p>
+			<p><span>保险工单</span>  {{datainfo.orderNo}}</p>
+			<p><span>手机号</span> {{datainfo.phoneNumber}}</p>
+			<p><span>车架号</span> {{datainfo.vin}}</p>
+		</li>
+		<p class="statuss" style="width: 100%;line-height: 35px;">
+			审核状态 <span :class="datainfo.auditStatus=='1'?'bule':datainfo.auditStatus=='2'?'green':'red'">{{datainfo.auditStatus | status}}</span>
+		</p>
+      </ul>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../js/varInfo.js"></script>
+<script src="../plugins/vue/vue.js"></script>
+<script type='text/javascript' src="../js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="../js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="../js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="../js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Servicetss.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/applicationdetailtss.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+
+
+  });
+</script>
+
+</html>
+<style>
+	.tabbox{
+			width: 100%;
+			color: #333333;
+			display: flex;
+			justify-content: space-around;
+		}
+	.item-tit{
+		line-height: 40px;
+		color: #333;
+		font-weight: 600;
+		text-align: center;
+		margin-bottom: 10px;
+	}	
+	
+	#appContent .clse{
+		position: absolute;
+		left: 20px;
+		top: 10px;
+		width: 18px;
+	}
+	.bgImgSet{
+		font-weight: 800;
+		border-bottom: 2px solid  #3366F5;
+	}
+	.tabbox button{
+		padding: 15px 0;
+	}
+	.datalist{
+		width: 100%;
+		background-color: white;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+	
+	.datalist li{
+		width: 97%;
+		margin-top: 20px;
+		height: 180px;
+		font-size: 16px;
+		line-height: 32px;
+		box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.2)  ;
+		border-radius: 8px;
+		padding: 15px 25px;
+		box-sizing: border-box;
+	}
+	.statuss{
+		width: 97%;
+		margin-top: 20px;
+		font-size: 16px;
+		line-height: 32px;
+		box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.2)  ;
+		border-radius: 8px;
+		padding: 15px 25px;
+		box-sizing: border-box;
+	}
+	.datalist span{
+		color: #666666;
+		margin-right: 12px;
+	}
+	
+	.datalist .bule{
+		color: #3366F5;
+	}
+	.datalist .green{
+		color: green;
+	}
+	.datalist .red{
+		color: red;
+	}
+</style>

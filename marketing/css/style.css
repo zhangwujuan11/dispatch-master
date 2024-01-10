@@ -1,0 +1,126 @@
+ .appContent{
+    display: none
+ }
+ .swiper-container {
+     width: 100%;
+ }
+
+.swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{
+    bottom:1px;
+}
+
+.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet{
+   margin:0 3px;  
+}
+.swiper-pagination-bullet{ width: 6px; height: 6px;  }
+.swiper-pagination-bullet-active{ width: 20px;border-radius: 10px }
+.item-form{ position: relative; width: 92%; margin: 0 auto; }
+.item-form h3{ height: 50px; line-height: 50px; text-align: center; font-size: 16px; font-weight: 600 }
+.item-input{ width: 100%; height: 26px; line-height: 26px; font-size: 14px;  padding:5px 0; margin-bottom: 30px  }
+.item-input input{ border:1px solid #e1e1e1; border-radius: 6px; font-size: 14px }
+.submit{ height: 40px; line-height: 40px; text-align: center; color: #fff; border-radius: 6px; font-size: 15px; font-weight: 600 }
+
+.options{ position: fixed; bottom: 0; left: 0; display: flex; width: 100%;  justify-content: space-between;  }
+.item-option,.item-option a{ width: 50%; display: flex;  height: 46px;  align-items:center; justify-content:center; }
+.item-option a{ width: 100% ; }
+.item-full-option{ width: 100% }
+.icon_tel,.icon_reserve{ display: block; width: 24px; height: 24px; background: url(../images/tel.png) center no-repeat; background-size: contain; }
+.icon_reserve{ background: url(../images/reserve.png) center no-repeat; background-size: contain; }
+.item-option p{ color: #fff ; margin-left: 4px}
+.btn-tel{ position: fixed; z-index: 999; right: 2%; top:50%; display: flex; flex-direction: column; align-items:center; justify-content:center; text-align: center; width: 60px; height: 60px; background: #4a90e2; border-radius: 100%; font-size: 12px }
+.btn-tel a{ color: #fff; }
+
+.blueGradient {
+    background: linear-gradient(left, #359cff, #65b4ff);
+    background: -ms-linear-gradient(left, #359cff, #65b4ff);
+    background: -moz-linear-gradient(left, #359cff, #65b4ff);
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-linear-gradient(left, #359cff, #65b4ff);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(left, #359cff, #65b4ff);
+}
+
+.blueGraShadow {
+    background: linear-gradient(left, #359cff, #65b4ff);
+    background: -ms-linear-gradient(left, #359cff, #65b4ff);
+    background: -moz-linear-gradient(left, #359cff, #65b4ff);
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-linear-gradient(left, #359cff, #65b4ff);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(left, #359cff, #65b4ff);
+    -webkit-box-shadow: 0 0 5px 5px #d9ecff;
+    -moz-box-shadow: 0 0 5px 5px #d9ecff;
+    box-shadow: 0 0 5px 5px #d9ecff;
+}
+
+.orangeGradient {
+    background: linear-gradient(left, #f04c41, #f07741);
+    background: -ms-linear-gradient(left, #f04c41, #f07741);
+    background: -moz-linear-gradient(left, #f04c41, #f07741);
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-linear-gradient(left, #f04c41, #f07741);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(left, #f04c41, #f07741);
+    /*    -webkit-box-shadow: 0 0 5px 5px #f04c41;
+    -moz-box-shadow: 0 0 5px 5px #f04c41;
+    box-shadow: 0 0 5px 5px #f04c41;*/
+}
+
+
+ .redGradient {
+     background: linear-gradient(left, #e21d1a, #fe6600);
+     background: -ms-linear-gradient(left, #e21d1a, #fe6600);
+     background: -moz-linear-gradient(left, #e21d1a, #fe6600);
+     /* Safari 5.1+, Chrome 10+ */
+     background: -webkit-linear-gradient(left, #e21d1a, #fe6600);
+     /* Opera 11.10+ */
+     background: -o-linear-gradient(left, #e21d1a, #fe6600);
+ }
+
+ .redGraShadow {
+     background: linear-gradient(left, #e21d1a, #fe6600);
+     background: -ms-linear-gradient(left, #e21d1a, #fe6600);
+     background: -moz-linear-gradient(left, #e21d1a, #fe6600);
+     /* Safari 5.1+, Chrome 10+ */
+     background: -webkit-linear-gradient(left, #e21d1a, #fe6600);
+     /* Opera 11.10+ */
+     background: -o-linear-gradient(left, #e21d1a, #fe6600);
+     -webkit-box-shadow: 0 0 10px 10px #ffe8d8;
+     -moz-box-shadow: 0 0 10px 10px #ffe8d8;
+     box-shadow: 0 0 10px 10px #ffe8d8;
+ }
+
+ .greyGradient {
+     background: linear-gradient(top, #efefef, #ffffff);
+     background: -ms-linear-gradient(top, #efefef, #ffffff);
+     background: -moz-linear-gradient(top, #efefef, #ffffff);
+     /* Safari 5.1+, Chrome 10+ */
+     background: -webkit-linear-gradient(top, #efefef, #ffffff);
+     /* Opera 11.10+ */
+     background: -o-linear-gradient(top, #efefef, #ffffff);
+ }
+
+ .greyGraShadow {
+     background: #cccccc;
+     -webkit-box-shadow: 0 0 10px 10px #ebebeb;
+     -moz-box-shadow: 0 0 10px 10px #ebebeb;
+     box-shadow: 0 0 10px 10px #ebebeb;
+ }
+ /*省略号*/
+
+ .omit {
+     overflow: hidden;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+ }
+
+ .omit2 {
+     text-overflow: -o-ellipsis-lastline;
+     overflow: hidden;
+     word-break: break-all;
+     text-overflow: ellipsis;
+     display: -webkit-box;
+     -webkit-line-clamp: 2;
+     line-clamp: 2;
+     -webkit-box-orient: vertical;
+ }

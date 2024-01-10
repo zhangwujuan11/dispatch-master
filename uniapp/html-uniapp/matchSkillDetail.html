@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>技能大赛详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>客户信息</span></h3>
+            <ul class="item-lists pb10">
+              <li class="item-list">
+                <em>客户姓名</em>
+                <p>
+                  {{matchInfo.userName}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>联系方式</em>
+                <p>{{matchInfo.mobile}}</p>
+              </li>
+              <li class="item-list">
+                <em>客户性别</em>
+                <p>{{matchInfo.sex ? `男` : `女`}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>技师信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>技师姓名</em>
+                <p>
+                  {{matchInfo.personName}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>技师性别</em>
+                <p>{{matchInfo.personSex ==1 ? `女` : `男`}}</p>
+              </li>
+              <li class="item-list">
+                <em>身份证号</em>
+                <p>{{matchInfo.personIdCard}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>竞赛照片信息</span></h3>
+            <ul class="item-lists" v-for="(item,index) in matchPics">
+              <h3 class="tit-require pt10">
+                <em class="red">*</em>
+                <span class="sBlue">{{item.name}}</span>
+              </h3>
+              <p class="markInfo grey">{{item.remarks}}</p>
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img :src="item.imgurl" width="100%" />
+                  <p>例图</p>
+                </div>
+                <div class="item-pic upLoadImgs" :symType="item.symType">
+                  <img :src="item.matchUrl" class="picFullcar" width="100%" />
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="btns">
+                <button class="startOrder fullBtn" @click="add">提交</button>
+            </div> -->
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/matchSkillDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>我的门店</title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>基本信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>门店定位</em>
+                <p>经度：{{shopInfo.lng}}<br />纬度：{{shopInfo.lat}}</p>
+              </li>
+              <li class="item-list">
+                <em>省市区</em>
+                <p>{{shopInfo.province}} {{shopInfo.city}} {{shopInfo.zone}}</p>
+              </li>
+              <li class="item-list">
+                <em>详细地址</em>
+                <p class="">{{shopInfo.address}}</p>
+              </li>
+              <li class="item-list">
+                <em>门店名称</em>
+                <p class="blue">{{shopInfo.name}}</p>
+              </li>
+              <li class="item-list">
+                <em>联系电话</em>
+                <p class="">{{shopInfo.linktel}}</p>
+              </li>
+              <li class="item-list">
+                <em>营业时间</em>
+                <p>早{{shopInfo.openb}}-晚{{shopInfo.opene}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info"
+          v-if="shopInfo.taskPrice || shopInfo.telephone || shopInfo.auditPrice || shopInfo.orderNum || shopInfo.balance">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>门店信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list" v-if="shopInfo.shopTypeValue">
+                <em>门店类型</em>
+                <p><span class="blue"> {{shopInfo.shopTypeValue}}</span></p>
+              </li>
+              <li class="item-list" v-if="shopInfo.taskPrice">
+                <em>合同任务金额</em>
+                <p><span class="red"> ¥{{shopInfo.taskPrice}}</span></p>
+              </li>
+              <li class="item-list" v-if="shopInfo.telephone">
+                <em>固定电话</em>
+                <p><span>{{shopInfo.telephone}}</span></p>
+              </li>
+              <li class="item-list" v-if="shopInfo.auditPrice">
+                <em style="line-height: 20px; width: 70px;">保证金金额(认证费用)</em>
+                <p><span class="red"> ¥{{shopInfo.auditPrice}}</span>
+                </p>
+              </li>
+              <li class="item-list" v-if="shopInfo.orderNum">
+                <em style="line-height: 20px; width: 70px;">本年度派单数量</em>
+                <p><span class="blue">{{shopInfo.orderNum}}</span></p>
+              </li>
+              <li class="item-list" v-if="shopInfo.balance">
+                <em>百度账户余额</em>
+                <p><span class="red"> ¥{{shopInfo.balance}}</span></p>
+              </li>
+              <li class="item-list" v-if="shopInfo.yearPurchaseAmount">
+                <em>年度采购金额</em>
+                <p><span class="red"> ¥{{shopInfo.yearPurchaseAmount}}</span></p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info" v-if="shopSettlementVOList.length">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>开票信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>开票单位</em>
+                <p class="blue">{{shopSettlementVOList[0].settlementName}}</p>
+              </li>
+              <li class="item-list">
+                <em>纳税人识别号</em>
+                <p class="blue">{{shopSettlementVOList[0].nsrsbh}}</p>
+              </li>
+              <li class="item-list">
+                <em>开票公司地址</em>
+                <p>{{shopSettlementVOList[0].companyAddress}}</p>
+              </li>
+              <li class="item-list">
+                <em>结算方式</em>
+                <p class="blue">{{shopSettlementVOList[0].settletmentMethodValue}}</p>
+              </li>
+              <li class="item-list" v-if="shopInfo.shopSettlementVOList[0].telephone">
+                <em>联系方式</em>
+                <p>{{shopSettlementVOList[0].telephone}}</p>
+              </li>
+              <li class="item-list">
+                <em>开户行名称</em>
+                <p>{{shopSettlementVOList[0].bankName}}</p>
+              </li>
+              <li class="item-list">
+                <em>开户行账号</em>
+                <p>{{shopSettlementVOList[0].bankNo}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>银行信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>银行账号</em>
+                <p class="blue">{{shopInfo.bankAccount}}</p>
+              </li>
+              <li class="item-list">
+                <em>账户名</em>
+                <p>{{shopInfo.bankName}}</p>
+              </li>
+              <li class="item-list">
+                <em>开户行</em>
+                <p class="">{{shopInfo.bankUser}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>门店图片</span></h3>
+            <!-- <ul class="item-pics fixed">
+                            <li class="item-shopPic" v-for="item in shopInfo.shopImgs">
+                                <img :src="item.imgPath" width="100%">
+                            </li>
+                        </ul> -->
+            <ul class="item-lists" v-if="imgShopZero.imgPath">
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img src="images/store-0.png" width="100%" />
+                  <p>示例：营业执照</p>
+                </div>
+                <div class="item-pic">
+                  <img :src="imgShopZero.imgPath" width="100%" />
+
+                </div>
+              </div>
+            </ul>
+            <ul class="item-lists" v-if="imgShopOne.imgPath">
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img src="images/store-1.png" width="100%" />
+                  <p>示例：休息区</p>
+                </div>
+                <div class="item-pic">
+                  <img :src="imgShopOne.imgPath" width="100%" />
+
+                </div>
+              </div>
+            </ul>
+            <ul class="item-lists" v-if="imgShopTwo.imgPath">
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img src="images/store-2.png" width="100%" />
+                  <p>示例：门头</p>
+                </div>
+
+                <div class="item-pic">
+                  <img :src="imgShopTwo.imgPath" width="100%" />
+
+                </div>
+              </div>
+            </ul>
+            <ul class="item-lists" v-if="imgShopThree.imgPath">
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img src="images/store-3.jpg" width="100%" />
+                  <p>示例：前台区</p>
+                </div>
+                <div class="item-pic">
+                  <img :src="imgShopThree.imgPath" width="100%" />
+
+                </div>
+              </div>
+            </ul>
+            <ul class="item-lists" v-if="imgShopFour.imgPath">
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img src="images/store-4.png" width="100%" />
+                  <p>示例：施工区</p>
+                </div>
+
+                <div class="item-pic">
+                  <img :src="imgShopFour.imgPath" width="100%" />
+
+                </div>
+              </div>
+            </ul>
+            <ul class="item-lists" v-if="imgShopFive.imgPath">
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img src="images/store-5.png" width="100%" />
+                  <p>示例：团队</p>
+                </div>
+
+                <div class="item-pic">
+                  <img :src="imgShopFive.imgPath" width="100%" />
+
+                </div>
+              </div>
+            </ul>
+            <div class="no-data" v-show="!shopInfo.shopImgs">暂无门店图片信息</div>
+          </div>
+        </div>
+
+        <!-- <div class="item-info" v-if="accountType!=4 && accountType!=6">
+          <div class="inner-item">
+            <button class="logout orangeGradient" @click="logout">退出登录</button>
+          </div>
+        </div> -->
+      </div>
+      <div class="btns" v-if="accountType!=4 && accountType!=6">
+        <!-- <button class="startOrder" @click="changePwd">更换密码</button> -->
+        <button class="cancelOrder" @click="editShopInfo">门店修改</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type="text/javascript" src="city.php"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/shopInfo.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

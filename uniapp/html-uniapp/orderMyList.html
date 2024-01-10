@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>我的订单</title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div id="appContent">
+      <div class="queryWarp">
+        <div class="query-item">
+          <div class="query-title" v-for="item in arrLevel" @click="showNormal(item)">
+            <em ref="titStatus">{{item.name}}</em> <span class="detailMore"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 头部信息结束 -->
+      <div class="content nobottom orderList_content">
+        <div id="mescroll" class="notice-content selService-content mescroll">
+          <!-- 待支付 -->
+          <ul id="dataList" class="order-items dataList" style="display: block">
+            <li class="orderList" v-for="item in pdlist">
+              <div class="orderList_title">
+                <p class="orderTit">
+                  <span>订单号：{{item.orderSn}}</span>
+                </p>
+                <p class="state"
+                  :class="(item.orderStatus == 106 || item.orderStatus == 103 || item.orderStatus == 105 ) ? `red` : ``">
+                  {{item.orderStatusDes}}</p>
+              </div>
+              <a href="javascript:;">
+                <div class="order_panel" :orderSn="item.orderSn" :orderStatus="item.orderStatus" @click="toDetail">
+                  <div class="dataMsg">
+                    <p class="p1">预约时间：</p>
+                    <p class="p2">{{item.appointmentTime}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">门店名称：</p>
+                    <p class="p2">{{item.userName}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">门店地址：</p>
+                    <p class="p2">{{item.userTypeName}}</p>
+                  </div>
+                  <div class="dataMsg" v-if="item.mobile">
+                    <p class="p1">联系方式：</p>
+                    <p class="p2" v-if="item.orderStatus!=100 && item.orderStatus!=103 && item.orderStatus!=105 ">
+                      {{item.mobile}}
+                    </p>
+                    <p class="p2" v-else>{{item.mobile.toString().replace(item.mobile.substring(3,7), "****") }}
+                    </p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">车&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;牌：</p>
+                    <p class="p2 blue">{{item.carNo}}</p>
+                  </div>
+                  <!-- 已完成订单的时候才显示时间 -->
+                  <div v-show="item.orderStatus==104" class="dataMsg mt10">
+                    <p class="p1">完成时间：</p>
+                    <p class="p2">{{item.endTime}}</p>
+                  </div>
+                </div>
+              </a>
+
+              <span class="showMore" v-show="item.orderStatus==101 || item.orderStatus==102"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- 拒绝理由申请 -->
+      <div class="mark" id="mark" style="display: none"></div>
+
+      <div id="tip-box">
+        <div class="wx_confirm_tit" id="tip-mes"></div>
+      </div>
+      <div class="_loading" id="loading"><img src="images/loading.gif" /></div>
+    </div>
+  </div>
+</body>
+<script>
+  var userInfo = {}
+</script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/orderMyList.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

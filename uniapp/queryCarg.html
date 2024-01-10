@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>carg查询</title>
+    <link rel="stylesheet" href="css/mui.min.css" />
+    <link rel="stylesheet" href="fonts/iconfont.css" />
+    <link rel="stylesheet" href="css/mui.picker.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/test.css" />
+    <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+    <script>
+        document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <div id="appContent">
+            <div>
+                <div class="textLogo">
+                    <img src="images/top.jpg" width="100%" />
+                </div>
+                <div class="loginForm">
+                    <div class="item-form">
+                        <input type="text" v-model="cargValue" placeholder="请输入carg" class="" />
+                        <span class="icon_car"></span>
+                    </div>
+                    <div>
+                        <button class="submit blueGraShadow" @click="queryCarg">carg查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tip-box">
+            <div class="wx_confirm_tit" id="tip-mes"></div>
+        </div>
+    </div>
+</body>
+
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script src="js/varInfo.js"></script>
+<!-- <script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script> -->
+<script type="text/javascript" src="js/years.js?v=1.0"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script>
+    document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+    document.write("<script type='text/javascript' src='js/queryCarg.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+    $(function () {
+        //ios软键盘收起，下面回滚
+        $('input,select').on('blur', function () {
+            var _self = this;
+            setTimeout(function () {
+                window.scroll(0, $(_self).offset().top);
+            }, 1)
+        })
+    });
+</script>
+
+</html>

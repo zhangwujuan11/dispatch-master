@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>结算列表</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div id="appContent">
+      <div v-show="!showUnitCharge">
+        <div class="queryWarp">
+          <div class="query-item">
+            <div class="query-title blue">
+              <em><b>待结算</b></em>
+            </div>
+            <div class="query-title" @click="toSettleListIng">
+              <em><b>结算中</b></em>
+            </div>
+            <div class="query-title" @click="toSettleListEnd">
+              <em><b>已结算</b></em>
+            </div>
+          </div>
+        </div>
+        <!-- 头部信息结束 -->
+        <div class="content nobottom orderList_content">
+          <div id="mescroll" class="notice-content selService-content mescroll" style="top:50px">
+            <!-- 待支付 -->
+            <ul id="dataList" class="order-items">
+              <li class="settleList" v-for="item in pdlist">
+                <div class="icon-select" @click="selSet(item)">
+                  <span v-show="item.bargainSucc!=1" class="icon-radio"
+                    :class="item.flagSel ? `icon-radio-ok` : `` "></span>
+                </div>
+                <div class="settleInfo">
+                  <h3 class="settle-tit">
+                    <span><b>{{item.endTime}}</b></span>
+                    <em class="blue">待结算</em>
+                  </h3>
+                  <div class="settle-context" @click="selSet(item)">
+                    <div class="item-info">
+                      <label class="grey">工单单号：</label>
+                      <span>{{item.orderSn}}</span>
+                    </div>
+                    <div class="item-info">
+                      <label class="grey">商品名称：</label>
+                      <span style="width: 70%; display: inline-block; line-height: 26px">{{item.productName}}</span>
+                    </div>
+
+                    <div class="item-info">
+                      <label class="grey">零部件编码：</label>
+                      <span>{{item. partSn}}</span>
+                    </div>
+
+                    <div class="item-info">
+                      <label class="grey">客户信息：</label>
+                      <span>{{item.userName}} {{item.mobile}}</span>
+                    </div>
+                    <div class="item-info">
+                      <label class="grey">车牌信息：</label>
+                      <span class="blue">{{item.carNo}}</span>
+                    </div>
+
+                    <div class="item-info">
+                      <label class="grey">会员类型：</label>
+                      <span><b>{{item.userTypeName}}</b></span>
+                    </div>
+                    <div class="item-info">
+                      <label class="grey">订单金额：</label>
+                      <span class="red">¥ {{item. orderPrice}}</span>
+                    </div>
+                    <!-- <p class="user-type">{{item.userTypeName}}</p> -->
+                    <div class="set-prix">
+                      <span class="red p16">¥ <em class="setPrix"><b>{{item.settlePrice}}</b></em> </span>
+                    </div>
+                    <!-- <div class="item-info" v-if="item.bargain!=0 || item.bargain!=0.00">
+                                            <label class="grey">争议价格：</label>
+                                            <span class="red">¥ <b>{{item.bargain}}</b></span>
+                                        </div>
+                                        <div class="item-info" v-if="item.bargainDes">
+                                            <label class="grey">争议备注：</label>
+                                            <span class="red">{{item.bargainDes}}</span>
+                                        </div>
+                                        <div class="item-info" v-if="item.bargainSucc != 0">
+                                            <label class="grey">争议状态：</label>
+                                            <span class="red">{{item.bargainSuccValue}}</span>
+                                        </div> -->
+                    <div class="item-info" v-if="item.auditDec">
+                      <label class="grey">审核信息：</label>
+                      <span style="line-height:24px">{{item.auditDec}}</span>
+                    </div>
+                  </div>
+                  <!-- <div class="order-bottom unit-bottom" style="border-top: 1px dashed #f1f1f1; margin-top:16px" v-if="item.bargainSucc < 1">
+                                        <div>
+                                            <button class="orderBtn redBorder" @click="toggleService(item)">价格争议</button>
+                                        </div>
+                                    </div> -->
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="set-foot">
+          <div class="set-foot-info">
+            <div class="option-set-select" @click="allSel">
+              <span class="icon-radio" :class="allSelect ? `icon-radio-ok` : ``"></span>
+              <label>全选</label>
+            </div>
+            <div class="set-money">
+              <em class="grey">结算金额：</em>
+              <span class="red p16">¥ <em class="set-total-money">{{totalPrice}}</em></span>
+            </div>
+          </div>
+          <div class="set-foot-btn">
+            <span @click="toNext">去结算</span>
+          </div>
+        </div>
+      </div>
+      <div v-show="showUnitCharge">
+        <div>
+          <!-- 结算单位列表 -->
+          <ul class="order-items">
+            <li class="settleList" v-for="item in settleList" @click="getSelectSettle(item)">
+              <div class="icon-select">
+                <span class="icon-radio" :class="item.selFlag ? `icon-radio-ok` : `` "></span>
+              </div>
+              <div class="settleInfo">
+                <div class="settle-context">
+                  <div class="item-info">
+                    <label class="grey">结算单位：</label>
+                    <span>{{item.settlementName}}</span>
+                  </div>
+                  <div class="item-info">
+                    <label class="grey">纳税人识别号：</label>
+                    <span>{{item.nsrsbh}}</span>
+                  </div>
+                  <!--    <div class="item-info">
+                                        <label class="grey">结算方式：</label>
+                                        <span>{{ item.settletmentMethod==1 ? "自开" : "一级代开"}}</span>
+                                    </div> -->
+                </div>
+              </div>
+            </li>
+          </ul>
+          <div class="no-data" v-show="!settleList.length">
+            <span>暂无结算单位信息</span>
+            <!-- <a href="unitChargeAdd.html" class="blue">去添加</a> -->
+          </div>
+        </div>
+        <div class="btns">
+          <button class="cancelOrder" @click="cancelSettleSel()">返回</button>
+          <button class="startOrder " @click="surSettle()">确认结算</button>
+        </div>
+      </div>
+      <!-- 模态层弹窗 -->
+      <div class="popup spec" :class="seviceClass" @touchmove.stop.prevent="stopPrevent" @click="toggleService">
+        <!-- 遮罩层 -->
+        <div class="maskPopup"></div>
+        <div class="layer service-content" @click.stop="stopPrevent">
+          <div class="item-info pb40">
+            <div class="inner-item">
+              <h3 class="item-tit">
+                <span>结算异议</span>
+                <em class="closs-glass" style="top:10px" @click="toggleService"></em>
+              </h3>
+              <ul class="item-lists edit-lists charge-lists">
+                <li class="item-list">
+                  <em>工单单号</em>
+                  <p>
+                    {{orderSn}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>工单价格</em>
+                  <p class="red">
+                    ¥ {{orderPrice}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>争议价格</em>
+                  <p>
+                    <input type="number" name="" v-model="bargain" onKeyUp="value=value.replace(/[^\d^\.]+/g,'')"
+                      value="" placeholder="请输入争议价格">
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>备注信息</em>
+                  <p>
+                    <input type="text" name="" v-model="bargainDes" value="" placeholder="请输入备注信息">
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="btns">
+            <button class="startOrder fullBtn" @click="surPrixSettle">确定</button>
+          </div>
+        </div>
+      </div>
+      <div id="tip-box">
+        <div class="wx_confirm_tit" id="tip-mes"></div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="js/varInfo.js"></script>
+<script type="text/javascript" src="plugins/vue/vue.js"></script>
+<script type="text/javascript" src="plugins/mescroll/mescroll.min.js"></script>
+<script type='text/javascript' src="plugins/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="plugins/common.js?v=0.6"></script>
+<script type='text/javascript' src="plugins/Service.js?v=0.6"></script>
+<script type='text/javascript' src="plugins/lazyload/lazyload.js"></script>
+<script>
+  //app暂时不需要 document.write("<script type='text/javascript' src='js/settleList.js?v=" + Date.now() + "'><\/script>");
+  document.write("<div style='text-align:center;margin-top:50%;font-size:20px'>请到公众号进行结算管理</div>")
+</script>
+
+</html>

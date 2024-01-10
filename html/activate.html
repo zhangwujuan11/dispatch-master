@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <title></title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script>
+
+  <script type="text/javascript" src="city.php"></script>
+</head>
+
+<body>
+  <header class="mui-bar mui-bar-nav store">
+    <h1 class="mui-title">门店激活</h1>
+  </header>
+  <!--头部结束  中间内容开始-->
+  <div class="mui-content mui-bottom12">
+    <div class="store-info">
+      <p class="remind j-window" style="display:none;">
+        请如实选择门店位置信息，提交后不可修改
+        <i class="iconfont icon-guanbi j-shut"></i>
+      </p>
+
+      <ul class="address">
+        <li>
+          门店定位
+          <span id="lnglat">定位中...</span>
+        </li>
+        <li>
+          选择省市
+          <span>
+            <label id="choose-city" class="color-cfcfcd">请选择</label>
+            <i class="iconfont icon-arrow-right" style="font-size: .24rem;"></i>
+          </span>
+        </li>
+        <li>
+          详细地址
+          <input type="text" id="address" placeholder="请填写详细地址" />
+        </li>
+        <li>
+          门店名称
+          <input type="text" id="name" placeholder="请填写门店名称" />
+        </li>
+        <li>
+          联系电话
+          <input type="text" id="linktel" placeholder="请填写号码" />
+        </li>
+        <li>
+          营业时间
+          <span>
+            <label id="opene" class="color-cfcfcd">请选择时间</label>
+            晚
+          </span>
+          <span>
+            <label id="openb" class="color-cfcfcd">请选择时间</label>
+            早
+          </span>
+
+
+        </li>
+      </ul>
+      <h4>
+        <span class="railing"></span>
+        银行信息
+      </h4>
+      <ul class="address">
+        <li>
+          银行账号
+          <input type="text" id="bank_account" placeholder="请填写银行账号">
+        </li>
+        <li>
+          账户名
+          <input type="text" id="bank_user" placeholder="请填写银行账户名">
+        </li>
+        <li>
+          开户行
+          <input type="text" id="bank_name" placeholder="请填写开户行及支行">
+        </li>
+      </ul>
+      <h4>
+        <span class="railing"></span>
+        门店图片
+      </h4>
+      <!--<ul class="photo">
+					<li id="choose-photo">
+						<i class="iconfont icon-tianjiatupian"></i>
+						<span>选择图片</span>
+					</li>
+					<div class="clear"></div>
+				</ul>-->
+      <ul class="store-photo">
+        <li>
+          <div class="case fl-l">
+            <img src="images/store-1.png" />
+            <span>客户休息区</span>
+          </div>
+          <div class="upload fl-r" title="休息区">
+            <i class="iconfont icon-tianjiatupian"></i>
+            <span>点击拍摄照片</span>
+          </div>
+        </li>
+        <li>
+          <div class="case fl-l">
+            <img src="images/store-2.png" />
+            <span>门头</span>
+          </div>
+          <div class="upload fl-r" title="门头">
+            <i class="iconfont icon-tianjiatupian"></i>
+            <span>点击拍摄照片</span>
+          </div>
+        </li>
+        <li>
+          <div class="case fl-l">
+            <img src="images/store-3.jpg" />
+            <span>前台</span>
+          </div>
+          <div class="upload fl-r" title="前台区">
+            <i class="iconfont icon-tianjiatupian"></i>
+            <span>点击拍摄照片</span>
+          </div>
+        </li>
+        <li>
+          <div class="case fl-l">
+            <img src="images/store-4.png" />
+            <span>施工区域</span>
+          </div>
+          <div class="upload fl-r" title="施工区">
+            <i class="iconfont icon-tianjiatupian"></i>
+            <span>点击拍摄照片</span>
+          </div>
+        </li>
+        <li>
+          <div class="case fl-l">
+            <img src="images/store-5.png" />
+            <span>团队</span>
+          </div>
+          <div class="upload fl-r" title="团队照片">
+            <i class="iconfont icon-tianjiatupian"></i>
+            <span>点击拍摄照片</span>
+          </div>
+        </li>
+      </ul>
+      <div class="but-pos">
+        <div class="but-box">
+          <button class="fl-l quit ml3" onclick="mui.back()">返回</button>
+          <button class="fl-r mr3" onclick="sure()">提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <input type="hidden" id="province_id" value="" />
+  <input type="hidden" id="city_id" value="" />
+  <input type="hidden" id="zone_id" value="" />
+
+  <input type="hidden" id="province" value="" />
+  <input type="hidden" id="city" value="" />
+  <input type="hidden" id="zone" value="" />
+
+  <input type="hidden" id="lat" value="" />
+  <input type="hidden" id="lng" value="" />
+  <script>
+    var userInfo = null;
+    document.addEventListener('plusready', function () {
+      userInfo = getUserInfo();
+      initialization();
+      setTimeout(function () {
+        console.log("开始定位");
+        getLocation();
+      }, 1000)
+    });
+
+    function sure() {
+      var province_id = $("#province_id").val();
+      var city_id = $("#city_id").val();
+      var zone_id = $("#zone_id").val();
+
+      var province = $("#province").val();
+      var city = $("#city").val();
+      var zone = $("#zone").val();
+
+      var lat = $("#lat").val();
+      var lng = $("#lng").val();
+
+      var address = $("#address").val();
+      var name = $("#name").val();
+      var linktel = $("#linktel").val();
+      var openb = $("#openb").text();
+      var opene = $("#opene").text();
+
+      var bank_account = $("#bank_account").val();
+      var bank_name = $("#bank_name").val();
+      var bank_user = $("#bank_user").val();
+
+      var imgs = "";
+      $("input[name=imgs]").each(function () {
+        var title = $(this).attr("title");
+        imgs += "," + title + "=" + this.value;
+      });
+
+      if (!lat || !lng) {
+        mui.toast("未定位成功，请耐心等待");
+        return;
+      }
+
+      if (!zone_id) {
+        mui.toast("请选择省市区");
+        return;
+      }
+
+      if (!address) {
+        mui.toast("请填写详细地址");
+        return;
+      }
+
+      if (!name) {
+        mui.toast("请填写门店名称");
+        return;
+      }
+
+      if (!linktel) {
+        mui.toast("请填写联系电话");
+        return;
+      }
+
+      if (!openb) {
+        mui.toast("请选择开始营业时间");
+        return;
+      }
+
+      if (!opene) {
+        mui.toast("请选择结束营业时间");
+        return;
+      }
+
+      if (!bank_account) {
+        mui.toast("请填写银行账号");
+        return;
+      }
+
+      if (!bank_user) {
+        mui.toast("请填写银行账户名");
+        return;
+      }
+
+      if (!bank_name) {
+        mui.toast("请填写开户行");
+        return;
+      }
+
+      var reg = /^[0-9]{10,30}$/;
+      if (!reg.test(bank_account)) {
+        mui.toast("银行账号格式错误");
+        return;
+      }
+
+      if (!imgs) {
+        mui.toast("请上传门店图片");
+        return;
+      }
+
+      imgs = imgs.substring(1);
+
+      myconfirm("提交后信息将重新审核<br/>确认提交吗？", function () {
+        var param = {
+          sid: userInfo.id,
+          province_id: province_id,
+          city_id: city_id,
+          zone_id: zone_id,
+          province: province,
+          city: city,
+          zone: zone,
+          lng: lng,
+          lat: lat,
+          address: address,
+          name: name,
+          linktel: linktel,
+          openb: openb,
+          opene: opene,
+          imgs: imgs,
+          bank_name: bank_name,
+          bank_account: bank_account,
+          bank_user: bank_user
+        };
+
+        requestRemoteApi("shop.php?do=activate", param, function (res) {
+          if (res.succ) {
+            plus.webview.getLaunchWebview().reload();
+            myloadPage("activateSucc.html");
+          } else {
+            mui.toast(res.msg);
+          }
+        });
+      })
+
+    }
+
+    function initialization() {
+      if (userInfo.zone_id) {
+        $("#choose-city").text(userInfo.province + " " + userInfo.city + " " + userInfo.zone);
+
+        $("#province_id").val(userInfo.province_id);
+        $("#city_id").val(userInfo.city_id);
+        $("#zone_id").val(userInfo.zone_id);
+
+        $("#province").val(userInfo.province);
+        $("#city").val(userInfo.city);
+        $("#zone").val(userInfo.zone);
+      }
+
+      $("#address").val(userInfo.address);
+      $("#name").val(userInfo.name);
+      $("#linktel").val(userInfo.linktel);
+      $("#bank_account").val(userInfo.bank_account);
+      $("#bank_name").val(userInfo.bank_name);
+      $("#bank_user").val(userInfo.bank_user);
+      if (userInfo.openb) $("#openb").text(userInfo.openb);
+      if (userInfo.opene) $("#opene").text(userInfo.opene);
+      if (userInfo.imgs) {
+        for (var k in userInfo.imgs) {
+          if ($(".upload[title='" + k + "']").length > 0) {
+            var _this = $(".upload[title='" + k + "']")[0];
+            $(_this).html("");
+            $(_this).append('<input type="hidden" name="imgs" title="' + k + '" value="' + userInfo.imgs[k] + '" />');
+            $(_this).append('<img src="' + _rooturl + userInfo.imgs[k] + '" />');
+          }
+        }
+      }
+    }
+
+    $(".upload").on('tap', function () {
+      var _this = this;
+      chooseImg(function (url, dst) {
+        var title = $(_this).attr("title");
+        if ($(":hidden", _this).length) {
+          $(":hidden", _this).val(url);
+          $("img", _this).attr("src", _rooturl + url);
+        } else {
+          $(_this).html("");
+          $(_this).append('<input type="hidden" name="imgs" value="' + url + '" title="' + title + '" />');
+          $(_this).append('<img src="' + _rooturl + url + '" />');
+        }
+      });
+    });
+
+    //省市选择
+    var cityPicker = new mui.PopPicker({
+      layer: 3
+    });
+    cityPicker.setData(cityData3);
+    $("#choose-city").on("tap", function () {
+
+      cityPicker.show(function (items) {
+        $("#choose-city").text(items[0].text + " " + items[1].text + " " + items[2].text);
+
+        $("#province_id").val(items[0].value);
+        $("#city_id").val(items[1].value);
+        $("#zone_id").val(items[2].value);
+
+        $("#province").val(items[0].text);
+        $("#city").val(items[1].text);
+        $("#zone").val(items[2].text);
+
+        //返回 false 可以阻止选择框的关闭
+        //return false;
+      });
+    });
+
+    //时间选择
+    var subinvman_sel = $("#openb")[0];
+    if (subinvman_sel) {
+      document.querySelector("#openb").addEventListener("tap", function () {
+        var dtpicker = new mui.DtPicker({
+          "type": "time"
+        });
+        dtpicker.show(function (items) {
+          $("#openb")[0].innerHTML = items.text;
+          dtpicker.dispose();
+          $("#openb").addClass("color-999");
+        });
+      });
+    };
+
+    var subinvman_sel = $("#opene")[0];
+    if (subinvman_sel) {
+      document.querySelector("#opene").addEventListener("tap", function () {
+        var dtpicker = new mui.DtPicker({
+          "type": "time"
+        });
+        dtpicker.show(function (items) {
+          $("#opene")[0].innerHTML = items.text;
+          dtpicker.dispose();
+          $("#opene").addClass("color-999");
+        });
+      });
+    };
+
+
+    function getLocation() {
+      plus.geolocation.watchPosition(function (p) {
+        $("#lnglat").text("经度" + p.coords.longitude + ",纬度" + p.coords.latitude);
+        $("#lat").val(p.coords.latitude);
+        $("#lng").val(p.coords.longitude);
+
+        if ($("#address").val() == "") {
+          $("#address").val(p.address['poiName']);
+        }
+
+        if ($("#city_id").val() == "" || $("#city_id").val() == "0") {
+          var province = p.address['province'];
+          var city = p.address['city'];
+          var district = p.address['district'];
+          //根据文本获取ID
+          var province_id = "";
+          var city_id = "";
+          var zone_id = "";
+          $(cityData3).each(function (i) {
+            if (this.text == province) {
+              province_id = this.value;
+              $(this.children).each(function () {
+                if (this.text == city) {
+                  city_id = this.value;
+                  $(this.children).each(function () {
+                    if (this.text == district) {
+                      zone_id = this.value;
+                    }
+                  });
+                }
+              });
+
+              return false;
+            }
+          });
+
+          $("#choose-city").text(province + " " + city + " " + district);
+
+          $("#province_id").val(province_id);
+          $("#city_id").val(city_id);
+          $("#zone_id").val(zone_id);
+
+          $("#province").val(province);
+          $("#city").val(city);
+          $("#zone").val(district);
+        }
+      }, function (e) {
+        mui.toast('定位失败: ' + e.message);
+      }, {
+        provider: 'baidu'
+      });
+    }
+  </script>
+
+</body>
+
+</html>

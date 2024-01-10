@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>权益服务</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="css/swiper.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <style type="text/css">
+    .swiper-button-prev,
+    .swiper-button-next {
+      display: block;
+      background: url(images/rightService/left.png) center no-repeat;
+      position: absolute;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+      z-index: 10;
+      cursor: pointer;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .swiper-button-next {
+      background: url(images/rightService/right.png) center no-repeat;
+      background-size: contain;
+    }
+  </style>
+</head>
+
+<body style="background:#fff">
+  <div id="app">
+    <div id="appContent">
+      <!-- Swiper -->
+      <div class="cardCont">
+        <div class="swiper-slide">
+          <img :src="cardInfo.imgurl ? cardInfo.imgurl : `images/rightService/card1.png`" width="100%">
+          <div class="card-title">
+            <!-- <h3>无忧膜力卡</h3> -->
+            <p>{{ cardInfo.range=="1" ? "适用30万以下车型" : "适用30万以上（含）车型"}}</p>
+            <p class="cardPrice">
+              <em>¥</em> <span class="p18"
+                v-show="cardInfo.priceMin !=cardInfo.priceMax">{{parseInt(cardInfo.priceMin)}}-{{parseInt(cardInfo.priceMax)}}</span>
+              <span class="p18" v-show="cardInfo.priceMin ==cardInfo.priceMax">{{parseInt(cardInfo.priceMin)}}</span>
+            </p>
+
+          </div>
+          <div class="card-detail">
+            <p v-show="cardInfo.yearMin != cardInfo.yearMax">保障期限：{{cardInfo.yearMin}}-{{cardInfo.yearMax}}年</p>
+            <p v-show="cardInfo.yearMin == cardInfo.yearMax">保障期限：{{cardInfo.yearMin}}年</p>
+          </div>
+        </div>
+        <div class="flagPic">
+          <img src="images/rightService/flag.jpg" width="100%">
+          <a class="phoneCustom" href="tel:4009886868"></a>
+        </div>
+      </div>
+      <div class="greyHr"></div>
+      <div class="item-info">
+        <div class="inner-item">
+          <h3 class="item-tit"><span>保障内容</span></h3>
+          <ul class="card-service fixed">
+            <li class="item-card-service" v-for="item in safeguards">
+              <img src="images/rightService/service1.png">
+              <span class="card-cicle">{{item.num}}</span>
+              <p>{{item.name}}</p>
+            </li>
+            <!-- <li class="item-card-service">
+                            <img src="images/rightService/service2.png">
+                            <span class="card-cicle">5</span>
+                            <p>前挡玻璃修复</p>
+                        </li>
+                        <li class="item-card-service">
+                            <img src="images/rightService/service3.png">
+                            <p>敬请期待</p>
+                        </li> -->
+          </ul>
+        </div>
+      </div>
+      <div class="greyHr"></div>
+      <div class="cardDetail">
+        <ul class="tit-cardDet fixed">
+          <li class="item-tit-cardDet" :class="currentIndex == index ? `on` : ``" v-for="(item,index) in arrCardTit"
+            @click="cngTitle(index)"><span>{{item}}</span></li>
+          <!-- <li class="item-tit-cardDet"><span>购买须知</span></li>
+                    <li class="item-tit-cardDet"><span>理赔服务</span></li> -->
+        </ul>
+        <div class="cont-cardDet" v-show="currentIndex==0" v-html="cardInfo.content">
+
+        </div>
+        <div class="cont-cardDet" v-show="currentIndex==1" v-html="cardInfo.notice">
+
+        </div>
+        <div class="cont-cardDet" v-show="currentIndex==2" v-html="cardInfo.service">
+
+        </div>
+      </div>
+      <div class="card-bottom">
+        <div class="agreeInfo">
+          <span class="icon_radio" @click="cngAgree" :class="agreeFlag ? `icon_ok` : ``"></span>
+          <label>我已阅读并同意</label>
+          <a class="blue" href="noticeDetail.html">《易道大咖用户协议》</a>
+        </div>
+        <ul class="card-bottom-fixed fixed">
+          <li class="l1">
+            <a href="tel:4009886868">
+              <img src="images/rightService/custome.png">
+              <h4>客服</h4>
+            </a>
+          </li>
+          <!-- <li class="l2">
+                        <h3 class="red p16">99元</h3>
+                        <p>保障期限：1年</p>
+                    </li> -->
+          <li class="l3">
+            <button class="startOrder fullBtn p16" @click="buyCard">立即购买</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="js/swiper.min.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/cardDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

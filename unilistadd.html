@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>门店资质认证</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script>
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+	  <!-- <div class="serbox">
+		  <input type="text">
+		  <button>搜索</button>
+	  </div> -->
+	  <form class="unitailsaddform">
+		  <div class="mui-input-row">
+			 <label> <span>*</span> 结算单位名称</label>
+			 <input type="text" v-model="form.settlementName" placeholder="请输入单位名称">
+		  </div>
+		  <div class="mui-input-row">
+			 <label><span>*</span>开户行名称</label>
+			 <input type="text" v-model="form.bankName" placeholder="请输入开户行名称">
+		 </div>
+		  <div class="mui-input-row">
+			 <label><span>*</span>银行账户</label>
+			 <input type="text" v-model="form.bankNo" placeholder="请输入银行账户">
+		  </div>
+		  <div class="mui-input-row">
+			 <label><span>*</span>企业地址</label>
+			 <input type="text" v-model="form.companyAddress" placeholder="请输入企业地址">
+		  </div>
+		  <div class="mui-input-row">
+			 <label><span> </span>邮箱</label>
+			 <input type="text" v-model="form.email"  placeholder="请输入邮箱">
+		  </div>
+		  <div class="mui-input-row">
+			 <label><span>*</span>纳税识别号</label>
+			 <input type="text" v-model="form.nsrsbh"  placeholder="请输入纳税识别号">
+		  </div>
+		  <div class="mui-input-row">
+			 <label><span>*</span>联系电话</label>
+			 <input type="text" v-model="form.telephone" placeholder="请输入联系电话">
+		  </div>
+	  </form>
+	  <div class="btonbox">
+	  	<button @click="goback" class="del">取消</button>
+	  	<button @click="subforn">确认</button>
+	  </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script type='text/javascript' src="js/Service.js?v=0.8"></script>
+<script type='text/javascript' src="js/jswx.js"></script>
+<script type="text/javascript" src="js/city.js?v=3.3"></script>
+<script>
+	document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+	document.write("<script type='text/javascript' src='js/unilistadd.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>
+<style scoped>
+	.unitailsaddform{
+		width: 100%;
+		padding: 25px 10px 25px 25px;
+		box-sizing: border-box;
+		background-color: white;
+	}
+	.mui-input-row{
+		width: 100%;
+		border-bottom: 1px solid #F5F7FB;
+		line-height: 50px;
+		line-height: 50px;
+	}
+	.mui-input-row input{
+		text-indent: 25px;
+	}
+	.mui-input-row span{
+		color: red;
+		margin-right: 5px;
+	}
+	.btonbox{
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		margin-top: 20px;
+	}
+	.btonbox button{
+		padding: 10px 55px;
+		border-radius: 4px;
+		background: #007DFF;
+		color: white;
+	}
+	.btonbox .del{
+		background:#F5F7FB;
+		color: black;
+	}
+	.mui-input-row label{
+		font-size: 14px;
+		line-height: 50px;
+		padding: 0;
+	}
+	.mui-input-row label~input{
+		font-size: 14px;
+	}
+</style>

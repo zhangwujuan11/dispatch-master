@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>销售单列表</title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div class="queryWarp">
+      <div class="query-item">
+        <div class="query-title" @click="showNormal">
+          <em ref="titStatus">客户类型</em> <span class="detailMore"></span>
+        </div>
+        <div class="query-title" @click="showDate">
+          <em ref="titDates">销售单时间</em> <span class="detailMore"></span>
+        </div>
+      </div>
+      <ul class="query-select hock_query-select">
+        <li class="query-sel-item bline" :class="{ 'active' : search.orderLevel == index  }" :score="index"
+          :status="item.status" :relDate="item.name" v-for="(item,index) in arrLevel" @click="searchLevel(0)">
+          <p v-text="item.name"></p>
+          <span class="hock_iconFill icon_fill"></span>
+        </li>
+      </ul>
+      <ul class="query-select query-selectFull">
+        <!-- <p v-text="userTypeList"></p> -->
+        <li class="query-sel-item bline" :class="{ 'active' : search.level == index  }" :score="index"
+          :relDate="item.id" v-for="(item,index) in userTypeList" @click="searchLevel(1)">
+          <p v-text="item.name"></p><span class="hock_iconFill icon_fill"></span>
+        </li>
+      </ul>
+      <ul class="query-select query-selectDate">
+        <li class="query-sel-item bline">
+        <li class="query-sel-item ">
+          <div class="choiceDate">
+            <label>选择开始日期：</label>
+            <span id="startDate">{{startDate}}</span>
+          </div>
+          <div class="choiceDate">
+            <label>选择截止日期：</label>
+            <span id="endDate">{{endDate}}</span>
+          </div>
+        </li>
+        <!-- <div class="query-sub" :relDate="selDate" @click="searchLevel(1)">
+                        <span>确定</span>
+                    </div> -->
+        <div class="btnOpts fixed">
+          <span class="orangeGradient fl" @click="searchLevel(2)">重置</span>
+          <span class="blueGradient fr" @click="searchLevel()">确定</span>
+        </div>
+        </li>
+      </ul>
+    </div>
+    <!-- 头部信息结束 -->
+    <div class="content nobottom orderList_content">
+      <div id="mescroll" class="notice-content selService-content mescroll">
+        <!-- 待支付 -->
+        <ul id="dataList" class="order-items dataList sale-dataList">
+          <li class="orderList" v-for="item in pdlist">
+            <div class="orderList_title">
+              <p class="orderTit">
+                <span style="color:#333"><b>{{item.orderSn}}</b></span>
+              </p>
+              <p class="state" style="color:#8f8f94">{{item.saleDate}}</p>
+            </div>
+            <div class="order_panel" :orderSn="item.orderSn" :orderStatus="item.orderStatus" @click="toDetail(item)">
+              <div class="dataMsg">
+                <p class="p1">商品名称：</p>
+                <p class="p2">{{item.productName}}</p>
+              </div>
+              <div class="dataMsg">
+                <p class="p1">付款方式：</p>
+                <p class="p2">{{item.payMethodValue}}</p>
+              </div>
+              <div class="dataMsg" style="background:#fafafa">
+                <p class="p1">客户名称：</p>
+                <p class="p2">{{item.userName}} &nbsp;&nbsp;{{item.mobile}}</p>
+              </div>
+              <div class="dataMsg" style="background:#fafafa">
+                <p class="p1">客户类型：</p>
+                <p class="p2" style="color:#349cff">{{item.userTypeName}}</p>
+              </div>
+              <div class="dataMsg" style="background:#fafafa">
+                <p class="p1">车牌号码：</p>
+                <p class="p2 blue" style="color:#349cff">{{item.carNo}}</p>
+              </div>
+
+              <div class="dataMsg " style="position:relative; padding:8px 8px">
+                <p class="p1" style="width:200px"><b class="red p16">¥ {{item.totalPrice}}</b></p>
+
+                <span class="showMore"></span>
+              </div>
+            </div>
+            <!-- <div class="order-bottom" style="border-top: 1px dashed #f1f1f1;">
+                            <div>
+                            <button class="orderBtn blueBorder" @click="edit(item)">编辑</button>
+                                <button class="orderBtn redBorder" @click="del(item)">删除</button>
+                            </div>
+                        </div> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="startOrder" @click="add">新建销售单</button>
+      <button class="cancelOrder" @click="toSaleReport">月结统计</button>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+    <div class="mask" id="mask" @click="hideMask"></div>
+    <div class="_loading" id="loading"><img src="images/loading.gif" /></div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=2.3"></script>
+<script src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/saleList.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

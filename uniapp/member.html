@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>查询结果</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+
+</head>
+
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent" >
+      <div class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>基本信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>客户姓名</em>
+                <p><i class="icon_star"></i><span>{{memberInfo.name}}</span></p>
+              </li>
+
+              <li class="item-list">
+                <em>客户性别</em>
+                <p>{{memberInfo.sex}}</p>
+              </li>
+              <li class="item-list">
+                <em>客户类型</em>
+                <p>{{memberInfo.typeName}}</p>
+              </li>
+              <li class="item-list">
+                <em>联系方式</em>
+                <p>{{memberInfo.mobile}}</p>
+              </li>
+              <li class="item-list">
+                <em>生日</em>
+                <p v-text="memberInfo.birthday ? memberInfo.birthday : `暂未填写`"></p>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>车辆信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>车牌号码</em>
+                <p>{{memberInfo.carNo}}</p>
+              </li>
+              <li class="item-list">
+                <em>车型</em>
+                <p class="omit">{{memberInfo.bandType}}</p>
+              </li>
+              <li class="item-list">
+                <em>车架号</em>
+                <p>{{memberInfo.vin}}</p>
+              </li>
+              <!-- <li class="item-list">
+                                <em>行驶证照</em>
+                                <p><img src="images/timg.jpg" width="100%" /></p>
+                            </li> -->
+            </ul>
+          </div>
+        </div>
+        <div class="item-info" v-show="memberInfo.rightsSta">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>权益信息</span></h3>
+            <div class="cardInfo">
+              <img src="images/card.jpg" width="100%">
+              <div class="innerCardInfo">
+                <h3>会员卡</h3>
+                <p>{{memberInfo.rightsSta}}-{{memberInfo.rightsEnd}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>权益内容列表</span></h3>
+            <ul class="item-lists item-sepLists" v-for="item in userRights">
+              <li class="item-list">
+                <em>权益名称</em>
+                <p>{{item.rightCardName}}</p>
+              </li>
+              <li class="item-list">
+                <em>起止日期</em>
+                <p class="omit">{{item.startTime}} - {{item.endTime}} </p>
+              </li>
+              <li class="item-list">
+                <em>权益数量</em>
+                <p>{{item.totalNum}} {{item.units}}</p>
+              </li>
+              <li class="item-list">
+                <em>剩余数量</em>
+                <p>{{item.residualNum}} {{item.units}}</p>
+              </li>
+            </ul>
+            <div class="no-data" v-show="!userRights.length">暂无权益</div>
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>权益使用记录</span></h3>
+            <ul class="item-lists item-sepLists" v-for="item in useRecords">
+              <li class="item-list">
+                <em>权益名称</em>
+                <p>{{item.name}}</p>
+              </li>
+              <li class="item-list">
+                <em>使用日期</em>
+                <p class="omit">{{item.useTime}}</p>
+              </li>
+              <li class="item-list">
+                <em>已使用</em>
+                <p>{{item.usedNum}}次</p>
+              </li>
+              <li class="item-list">
+                <em>本次使用</em>
+                <p>{{item.useingNum}}次</p>
+              </li>
+            </ul>
+            <div class="no-data" v-show="!useRecords.length">暂无使用记录</div>
+          </div>
+        </div>
+
+        <!--  <div class="item-info">
+                    <div class="inner-item">
+                        <div class="showKy">
+                            <p>查看勘验历史</p>
+                            <i class="showMore"></i>
+                        </div>
+                    </div>
+                </div> -->
+      </div>
+      <div class="btns">
+        <button class="startOrder" @click="add(memberInfo)">新建勘验单</button>
+        <button class="cancelOrder" @click="edit">编辑会员信息</button>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/member.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

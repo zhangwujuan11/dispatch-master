@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>月结统计列表</title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div id="appContent">
+      <div class="queryWarp">
+        <div class="query-item">
+          <div class="query-title" @click="showDate">
+            <em ref="titStatus">筛选查询</em> <span class="detailMore"></span>
+          </div>
+          <div class="query-title" @click="showDate">
+            <em ref="titDates" class="blue">{{startDate ? startDate : `统计月份`}}</em> <span class="arrDown"></span>
+          </div>
+        </div>
+        <ul class="query-select query-selectDate">
+          <li class="query-sel-item bline">
+          <li class="query-sel-item ">
+            <div class="choiceDate">
+              <label>月结统计年月：</label>
+              <span id="startDate">{{startDate}}</span>
+            </div>
+          </li>
+          <div class="btnOpts fixed">
+            <span class="orangeGradient fl" @click="searchLevel(2)">重置</span>
+            <span class="blueGradient fr" @click="searchLevel()">确定</span>
+          </div>
+          </li>
+        </ul>
+      </div>
+      <!-- 头部信息结束 -->
+      <div class="content nobottom orderList_content">
+        <div id="mescroll" class="notice-content selService-content mescroll">
+          <!-- 待支付 -->
+          <ul id="dataList" class="sale-dataList">
+            <div class="item-saleReport" v-for="item in pdlist">
+              <p class="report-time blue"><b>{{item.reportsDate}}</b></p>
+              <div class="report-data fixed">
+                <dl>
+                  <dt>销售单数</dt>
+                  <dd class="p18">{{item.totalSaleCount}}</dd>
+                </dl>
+                <dl>
+                  <dt>总销售金额(元)</dt>
+                  <dd class="p18">{{item.totalSalePrice}}</dd>
+                </dl>
+              </div>
+              <li class="orderList" v-for="subItem in item.orderSaleVOS">
+                <div class="orderList_title">
+                  <p class="orderTit">
+                    <span style="color:#333"><b>{{subItem.orderSn}}</b></span>
+                  </p>
+                  <p class="state" style="color:#8f8f94">{{subItem.saleDate}}</p>
+                </div>
+                <div class="order_panel" style="position:relative" :orderSn="item.orderSn"
+                  :orderStatus="item.orderStatus" @click="toDetail(subItem)">
+                  <div class="dataMsg">
+                    <p class="p1">商品名称：</p>
+                    <p class="p2">{{subItem.productName}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">付款方式：</p>
+                    <p class="p2">{{subItem.payMethodValue}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">付款金额：</p>
+                    <p class="p2"><b class="red p16">¥ {{subItem.totalPrice}}</b></p>
+                  </div>
+                  <span class="showMore" style="top:40%"></span>
+                </div>
+              </li>
+              <div class="showDetailMore" @click="toMore(item)">
+                <p>更多销售单<span class="icon-more"></span></p>
+              </div>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="btns">
+            <button class="startOrder fullBtn" @click="add">新建销售单</button>
+        </div> -->
+    <div class="download" @click="toDown">
+      <p>销售单</p>
+      <p>下载</p>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+    <div class="mask" id="mask" @click="hideMask"></div>
+    <div class="_loading" id="loading"><img src="images/loading.gif" /></div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=2.3"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/saleReport.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

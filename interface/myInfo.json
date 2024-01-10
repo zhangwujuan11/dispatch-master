@@ -1,0 +1,16 @@
+{
+  "retCode": 200,
+  "retMsg": "成功",
+  "data": {
+    "id": 1005,
+    "userName": "13800000000",
+    "nickName": "138****0000",
+    "sex": 0,
+    "diamond": 15000,
+    "diamondLevel": 0,
+    "frozenDiamond": 0,
+    "gold": 0,
+    "certificateType": 0
+  },
+  "success": true
+}

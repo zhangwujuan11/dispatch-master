@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" /> -->
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>权益领取</title>
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div>
+        <img src="images/sale/6.png" style="width: 100%;" />
+      </div>
+      <div class="innerCont pb40" style="margin-top: -23px;">
+        <div class="item-info" style="padding-top: 10px; padding-bottom: 80px">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>VIP信息</span></h3>
+            <ul class="item-lists pb10">
+              <li class="item-list">
+                <em>车牌号码</em>
+                <p>
+                  <input type="text" name="" value="" placeholder="请输入车牌号码" @keyup="toUpperCase(carNo)" v-model="carNo"
+                    style="text-indent:50px">
+                  <select name="province" class="province blue" id="province" v-model="provSelected"
+                    style="left:-6px; top:13px; font-weight: 600">
+                    <option v-for="item in provList">{{item.code}}</option>
+                  </select>
+                  <span class="icon_down icon_down_p" style="left:24px; top:21px"></span>
+                </p>
+              </li>
+              <li class="item-list" style="position:relative">
+                <!-- <span class="red iconD">*</span> -->
+                <em>手机号</em>
+                <p>
+                  <input type="text" name="" v-model="mobile" placeholder="请输入手机号">
+                </p>
+              </li>
+              <li class="item-list" style="position:relative">
+                <em>车架号</em>
+                <p>
+                  <input type="text" name="" v-model="vin" placeholder="请输入车架号">
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="btns" style="z-index: 2">
+          <button class="startOrder fullBtn" @click="add">确认领取</button>
+        </div>
+      </div>
+      <div style="text-align: center; font-size: 16px; position: fixed; bottom: 10%; left:0;right: 0;margin: auto;">
+        服务热线： <a href="tel:400-988-6868" style="color: #60b2ff;font-weight: bold;">400-988-6868</a>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script>
+  var userInfo = ""
+</script>
+<!--   -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/InsuranceReceive.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

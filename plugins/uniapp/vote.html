@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>活动投票</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#349cff">
+  <div id="app">
+    <div id="appContent">
+      <div>
+        <!-- <img :src="voteInfo.imagePath ? voteInfo.imagePath : `images/active/top.jpg`" width="100%" /> -->
+        <img src="images/active/top1.jpg" width="100%" />
+      </div>
+      <div class="vote-top">
+        <div class="vote-inner">
+          <div class="vote-rank">
+            <div class="vote-count">
+              <dl>
+                <dt style="text-align: center;">{{voteInfo.singedCount}}人</dt>
+                <dd>评选人数</dd>
+              </dl>
+              <dl>
+                <dt style="text-align: center;">{{voteInfo.totalVoteNum}}次</dt>
+                <dd>总投票数</dd>
+              </dl>
+              <dl>
+                <dt style="text-align: center;">{{voteInfo.browseSum}}人</dt>
+                <dd>访问量</dd>
+              </dl>
+            </div>
+            <div class="view-rank" @click="toRank">
+              <img src="images/icon/prise.png" width="30px" height="30px">
+              <p>查看排行</p>
+            </div>
+          </div>
+          <div class="vote-countDown">
+            <img src="images/icon/clock.png" width="16px" height="16px">
+            <p class="v-yellow" style="padding:0 8px">活动结束</p>
+            <p style="padding-right: 6px">倒计时 </p>
+            <div class="js_time_txt">
+              <em class="v-yellow"> 13 </em> 天
+              <em class="v-yellow"> 5 </em> 小时
+              <em class="v-yellow"> 17 </em> 分
+              <em class="v-yellow"> 39 </em> 秒
+            </div>
+          </div>
+          <div class="vote-search">
+            <img src="images/active/search.png" width="100%" height="34px" />
+            <input type="text" class="vote-kw" name="" placeholder="搜名字或者门店名称" v-model="name">
+            <span class="vote-srh" @click="srhName(name)"></span>
+          </div>
+        </div>
+      </div>
+      <div class="priseInfo voteInfo" :class="{ 'noVoteInfo' : !pdlist.length}">
+        <img class="priseInfoImg" src="images/prise/center.jpg" width="100%" />
+        <div></div>
+        <div class="priseUser" style="top:6px; background:#f1f1f1">
+          <div class="vote-line"></div>
+          <h3 class="priseUser-h">
+            <img src="images/active/pop.png" width="90px" style="padding:0 0 20px 0" />
+          </h3>
+          <div class="priseCont">
+            <div class="priseTitre">
+            </div>
+            <div class="vote-box">
+              <div id="mescroll" class="mescroll">
+                <div id="dataList">
+                  <ul class="wall vote-dataList fixed">
+                    <li class="vote-item" v-for="(item,index) in pdlist">
+                      <div @click="toDetail(item)">
+                        <img :src="item.personImg" width="100%" />
+                      </div>
+                      <div style="padding:0 4px">
+                        <h3>{{item.no}}号 &nbsp;{{item.personName}}
+                        </h3>
+                        <p>{{item.shopName}}</p>
+                      </div>
+                      <!-- <span class="vote-opts" @click="toVote(item,index)">投TA一票</span> -->
+                      <div class="vote-num">
+                        <em>投票数：</em>
+                        <span class="blue">{{item.voteNum}}</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vote-prise">
+        <div class="vote-line"></div>
+        <h3 class="priseUser-h">
+          <img src="images/active/prise.png" width="90px" style="padding:0 0 20px 0" />
+        </h3>
+        <div class="vote-inner" style="padding:20px 0 10px ">
+          <dl class="item-vote-prise blueGradient">
+            <dt>冠军</dt>
+            <dd>10 万元奖金及奖杯</dd>
+          </dl>
+          <dl class="item-vote-prise blueGradient">
+            <dt>亚军</dt>
+            <dd>5 万元奖金及奖杯</dd>
+          </dl>
+          <dl class="item-vote-prise blueGradient">
+            <dt>季军</dt>
+            <dd>3 万元奖金及奖杯</dd>
+          </dl>
+          <dl class="item-vote-prise blueGradient" style="line-height: 24px">
+            <dt>预选赛奖项</dt>
+            <dd>
+              <p>1、通过海选的前50名选手和2020年技师认证考试前10名选手，颁发价值300元的参赛纪念品。
+              </p>
+              <p>2、通过海选的前3名，奖励冠军10000元、亚军8000元、季军5000元（或等值奖品）。</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="priseRule">
+        <div class="innerRule">
+          <h3>投票规则：</h3>
+          <p> 1、每人（微信号）每天只能投票2次，可以投给同一个人。</p>
+          <p>2、成功投票后，取消关注的，被投票选手的票数将自动取消。</p>
+          <p> 3、每天封顶票数为3000票，严禁使用软件等恶意刷票，一经发现，取消参赛资格。</p>
+          <p>4、活动结束之后，由主办方公布本次活动排名名单，投票结果将作为2020技师大赛预选赛选手总排名的依据之一。</p>
+          <p>5、本活动不收取任何费用。</p>
+          <p>6、本活动最终解释权归活动组委会所有。</p>
+        </div>
+      </div>
+      <div class="maskBigPic" v-show="showImgCode"></div>
+      <div class="img-code" v-show="showImgCode">
+        <img id="codeT3" :src="codePath ">
+        <select id="codeSelect" style="display: none;"></select>
+        <!-- <img  src="images/refresh.png" style="position:absolute;right:10px;top:10px; width:20px; height: 20px;" @click="getCodeTree" /> -->
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<!--   -->
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<!-- <script type='text/javascript' src="js/jaliswall.js"></script> -->
+<!-- <script type='text/javascript' src="http://v.bootstrapmb.com/2019/9/fep716068/js/jquery.masonry.min.js"></script> -->
+<script type="text/javascript" src="js/jquery.masonry.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/vote.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

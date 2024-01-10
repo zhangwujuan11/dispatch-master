@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>选择品牌</title>
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <div id="appContent">
+      <section class="aui-flexView">
+        <header class="aui-navBar aui-navBar-fixed b-line">
+          <a href="javascript:;" class="aui-navBar-item">
+            <i class="icon icon-return"></i>
+          </a>
+          <div class="aui-center">
+            <span class="aui-center-title">选择品牌</span>
+          </div>
+          <a href="javascript:;" class="aui-navBar-item">
+            <i class="icon icon-sys"></i>
+          </a>
+        </header>
+        <section class="aui-scrollView">
+          <div id="showLetter" class="showLetter">
+            <span>A</span>
+          </div>
+          <div class="letter">
+            <ul>
+              <li v-for="item in arrWords">
+                <a href="javascript:;">{{item}}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="container">
+            <div class="city">
+              <div class="city-list" v-for="iWord in arrWords">
+                <span class="city-letter b-line" :id="iWord+`1`">{{iWord}}</span>
+                <a href="javascript:;" v-for="item in carList" class="aui-flex" v-if="item.firstletter==iWord"
+                  :realId="item.id">
+                  <div class="aui-brand-logo">
+                    <img :src="item.img" alt="">
+                  </div>
+                  <div class="aui-flex-box">
+                    <h3>{{item.name}}</h3>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=1.0"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/queryCar.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

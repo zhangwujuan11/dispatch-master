@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>信息单详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>客户信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>报&nbsp;&nbsp;案&nbsp;&nbsp;号</em>
+                <p>{{orderInfo.outOrderSn}}</p>
+              </li>
+              <li class="item-list">
+                <em>查&nbsp;&nbsp;勘&nbsp;&nbsp;员</em>
+                <p>{{orderInfo.contactName}}</p>
+              </li>
+              <li class="item-list">
+                <em>查勘员电话</em>
+                <p> {{orderInfo.mobile}}</p>
+              </li>
+              <li class="item-list">
+                <em>修理厂联系人</em>
+                <p>{{orderInfo.repairContact}}</p>
+              </li>
+              <li class="item-list">
+                <em>修理厂电话</em>
+                <p>{{orderInfo.repairTel}}</p>
+              </li>
+              <li class="item-list">
+                <em>车&nbsp;&nbsp;牌&nbsp;&nbsp;号</em>
+                <p>{{orderInfo.carNo}}</p>
+              </li>
+              <li class="item-list">
+                <em>车&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型</em>
+                <p>{{orderInfo.carType}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>维修建议</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>商品名称</em>
+                <p>{{orderInfo.productName}}</p>
+              </li>
+              <li class="item-list">
+                <em>零件编码</em>
+                <p>{{orderInfo.partSn}}</p>
+              </li>
+              <li class="item-list">
+                <em>CARG码</em>
+                <p>{{orderInfo.carg}}</p>
+              </li>
+              <li class="item-list">
+                <em>建议玻璃价</em>
+                <p><em>¥</em> <span class="p18 blue">{{orderInfo.orderPrice}}</span></p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>订单信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>订单号</em>
+                <p>{{orderInfo.orderSn}}</p>
+              </li>
+              <li class="item-list" v-if="orderInfo.outOrderSn">
+                <em>报案号</em>
+                <p class="blue">{{orderInfo.outOrderSn}}</p>
+              </li>
+              <li class="item-list" v-if="orderInfo.sender">
+                <em>派单人</em>
+                <p class="blue">{{orderInfo.sender}}</p>
+              </li>
+              <li class="item-list" v-if="orderInfo.auditor">
+                <em>审核人</em>
+                <p class="blue">{{orderInfo.auditor}}</p>
+              </li>
+              <li class="item-list" v-if="orderInfo.personName">
+                <em>服务技师</em>
+                <p>{{orderInfo.personName}}</p>
+              </li>
+              <li class="item-list">
+                <em>服务预约时间</em>
+                <p>{{orderInfo.appointmentTime}}</p>
+              </li>
+
+              <li class="item-list">
+                <em>订单创建时间</em>
+                <p>{{orderInfo.createDate}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/msgOrderDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

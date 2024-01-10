@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>VIN查询</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <link rel="stylesheet" type="text/css" href="plugins/cropper/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="plugins/cropper/cropper.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="plugins/cropper/main.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app" class="vin_dom">
+    <div id="appContent">
+      <img class="vim_top_img" src="./images/vin/loging.png" alt="">
+      <div class="vin_query">
+        <div class="vin_choose">
+          <img src="images/vin/vin.png" class="vinImg" />
+          <input accept="image/*" type="file" class="vinUploadImg" id="uploadIMG" @change="btnUploadFile(1)" @click="authority" />
+        </div>
+
+        <input v-model="vinSearch" :value="vinSearch" type="url" @keyup="toUpperCase(vinSearch)"
+          style="ime-mode:disabled" placeholder="请输入VIN查询" class="vin_search">
+        <div class="collect" @click="collect">
+          <img style="height: 100%;width: 100%;" src="images/vin/search.png" alt="">
+        </div>
+      </div>
+      <div class="tishis" @click="look()">
+        如何查看VIN码 ？
+      </div>
+      <div class="vin_vehicle">
+        <div class="glass_top">
+          <span @click="clickGlass(0)" class="front" :class="{ native: classNative == 0}">左后</span>
+          <span @click="clickGlass(1)" class="front" :class="{ native: classNative == 1}">左前</span>
+        </div>
+        <div class="glass_center">
+          <span @click="clickGlass(2)" class="middle" :class="{ native: classNative == 2}">后<br>挡</span>
+          <div class="zhongtu">
+            <img class="vehicle" src="images/vin/vehicle.png" alt="">
+            <img class="frontGear" v-if="classNative == 0" src="images/vin/leftrear.png" style="left: 22%;top: 10%;"
+              alt="">
+            <img class="frontGear" v-if="classNative == 1" src="images/vin/leftfront.png" style="right: 28%;top: 10%;"
+              alt="">
+            <img class="frontGear" v-if="classNative == 2" src="images/vin/backGear.png" style="left: 7%;top: 10%;"
+              alt="">
+            <img class="frontGear" v-if="classNative == 3" src="images/vin/skylight.png" style="left: 43%;top: 22%;"
+              alt="">
+            <img class="frontGear" v-if="classNative == 4" src="images/vin/frontGear.png" style="right: 20%;top: 10%;"
+              alt="">
+            <img class="frontGear" v-if="classNative == 5" src="images/vin/rigthrear.png" style="left: 22%;bottom: 17%;"
+              alt="">
+            <img class="frontGear" v-if="classNative == 6" src="images/vin/rigthfront.png"
+              style="right: 28%;bottom: 16%;" alt="">
+            <span class="skylight middle" @click="clickGlass(3)" :class="{ native: classNative == 3}">天<br>窗</span>
+          </div>
+          <span @click="clickGlass(4)" class="middle" :class="{ native: classNative == 4}">前<br>挡</span>
+        </div>
+        <div class="glass_bottom">
+          <span @click="clickGlass(5)" class="front" :class="{ native: classNative == 5}">右后</span>
+          <span @click="clickGlass(6)" class="front" :class="{ native: classNative == 6}">右前</span>
+        </div>
+      </div>
+      <div class="vin_footer">
+        <div class="disply" style="background: url('./images/vin/bg1.png') no-repeat; justify-content: center;">
+          <span class="triangle_left"></span> 创中国汽车后服务市场连锁品牌
+          <span class="triangle_right"></span></div>
+        <div style="font-size: 15px;margin: 10px;">全国服务热线：<a style="color:royalblue;"
+            href="tel:400-988-6868">400-988-6868</a> </div>
+      </div>
+
+      <div class="lokShow" v-show="lokShow" @click="look()">
+        <p class="clo">x</p>
+        <img src="images/vin/vins.png">
+      </div>
+      <div class="cropperModal" v-show="cropperShow">
+        <div class="container">
+          <div class="img-container">
+            <img :src="cropperUrl" alt="Picture">
+          </div>
+        </div>
+
+        <div class="docs-preview clearfix" style="display: none;">
+          <div class="modal-body"></div>
+        </div>
+
+        <div class="cropperBtn">
+          <button @click="clos">取消</button>
+          <button data-method="getCroppedCanvas" type="button" style="background: #349CFF;color: #fff;">
+            确定
+          </button>
+        </div>
+      </div>
+      <div style="display: none;" class="authority_mask" @click="hideAuthorityMask">
+        <div class="authority_mask_box">
+          <div>相机、储存空间/照片权限使用说明：</div>
+          <div>用于拍摄照片、扫码、上传图片等场景</div>
+        </div>
+      </div> 
+    </div>
+  </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<!-- <script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script> -->
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js?v=2.3"></script>
+<script type="text/javascript" src="./plugins/cropper/jquery.min.js"></script>
+<script type="text/javascript" src="./plugins/cropper/bootstrap.min.js"></script>
+<script type="text/javascript" src="./plugins/cropper/cropper.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/vinQuery.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

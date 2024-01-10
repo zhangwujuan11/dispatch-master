@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>ETC办理</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="etc-top">
+        <ul class="etc-steps">
+          <li class="etc-step">
+            <img src="images/etc/step.png" width="100%" />
+            <p class="blue">证件资料</p>
+          </li>
+          <li class="etc-step">
+            <img :src="showStepOne ? `images/etc/tel.png` : `images/etc/telOn.png`" width="100%" />
+            <p :class=" showStepOne ? `` : `blue`">手机验证</p>
+          </li>
+          <li class="etc-step">
+            <img :src="showStepThree ? `images/etc/etcOn.png` : `images/etc/etc.png`" width="100%" />
+            <p :class="showStepThree ? `blue` : ``">开通ETC</p>
+          </li>
+        </ul>
+      </div>
+      <div class="step1" v-show="showStepOne">
+        <div class="innerCont pb40">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit">
+                <span>行驶证照</span>
+                <em class="grey" style="font-size:12px">请确保照片清晰，证件信息完整</em></h3>
+              <ul class="item-lists">
+                <!--  <p class="markInfo grey">照片中需包含（双面，含有效期（未过期时间））</p> -->
+                <div class="upDrive etcUpDrive">
+                  <div class="item-etcPic">
+                    <img src="images/etc/card.jpg" width="100%" />
+                    <p>示例图</p>
+                  </div>
+                  <div class="item-etcPic item-etcUpLoad">
+                    <img :src="drivingPic ? drivingPic : `images/etc/upload.png`" class="matchImg" width="100%" />
+                    <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG" @change="btnUploadFile()" />
+                    <div class="maskUploadImg" v-show="isShowMask">
+                      <span class="maskLoading"></span>
+                    </div>
+                  </div>
+
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="startOrder fullBtn" style="background:#ccc" v-show="!isNext">下一步</button>
+          <button class="startOrder fullBtn" @click="next('two')" v-show="isNext">下一步</button>
+        </div>
+      </div>
+      <div class="step2" v-show="showStepTwo">
+        <div class="etcInfo">
+          <div class="row ">
+            <p class="tit">手机号</p>
+            <input type="number" name="" class="input" placeholder="请输入手机号码" v-model="mobile"
+              oninput="if(value.length>11) value=value.slice(0,11)"
+              onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+          </div>
+          <div class="row">
+            <p class="tit">验证码</p>
+            <input type="number" name="" class="input" placeholder="请输入验证码" v-model="verifyCode"
+              oninput="if(value.length>4) value=value.slice(0,4)"
+              onKeyUp="this.value=this.value.replace(/[^\d]/g, '')" />
+            <button class="sendCode disalbed">获取验证码</button>
+            <button v-show="showSendBtn == 1" id="sendCode" class="sendCode" @click="sendCode">获取验证码</button>
+          </div>
+          <div class="row">
+            <p class="tit">ETC渠道</p>
+            <select class="select" v-model="partnerCode">
+              <option value="">请选择ETC渠道</option>
+              <option :value="item.partnerCode" v-for="item in bankList">{{item.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="startOrder fullBtn" @click="next('three')">下一步</button>
+        </div>
+      </div>
+      <div class="step3" v-show="showStepThree">
+        <div class="etcInfo">
+          <div class="ectInfo-inner">
+            <img :src="etcInfo.qrcode" width="40%">
+            <p class="p12 grey">长按识别图中二维码，进入下一步</p>
+          </div>
+          <div class="ect-intro" v-html="etcInfo.detail">
+
+          </div>
+        </div>
+        <div class="btns">
+          <p style="width:100%; text-align:center">咨询服务电话：
+            <a href="tel:400-988-6868">400-988-6868</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tip-box">
+    <div class="wx_confirm_tit" id="tip-mes"></div>
+  </div>
+  </div>
+</body>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/etc.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

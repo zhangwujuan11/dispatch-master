@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>易道大咖</title>
+ <link rel="stylesheet" href="fonts/iconfont.css" />
+ <link rel="stylesheet" href="css/mui.picker.min.css" />
+ <link rel="stylesheet" type="text/css" href="css/test.css" />
+ <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+ <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+ <script type="text/javascript" src="js/mui.min.js"></script>
+  <script type="text/javascript" src="js/mui.picker.min.js"></script>
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="textLogo">
+        <img src="images/entreTop.jpg" width="100%" />
+      </div>
+      <div class="enterLists">
+
+        <ul class="enterList fixed">
+          <li @click="toShopQualCert"  style="margin-top: -4px;">
+            <img src="images/icon/renzheng.png" />
+            <p style="color: red;">门店认证</p>
+          </li>
+         <!-- <li @click="toBuyService" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/1.png" />
+            <p>权益购买</p>
+          </li> -->
+          <li @click="toOrder" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/2.png" />
+            <p>报修服务</p>
+          </li>
+          <li @click="toSurvey" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/3.png" />
+            <p>会员查勘</p>
+          </li>
+          <li @click="toRepair" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/18.png" />
+            <p>保险查勘</p>
+          </li>
+          <li @click="toMember" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/4.png" />
+            <p>会员查询</p>
+          </li>
+          <!--<li @click="toCoatList" v-if="accountType!=4 && accountType!=6">
+                        <img src="images/icon/5.png" />
+                        <p>镀膜补贴</p>
+                    </li>-->
+          <!-- <li>
+                        <img src="images/icon/5.png"  />
+                        <p>镀膜补贴</p>
+                    </li> -->
+          <li @click="toQueryGlass" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/6.png" />
+            <p>玻璃查询</p>
+          </li>
+          <!-- <li>
+                        <img src="images/icon/7.png"  />
+                        <p>认证申请</p>
+                    </li> -->
+
+          <!-- <li @click="toActive" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/8.png" />
+            <p>最新活动</p>
+          </li> -->
+          <li @click="toAddSale" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/11.png" />
+            <p>销售开单</p>
+          </li>
+          <li @click="toSale" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/10.png" />
+            <p>销售单</p>
+          </li>
+          <li @click="toSettle" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/12.png" />
+            <p>结算管理</p>
+          </li>
+          <li @click="toQuality" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/13.png" />
+            <p>太阳膜防伪</p>
+          </li>
+          <li @click="toQuality1" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/17.png" />
+            <p>指导书任务</p>
+          </li>
+          <li @click="toGuidance" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/17.png" />
+            <p>作业指导书</p>
+          </li>
+          <!-- <li @click="toMsgOrder" v-if="accountType!=4 && accountType!=6">
+            <img src="images/icon/19.png" />
+            <p>信息工单</p>
+          </li> -->
+          <li @click="toShop" v-if="accountType!=4">
+            <img src="images/icon/9.png" />
+            <p>我的门店</p>
+          </li>
+        </ul>
+        <!-- <div class="dayCode fixed">今日日期码： <em class="p18 blue">{{dateCode}}</em></div> -->
+      </div>
+      <div class="newsLists">
+        <div class="news_title">
+          <p>公告</p>
+          <span class="news_more" @click="toAnnonce">更多 ></span>
+        </div>
+        <ul class="newsList">
+          <li class="item-news" v-for="item in noteList" @click="toDetail(item.id)">
+            <h3 class="item-news-title">
+              <span class="omit">{{item.title}}</span>
+              <em>{{item.createDate}}</em>
+            </h3>
+            <p class="item-news-desc omit">{{item.introduct}}</p>
+          </li>
+        </ul>
+      </div>
+      <div class="btns">
+        <div class="dayCode fixed">今日日期码： <em class="p18 blue">{{dateCode}}</em></div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+	
+  </div>
+</body>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+ 
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+<script type='text/javascript' src="js/jswx.js?v=2.3"></script>
+<script type='text/javascript' src="js/wordScroll.js?v=2.6"></script>
+<!-- 用于回跳uniapp页面 -->
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/index.js?v=" + Date.now() + "'><\/script>");
+  
+  
+  
+</script>
+
+</html>

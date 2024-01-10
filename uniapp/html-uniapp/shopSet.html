@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>我的门店</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <!-- <div class="shopHeader">
+                <div class="innerShopHeader">
+                    <img src="images/logo.png" height="70px" />
+                    <p>{{shopInfo.name}}</p>
+                    <p><b>门店编号：{{shopInfo.code}}</b></p>
+                </div>
+            </div> -->
+      <div class="shopInfo">
+        <!-- <div class="shopOrder">
+                    <div class="innerShopOrder">
+                        <ul class="shopOrderList fixed">
+                            <li class="item-shopOrder" @click="toCardOrderList">
+                                <h3><span class="icon-order"></span></h3>
+                                <p>权益订单</p>
+                            </li>
+                            <li class="item-shopOrder" @click="toCardPayOrderList">
+                                <h3><span class="icon-pay"></span></h3>
+                                <p>待付款</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div> -->
+        <ul class=" user_detail_context">
+          <!-- <li class="query-sel-item bline" @click="toShop">
+                        <p class="user-cat"><span class="icon-remark icon-shop"></span>门店信息</p><span class="icon_go user_detail_data "></span>
+                    </li>
+                    
+                    <li class="query-sel-item bline" @click="toSettle">
+                        <p class="user-cat"><span class="icon-remark icon-settle"></span>结算管理</p><span class="icon_go user_detail_data"></span>
+                    </li>
+                    <li class="query-sel-item bline" @click="toShopManage">
+                        <p class="user-cat"><span class="icon-remark icon-user"></span>店员管理</p><span class="icon_go user_detail_data"></span>
+                    </li>
+                    
+                    <li class="query-sel-item bline" @click="toUnitCharge">
+                        <p class="user-cat"><span class="icon-remark icon-charge"></span>结算单位</p><span class="icon_go user_detail_data"></span>
+                    </li>
+                    <li class="query-sel-item bline" @click="toSale">
+                        <p class="user-cat"><span class="icon-remark icon-sale"></span>销售单列表</p><span class="icon_go user_detail_data "></span>
+                    </li>
+                    <li class="query-sel-item bline" @click="toCodePay">
+                        <p class="user-cat"><span class="icon-remark icon-payCode"></span>收款码配置</p><span class="icon_go user_detail_data "></span>
+                    </li> -->
+          <li class="query-sel-item" @click="cngPwd">
+            <p class="user-cat"><span class="icon-remark icon-pwd"></span>更换密码</p><span
+              class="icon_go user_detail_data "></span>
+          </li>
+        </ul>
+        <div class="innerCont pb40" style="margin-top:30px">
+          <!-- <div class="item-info">
+                        <div class="inner-item" @click="toShop">
+                            <h3 class="item-tit"><span>门店信息</span><em class="go"></em></h3>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="inner-item" @click="toShopManage">
+                            <h3 class="item-tit"><span>店员管理</span><em class="go"></em></h3>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="inner-item" @click="cngPwd">
+                            <h3 class="item-tit"><span>更换密码</span><em class="go"></em></h3>
+                        </div>
+                    </div> -->
+          <div class="item-info">
+            <div class="inner-item">
+              <button class="logout orangeGradient" @click="logout">退出</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/shopSet.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

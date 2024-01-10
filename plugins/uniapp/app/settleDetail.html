@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>结算单位详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont shopCont" :class="settleInfo.isExpress ? `` : `pb40`">
+        <div class="item-info">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit">
+                <span><b>{{settleInfo.settlementSn}}</b></span>
+                <em class="blue setStauts">{{settleInfo.settlementStatusDes}}</em>
+              </h3>
+              <ul class="item-lists" @click="toSubList(settleInfo)">
+                <li class="item-list">
+                  <em>门店名称</em>
+                  <p>{{settleInfo.shopName}}</p>
+                </li>
+                <li class="item-list">
+                  <em>门店编辑</em>
+                  <p>{{settleInfo.shopCode}}</p>
+                </li>
+                <li class="item-list">
+                  <em>结算单号</em>
+                  <p class="blue">{{settleInfo.settlementSn}}</p>
+                </li>
+                <li class="item-list">
+                  <em>结算金额</em>
+                  <p class="red">
+                    ¥ <b>{{settleInfo.settlementAmount}}</b>
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>包含工单</em>
+                  <p>
+                    <b class="red p16">{{settleInfo.orderNum}}</b> 个
+                  </p>
+                </li>
+                <li class="item-list" v-show="settleInfo.auditDec">
+                  <em>审核信息</em>
+                  <p>
+                    {{settleInfo.auditDec}}
+                  </p>
+                </li>
+                <span class="showMore"></span>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="item-info">
+                    <div class="item-info">
+                        <div class="inner-item" style="position:relative">
+                            <h3 class="item-tit" style="border:none" >
+                                <span>包含 <b class="red">2</b> 个订单</span>
+                                <em class="blue setStauts">查看订单</em>
+                            </h3>
+                        </div>
+                    </div>
+                </div> -->
+        <div class="item-info" v-if="settleInfo.shopSettlement">
+          <div class="item-info">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>结算单位信息</span></h3>
+              <ul class="item-lists normaLists" :class="showMoreCharge ? `showMordLists` : ``">
+                <!--  <li class="item-list">
+                                    <em>结算方式</em>
+                                    <p class="blue">{{ shopSettlement.settletmentMethod==1 ? "自开" : "一级代开"}}</p>
+                                </li> -->
+                <li class="item-list">
+                  <em>结算单位</em>
+                  <p class="blue">
+                    {{shopSettlement.settlementName}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>纳税人识别号</em>
+                  <p class="blue">
+                    {{shopSettlement.nsrsbh}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>联系方式</em>
+                  <p>
+                    {{shopSettlement.telephone}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>注册地址</em>
+                  <p>
+                    {{shopSettlement.companyAddress}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>开户行名称</em>
+                  <p>
+                    {{shopSettlement.bankName}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>开户行账号</em>
+                  <p>
+                    {{shopSettlement.bankNo}}
+                  </p>
+                </li>
+                <li class="item-list">
+                  <em>电子邮箱</em>
+                  <p>
+                    {{shopSettlement.email}}
+                  </p>
+                </li>
+              </ul>
+              <div class="showDown" @click="showMore">
+                <span class="grey"> {{showMoreCharge ? "收 起 ↑" : "展开更多信息 ↓"}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="item-info" v-if="settleInfo.isExpress">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>快递信息</span></h3>
+            <ul class="item-lists edit-lists charge-lists">
+              <li class="item-list">
+                <em>快递公司</em>
+                <p>
+                  {{expressDetail.expressCompany}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>快递单号</em>
+                <p>
+                  {{expressDetail.expressSn}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>快递时间</em>
+                <p>
+                  {{expressDetail.expressDate}}
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info" v-if="settleInfo.isExpress">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>快递凭证</span></h3>
+            <ul class="item-lists">
+              <!-- <p class="markInfo grey">照片中需包含（单号，寄件信息）</p> -->
+              <div class="upDrive">
+                <img :src="expressDetail.expressImg ? expressDetail.expressImg : `images/404.jpg`" width="100%" />
+              </div>
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info" v-if="settleInfo.payDetail">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>付款凭证</span></h3>
+            <ul class="item-lists">
+              <div class="upDrive">
+                <img :src="settleInfo.payDetail.payImg ? settleInfo.payDetail.payImg : `images/404.jpg`" width="100%" />
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="btns" v-if="settleInfo.auditStatus == 2 && !settleInfo.isExpress">
+                <button class="startOrder fullBtn" @click="toSettleSend(settleInfo)">发票快递</button>
+            </div> -->
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script type='text/javascript' src="js/varInfo.js"></script>
+<script type='text/javascript' src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="plugins/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="plugins/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="plugins/common.js?v=0.6"></script>
+<script type='text/javascript' src="plugins/Service.js?v=0.6"></script>
+<script type='text/javascript' src="plugins/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/settleDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+<script>
+  $(function () {
+    //ios软键盘收起，下面回滚
+    $('input,select').on('blur', function () {
+      var _self = this;
+      setTimeout(function () {
+        window.scroll(0, $(_self).offset().top);
+      }, 1)
+    })
+  });
+</script>
+
+</html>

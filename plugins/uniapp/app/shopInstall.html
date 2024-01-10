@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>安装作业素材收集</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" href="css/mui.popover.min.css" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="shopInstall" v-show="step1">
+        <div class="shopInstallHeader">
+          <p><img src="images/shop/7.png" height="70px" /></p>
+          <p><img src="images/shop/6.png" /></p>
+          <p><img src="images/shop/5.png" /></p>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>车型数据</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"> 安装车型</em>
+                <div class="glassss">
+                  <input type="text" v-model="shopInfo.glassType" placeholder="请输入或选择商品" class="chaxun">
+                  <div class="serleglass" @click="toProName('proName')">选择商品</div>
+                </div>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px">CARG码</em>
+                <p class="color-cfcfcd">
+                  {{shopInfo.carg}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px">玻璃型号</em>
+                <p>
+                  <input type="text" v-model="shopInfo.partsName" placeholder="请输入玻璃型号">
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"> 本厂编码</em>
+                <p>
+                  <input type="text" v-model="shopInfo.gysPartsSn" placeholder="请输入本厂编码">
+                </p>
+              </li>
+              <li class="item-list">
+                <em style="line-height:20px; width:90px"> 技师姓名</em>
+                <p @click="toPerson" class="color-cfcfcd">
+                  <label id="choose-person">{{shopInfo.personName ? shopInfo.personName: "请选择技师"}}</label>
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info">
+
+          <div class="inner-item">
+            <h3 class="item-tit"><span>审核信息</span></h3>
+            <ul class="item-lists" v-for="(item,index) in shopInfo.materialItemList" :key="index">
+              <h3 class="tit-require pt10">
+                <em class="red">*</em>
+                <span class="sBlue">{{item.checkItemName}}</span>
+              </h3>
+              <p class="markInfo grey">{{item.checkItemRemarks}}</p>
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img :src="item.checkItemImg" width="100%" />
+                  <p>例图</p>
+                </div>
+                <label
+                  v-show="item.checkItemId == 67||item.checkItemId == 68||item.checkItemId == 69||item.checkItemId == 70||item.checkItemId == 71 ">
+                  <div class="item-pic upLoadImgs" v-if="item.imgList.length>0" v-for="(items,idx) in item.imgList"
+                    :key="idx">
+                    <img :src="items.imgPath ?items.imgPath : 'images/upload.jpg'" class="picFullcar" width="100%"
+                      @click="openPopover(item,index,items)" />
+                  </div>
+                  <div class="item-pic upLoadImgs" v-if="item.imgList.length<=1">
+                    <img src="images/upload.jpg" class="picFullcar" width="100%" @click="openPopover(item,index)" />
+                  </div>
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <p>重新上传</p>
+                  </div>
+                </label>
+                <label v-show="item.checkItemId == 72 ">
+                  <div class="item-pic upLoadImgs" style="height: 120px;" v-if="item.imgList.length>0"
+                    v-for="(items,idx) in item.imgList" :key="idx">
+                    <img :src="items.imgPath ?items.imgPath : 'images/upload.jpg'" class="picFullcar" width="100%"
+                      style="height: 90px;" @click="onMaterial(item,index,items,idx)" />
+                    <p style="width: 110px;position: absolute;bottom: 0%;padding-left: 10px;z-index: 10;">
+                      {{items.remarks == null ? '请选择工具名称' :items.remarks}}
+                    </p>
+                  </div>
+                  <div class="item-pic upLoadImgs" style="height: 120px;" v-if="item.imgList.length<=10">
+                    <img src="images/upload.jpg" class="picFullcar" width="100%" style="height: 90px;"
+                    @click="onMaterial(item,index,1)" />
+                    <p style="width: 110px;position: absolute;bottom: 0%;padding-left: 10px;z-index: 10;">
+                      请选择工具名称
+                    </p>
+                  </div>
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <p>重新上传</p>
+                  </div>
+                </label>
+                <label
+                  v-show=" item.checkItemId == 73 || item.checkItemId == 74 || item.checkItemId == 75 || item.checkItemId == 76">
+                  <div class="item-pic upLoadImgs" v-if="item.imgList.length>0" v-for="(items,idx) in item.imgList"
+                    :key="idx">
+                    <img :src="items.imgPath ?items.imgPath : 'images/upload.jpg'" class="picFullcar" width="100%"
+                      @click="openPopover(item,index,items)" />
+
+                  </div>
+                  <div class="item-pic upLoadImgs" v-if="item.imgList.length<=10">
+                    <img src="images/upload.jpg" class="picFullcar" width="100%" @click="openPopover(item,index)" />
+                  </div>
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <p>重新上传</p>
+                  </div>
+                </label>
+              </div>
+            </ul>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="startOrder fullBtn" @click="addPay">提交素材</button>
+        </div>
+      </div>
+      <div v-show="step4" style="background:#efeff4">
+        <div class="search">
+          <span class="icon_search"></span>
+          <input type="txet" v-model="kw" class="pro-search"
+            style="width: 100%; height: 20px; line-height: 20px; padding:12px 0; text-indent: 32px; color: #333" name=""
+            @input="search(kw)" :placeholder="searchType == 'proName' ?  `搜索商品名称` : `搜索太阳膜防伪码`">
+        </div>
+        <div class="excellContent">
+          <div class="mp60">
+            <div id="mescroll" class="mescroll">
+              <ul class="wasteLists fixed" id="dataList">
+                <li class="wasteList" v-for="pl in prolist" @click="surSrh(pl)">
+                  <p>{{pl.partsName}}</p>
+                  <p class="grey">商品编码： [ {{pl.carg}} ] </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+    <div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
+      <!-- 可选择菜单 -->
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell" @click="onOpenCamera">拍照</li>
+        <li class="mui-table-view-cell" @click="onselecePhoto">从相册中选择</li>
+      </ul>
+      <!-- 取消菜单 -->
+      <ul class="mui-table-view">
+        <li class="mui-table-view-cell" @click="hidePopover">
+          <b>取消</b>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="js/varInfo.js"></script>
+<script type="text/javascript" src="plugins/vue/vue.js"></script>
+<script type="text/javascript" src="plugins/mescroll/mescroll.min.js" charset="utf-8"></script>
+<script type='text/javascript' src="plugins/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="plugins/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="plugins/mui.min.js"></script>
+<script type="text/javascript" src="plugins/mui.picker.min.js"></script>
+<script type='text/javascript' src="plugins/common.js?v=0.7"></script>
+<script type='text/javascript' src="plugins/Service.js?v=0.7"></script>
+<script type='text/javascript' src="plugins/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/shopInstall.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>订单详情</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>客户信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>客户名称</em>
+                <p><i class="icon_star"></i><span>{{orderInfo.userName}}</span></p>
+              </li>
+              <li class="item-list">
+                <em>客户类型</em>
+                <p><span>{{orderInfo.userTypeName}}</span></p>
+              </li>
+              <li class="item-list">
+                <em>联系方式</em>
+                <p v-if="orderInfo.orderStatus!=100 
+                                && orderInfo.orderStatus!=103 
+                                && orderInfo.orderStatus!=105 "> {{orderInfo.mobile}}
+                </p>
+                <p v-else>
+                  {{orderInfo.mobile.toString().replace(orderInfo.mobile.substring(3,7), "****") }}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>车牌号码</em>
+                <p>{{orderInfo.carNo}}</p>
+              </li>
+              <li class="item-list">
+                <em>车辆车型</em>
+                <p>{{orderInfo.carType}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>商品信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>商品名称</em>
+                <p>{{orderInfo.productName}}</p>
+              </li>
+              <li class="item-list">
+                <em>零件编码</em>
+                <p>{{orderInfo.partSn}}</p>
+              </li>
+              <li class="item-list">
+                <em>CARG码</em>
+                <p>{{orderInfo.carg}}</p>
+              </li>
+              <li class="item-list" v-show="orderInfo.parentTypeId != 1 &&orderInfo.orderPrice">
+                <em>预计服务金额</em>
+                <p><em>¥</em> <span class="p18 blue">{{orderInfo.orderPrice}}</span></p>
+              </li>
+              <li class="item-list" v-show="orderInfo.parentTypeId != 1 && orderInfo.retailPrice">
+                <em>全国零售价</em>
+                <p><em>¥</em> <span class="p18 blue">{{orderInfo.retailPrice}}</span></p>
+              </li>
+              <li class="item-list" v-show="orderInfo.parentTypeId == 1 && orderInfo.memberPrice">
+                <em>会员价格</em>
+                <p><em>¥</em> <span class="p18 red">{{orderInfo.memberPrice}}</span></p>
+              </li>
+              <li class="item-list" v-show="orderInfo.parentTypeId != 1 && orderInfo.dealPrice">
+                <em>实际服务金额</em>
+                <p><em>¥</em> <span class="p18 red">{{orderInfo.dealPrice}}</span></p>
+              </li>
+
+
+            </ul>
+          </div>
+        </div>
+        <div class="item-info" v-if="orderInfo.isGift">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>赠送信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>赠送服务</em>
+                <p>{{orderInfo.giftService}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>订单信息</span></h3>
+            <ul class="item-lists">
+              <li class="item-list">
+                <em>订单号</em>
+                <p>{{orderInfo.orderSn}}</p>
+              </li>
+              <li class="item-list" v-if="orderInfo.outOrderSn">
+                <em>商城订单号</em>
+                <p class="blue">{{orderInfo.outOrderSn}}</p>
+              </li>
+              <li class="item-list" v-if="orderInfo.sender">
+                <em>派单人</em>
+                <p class="blue">{{orderInfo.sender}}</p>
+              </li>
+              <li class="item-list" v-if="orderInfo.auditor">
+                <em>审核人</em>
+                <p class="blue">{{orderInfo.auditor}}</p>
+              </li>
+              <li class="item-list" v-if="orderInfo.personName">
+                <em>服务技师</em>
+                <p>{{orderInfo.personName}}</p>
+              </li>
+              <li class="item-list">
+                <em>服务预约时间</em>
+                <p>{{orderInfo.appointmentTime}}</p>
+              </li>
+
+              <li class="item-list">
+                <em>订单创建时间</em>
+                <p>{{orderInfo.createDate}}</p>
+              </li>
+
+
+            </ul>
+          </div>
+        </div>
+
+
+        <div class="item-info">
+          <div class="inner-item" v-show="orderInfo.orderStatus==104 && orderAuditList.length">
+            <h3 class="item-tit"><span>审核信息</span></h3>
+            <ul class="item-lists" v-for="(item,index) in orderAuditList">
+              <h3 class="tit-require pt10">
+                <em class="red">*</em>
+                <span class="sBlue">{{item.name}}</span>
+              </h3>
+              <p class="markInfo grey">{{item.remarks}}</p>
+              <div class="upDrive">
+                <div class="item-pic">
+                  <img :src="item.imgurl" width="100%" />
+                  <p>例图</p>
+                </div>
+                <div class="item-pic upLoadImgs" :checkItemId="item.checkItemId" :orderSn="item.orderSn">
+                  <img :src="item.checkItemImg?item.checkItemImg:`images/upload.jpg`" class="picFullcar" width="100%" />
+                  <div class="noPass" v-show="item.auditStatus==-1">
+                    <span>不通过</span>
+                    <p>重新上传</p>
+                  </div>
+                </div>
+                <div v-show="item.auditStatus==-1" class="markInfo red">
+                  {{item.auditDes}}
+                </div>
+              </div>
+            </ul>
+
+          </div>
+        </div>
+        <!-- <div class="item-info">
+                    <div class="inner-item">
+                        <div class="showKy">
+                            <p>查看勘验历史</p>
+                            <i class="showMore"></i>
+                        </div>
+                    </div>
+                </div> -->
+      </div>
+      <div v-show="orderInfo.orderStatus!=103">
+        <div class="btns" v-show="orderInfo.orderStatus==100">
+          <button class="startOrder" :orderInfo="orderInfo.orderSn" @click="orderRecevie">接单</button>
+          <button class="cancelOrder" :orderStatus="orderInfo.orderStatus" :orderSn="orderInfo.orderSn"
+            @click="orderRefuse">拒绝</button>
+        </div>
+        <div class="btns"
+          v-show="orderInfo.orderStatus==100 || orderInfo.orderStatus==101 || orderInfo.orderStatus==106">
+          <button class="startOrder" @click="startOrder" :orderSn="orderInfo.orderSn" style="width: 100%;">开始订单</button>
+          <!-- <button class="cancelOrder" :orderStatus="orderInfo.orderStatus" :orderSn="orderInfo.orderSn"
+            @click="orderRefuse">取消订单</button> -->
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+    <!-- 拒绝理由申请 -->
+    <div class="mark" id="mark" style="display: none"></div>
+    <div class="win-refuse">
+      <!-- <h3 class="tit-refuse" v-show="orderStatus==102">取消订单</h3> -->
+      <h3 class="tit-refuse" v-show="orderStatus!=102">拒绝订单</h3>
+      <div class="cont-refuse">
+        <textarea placeholder="请输入理由" v-model="refuseMsg"></textarea>
+      </div>
+      <div class='refuse_btns'>
+        <button class="btn-sur" @click="surRefuse">确定</button>
+        <button class="btn-cancel" @click="cancelRefuse">取消</button>
+      </div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/orderDetail.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

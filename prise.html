@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>万众来盖楼</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#349cff">
+  <div id="app">
+    <div id="appContent">
+      <div>
+        <img src="images/prise/top6.jpg" width="100%" />
+      </div>
+      <div class="priseInfo" style="height: 460px">
+        <img class="priseInfoImg" src="images/prise/center.jpg" width="100%" />
+        <div class="priseUser" style="top:-10px">
+          <h3 class="priseUser-h">
+            <img src="images/prise/innerTit.png" width="90px" />
+          </h3>
+          <div class="priseCont">
+            <div class="priseTitre">
+              <h3 class="col1">门店名称</h3>
+              <h3 class="col2">排名</h3>
+              <h3 class="col3">时间</h3>
+              <h3 class="col4">&nbsp;</h3>
+            </div>
+            <div class="scroll-box">
+              <div id="mescroll" class=" mescroll">
+                <ul id="dataList">
+                  <li v-for="item in pdlist">
+                    <p class="col1 omit2">{{item.shopName}}</p>
+                    <p class="col2">{{item.sort}}</p>
+                    <p class="col3">
+                      <em>{{item.saleDate}}</em>
+                    </p>
+                    <p class="col4">
+                      <span class="icon_prise" :class="`icon_prise` + item.prizeLevel "></span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="priseRule">
+        <div class="innerRule">
+          <h3>活动规则：</h3>
+          <h4>PK细则：</h4>
+          <p>1、PK结果认定：产品部依据易道大咖运营平台导出的报表数据进行结果认定。</p>
+          <p>
+            2、PK违规操作处罚：易道大咖会对PK赛结果进行抽查，一经发现在PK赛过程中门店有恶意激活太阳膜防伪码行为或销售开单数据为造假数据，将会取消该门店获得的太阳膜抵用券，同时罚款1000元从认证费押金中扣除，并将结果公示到易道大咖公众号中。
+          </p>
+          <h4>抵用券使用规则：</h4>
+          <p>（一）太阳膜下单金额每满2000元抵扣1张100元抵用券；</p>
+          <p>（二）太阳膜下单金额每满10000元抵扣1张500元抵用券；</p>
+          <p>依次类推，抵完为止，抵用券不可退换现金以及其它等价产品，仅限采 购下单太阳膜使用。</p>
+          <h4>抵用券使用时间：</h4>
+          <p>2020年6月25日-2020年8月25日</p>
+          <h4>本方案最终解释权归福建易道大咖商业管理有限公司所有。</h4>
+        </div>
+      </div>
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/prise.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

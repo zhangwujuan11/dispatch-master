@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>修改密码</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit"><span>修改密码</span></h3>
+            <ul class="item-lists" style=" padding:10px 0">
+
+              <li class="item-list">
+                <em>设置新密码</em>
+                <p>
+                  <input type="text" v-model="password" name="" value="" placeholder="输入新密码" />
+                </p>
+              </li>
+              <li class="item-list">
+                <em>确认新密码</em>
+                <p>
+                  <input type="text" name="" v-model="rePassword" value="" placeholder="确认新密码" />
+                </p>
+              </li>
+
+            </ul>
+
+          </div>
+
+        </div>
+        <p class="p12 grey">
+          密码长度为6-12位，有数字、字母或符号的两种组合更安全，字母需要区别大小写
+        </p>
+        <div>
+          <button class="submit blueGraShadow" style="margin-top:80px" @click="changePassword">确认修改</button>
+        </div>
+      </div>
+      <!-- <div class="btns" @click="editShop">
+                <button class="startOrder fullBtn" >确认更新</button>
+            </div> -->
+    </div>
+    <div id="tip-box">
+      <div class="wx_confirm_tit" id="tip-mes"></div>
+    </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/resetPwd.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>

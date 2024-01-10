@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>我的权益</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <!-- <div v-show="stem1"> -->
+      <div class="queryWarp">
+        <div class="query-item">
+          <div class="query-title" @click="nouse">
+            <em ref="titStatus">未使用</em> <span class="detailMore">({{nouselist.length}})</span>
+          </div>
+          <!-- <div class="query-title" @click="used">
+            <em ref="titTypes">已使用</em> <span class="detailMore">({{usedlist.length}})</span>
+          </div> -->
+          <div class="query-title" @click="invalid">
+            <em ref="titDates">已失效</em> <span class="detailMore">({{Invalid.length}})</span>
+          </div>
+        </div>
+      </div>
+      <div class="content" style="margin-top: 55px;">
+        <ul id="dataList" class="order-items dataList" style="display: block">
+          <li class="rightItem" v-show="nosedShow " v-for="item in nouselist" >
+            <h2>{{item.name}}</h2>
+            <div style="margin-top: 5px;">
+              <p>福耀玻璃门店通用</p>
+              <p>服务热线：400-988-6868</p>
+            </div>
+            <div style="margin-top: 20px;">
+              <p>有效期：{{item.canUse==1?'在保有效':'已失效'}}</p>
+            </div>
+          </li>
+          <li class="rightItem" v-show="invalidShow " v-for="item in Invalid">
+            <h2>{{item.name}}</h2>
+            <div style="margin-top: 5px;">
+              <p>福耀玻璃门店通用</p>
+              <p>服务热线：400-988-6868</p>
+            </div>
+            <div style="margin-top: 20px;">
+              <p>有效期：{{item.canUse==1?'在保有效':'已失效'}}</p>
+            </div>
+          </li>
+          <div v-show="stem2">
+            <div v-show="(nosedShow && nouselist.length <= 0) || (invalidShow && Invalid.length <= 0 )"
+              style="text-align: center;">
+              <img src="images/mescroll/mescroll-empty.png">
+              <p>亲,暂无相关数据哦~</p>
+            </div>
+          </div>
+        </ul>
+      </div>
+      <div class="btns" style="z-index: 2" v-show="stem2">
+        <button class="startOrder fullBtn" @click="receive">领取权益（仅限中国人寿财产在保客户）</button>
+      </div>
+      <!-- </div> -->
+      <!-- <div v-show="stem2">
+        <div>
+          <img src="images/sale/6.png" style="width: 100%;" />
+        </div>
+        <div class="innerCont pb40" style="margin-top: -25px;">
+          <div class="item-info" style="padding-top: 10px; padding-bottom: 80px">
+            <div class="inner-item">
+              <h3 class="item-tit"><span>VIP信息</span></h3>
+              <ul class="item-lists pb10">
+                <li class="item-list">
+                  <em>车牌号码</em>
+                  <p>
+                    <input type="text" name="" value="" placeholder="请输入车牌号码" @keyup="toUpperCase(carNo)" v-model="carNo"
+                      style="text-indent:50px">
+                    <select name="province" class="province blue" id="province" v-model="provSelected"
+                      style="left:-6px; top:13px; font-weight: 600">
+                      <option v-for="item in provList">{{item.code}}</option>
+                    </select>
+                    <span class="icon_down icon_down_p" style="left:24px; top:21px"></span>
+                  </p>
+                </li>
+                <li class="item-list" style="position:relative">
+                  <em>手机号</em>
+                  <p>
+                    <input type="text" name="" v-model="mobile" placeholder="请输入手机号">
+                  </p>
+                </li>
+                <li class="item-list" style="position:relative">
+                  <em>车架号</em>
+                  <p>
+                    <input type="text" name="" v-model="vin" placeholder="请输入车架号">
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+  
+  
+  
+          <div class="btns" style="z-index: 2">
+            <button class="startOrder fullBtn" @click="add">确认领取</button>
+          </div>
+        </div>
+        <div style="text-align: center; font-size: 16px; position: fixed; bottom: 10%; left:0;right: 0;margin: auto;">
+          服务热线： <a href="tel:400-988-6868" style="color: #60b2ff;font-weight: bold;">400-988-6868</a>
+        </div>
+      </div> -->
+    </div>
+  </div>
+
+  <div id="tip-box">
+    <div class="wx_confirm_tit" id="tip-mes"></div>
+  </div>
+  </div>
+</body>
+<script>
+  var userInfo = ""
+</script>
+<!-- <script src="js/varInfo.js"></script> -->
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/jswx.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/InsuranceList.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

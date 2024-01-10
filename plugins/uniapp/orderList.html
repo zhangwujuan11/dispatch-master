@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>我的订单</title>
+  <link rel="stylesheet" href="css/mui.min.css" />
+  <link rel="stylesheet" href="fonts/iconfont.css" />
+  <link rel="stylesheet" href="css/mui.picker.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" href="plugins/mescroll/mescroll.min.css">
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#f8f8f8">
+  <div id="app">
+    <div id="appContent">
+      <!-- <div class="queryWarp">
+            <div class="query-item">
+                <div v-for="(item,index) in orederType" class="query-title" @click="changType(index)" :class="{active:index == field }">
+                    <p v-text="item"></p>
+                    <span class="hock_icon_annonce "></span>
+                </div>
+            </div>
+        </div> -->
+      <div class="queryWarp">
+        <div class="query-item">
+          <div class="query-title" @click="showNormal">
+            <em ref="titStatus">订单状态</em> <span class="detailMore"></span>
+          </div>
+          <div class="query-title" @click="showFull">
+            <em ref="titTypes">客户类型</em> <span class="detailMore"></span>
+          </div>
+          <div class="query-title" @click="showDate">
+            <em ref="titDates">订单时间</em> <span class="detailMore"></span>
+          </div>
+        </div>
+        <ul class="query-select hock_query-select">
+          <li class="query-sel-item bline" :class="{ 'active' : search.orderLevel == index  }" :score="index"
+            :status="item.status" :relDate="item.name" v-for="(item,index) in arrLevel" @click="searchLevel(0)">
+            <p v-text="item.name"></p>
+            <span class="hock_iconFill icon_fill"></span>
+          </li>
+        </ul>
+        <ul class="query-select query-selectFull">
+          <!-- <p v-text="userTypeList"></p> -->
+          <li class="query-sel-item bline" :class="{ 'active' : search.level == index  }" :score="index"
+            :relDate="item.id" v-for="(item,index) in userTypeList" @click="searchLevel(1)">
+            <p v-text="item.name"></p><span class="hock_iconFill icon_fill"></span>
+          </li>
+        </ul>
+        <ul class="query-select query-selectDate">
+          <li class="query-sel-item bline">
+          <li class="query-sel-item ">
+            <div class="choiceDate">
+              <label>选择开始日期：</label>
+              <span id="startDate">{{startDate}}</span>
+            </div>
+            <div class="choiceDate">
+              <label>选择截止日期：</label>
+              <span id="endDate">{{endDate}}</span>
+            </div>
+          </li>
+          <!-- <div class="query-sub" :relDate="selDate" @click="searchLevel(1)">
+                        <span>确定</span>
+                    </div> -->
+          <div class="btnOpts fixed">
+            <span class="orangeGradient fl" @click="searchLevel(2)">重置</span>
+            <span class="blueGradient fr" @click="searchLevel()">确定</span>
+          </div>
+          </li>
+        </ul>
+      </div>
+      <!-- 头部信息结束 -->
+      <div class="content nobottom orderList_content">
+        <div id="mescroll" class="notice-content selService-content mescroll">
+          <!-- 待支付 -->
+          <ul id="dataList" class="order-items dataList" style="display: block">
+            <li class="orderList" v-for="item in pdlist">
+              <div class="orderList_title">
+                <p class="orderTit">
+                  <span>订单号：{{item.orderSn}}</span>
+                </p>
+                <p class="state"
+                  :class="(item.orderStatus == 106 || item.orderStatus == 103 || item.orderStatus == 105 ) ? `red` : ``">
+                  {{item.orderStatusDes}}</p>
+              </div>
+              <a href="javascript:;">
+                <div class="order_panel" :orderSn="item.orderSn" :orderStatus="item.orderStatus" @click="toDetail">
+                  <div class="dataMsg">
+                    <p class="p1">预约时间：</p>
+                    <p class="p2">{{item.appointmentTime}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">客户姓名：</p>
+                    <p class="p2">{{item.userName}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">客户类型：</p>
+                    <p class="p2">{{item.userTypeName}}</p>
+                  </div>
+                  <div class="dataMsg" v-if="item.mobile">
+                    <p class="p1">联系方式：</p>
+                    <p class="p2" v-if="item.orderStatus!=100 && item.orderStatus!=103 && item.orderStatus!=105 ">
+                      {{item.mobile}}
+                    </p>
+                    <p class="p2" v-else>{{item.mobile.toString().replace(item.mobile.substring(3,7), "****") }}
+                    </p>
+                  </div>
+
+                  <div class="dataMsg">
+                    <p class="p1">车&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;牌：</p>
+                    <p class="p2 blue">{{item.carNo}}</p>
+                  </div>
+                  <div class="dataMsg">
+                    <p class="p1">车&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型：</p>
+                    <p class="p2">{{item.carType}}</p>
+                  </div>
+                  <div class="dataMsg" v-show="item.refuseDes"
+                    style="margin-top:10px; border-top:1px dashed #ececec; border-bottom:1px dashed #ececec; padding:5px 0; color: #999">
+                    <p class="p1" v-show="item.orderStatus ==100 ">拒绝原因：</p>
+                    <p class="p1" v-show="item.orderStatus ==101 ">取消原因：</p>
+                    <p class="p2">{{item.refuseDes}}</p>
+                  </div>
+                  <div class="dataMsg" v-show="item.remarks"
+                    style="margin-top:10px; border-top:1px dashed #ececec; border-bottom:1px dashed #ececec; padding:5px 0; color: #999">
+                    <p class="p1">备注信息：</p>
+                    <p class="p2">{{item.remarks}}</p>
+                  </div>
+                  <div class="dataMsg" v-show="item.auditDec"
+                    style="border-bottom:1px dashed #ececec; padding:5px 0; color: #999">
+                    <p class="p1">审核意见：</p>
+                    <p class="p2 red">{{item.auditDec}}</p>
+                  </div>
+                  <!-- 已完成订单的时候才显示时间 -->
+                  <div v-show="item.orderStatus==104" class="dataMsg mt10">
+                    <p class="p1">完成时间：</p>
+                    <p class="p2">{{item.endTime}}</p>
+                  </div>
+                </div>
+              </a>
+              <div class="order-bottom">
+                <span class="settlement" :class="item.settleStatus==2 ? `green` : `red`"
+                  v-show="item.orderStatus==104">{{item.settlementStatusName}}</span>
+                <div v-show="item.orderStatus!=103">
+                  <button class="orderBtn blueBorder" v-show="item.orderStatus==100" :orderSn="item.orderSn"
+                    @click="orderRecevie">接单</button>
+                  <button class="orderBtn redBorder" :orderSn="item.orderSn" v-show="item.orderStatus==100"
+                    @click="orderRefuse(item)">拒绝</button>
+                  <button class="orderBtn blueBorder" :orderSn="item.orderSn" v-show="item.orderStatus==101 ||
+                                    item.orderStatus==106 " @click="startOrder">开始订单</button>
+                  <!-- <button class="orderBtn greyBorder" :orderSn="item.orderSn" :orderStatus="item.orderStatus" v-show=" item.orderStatus==101 ||
+                                    item.orderStatus==106" @click="orderRefuse(item)">取消订单</button> -->
+                  <!-- <button class="orderBtn blueBorder">勘验</button> -->
+                </div>
+              </div>
+              <span class="showMore" v-show="item.orderStatus==101 || item.orderStatus==102"></span>
+            </li>
+            <!-- <li class="orderList">
+                        <div class="orderList_title">
+                            <p class="orderTit">
+                                <span>订单号：2019041410000000007</span>
+                            </p>
+                            <p class="state">已派单</p>
+                        </div>
+                        <a href="orderDetail.html">
+                            <div class="order_panel">
+                                <div class="dataMsg">
+                                    <p class="p1">预约时间：</p>
+                                    <p class="p2">2018-06-08 09:00</p>
+                                </div>
+                                <div class="dataMsg">
+                                    <p class="p1">客户信息：</p>
+                                    <p class="p2">陈女士 18809875678</p>
+                                </div>
+                                <div class="dataMsg">
+                                    <p class="p1">车&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;牌：</p>
+                                    <p class="p2">京NDA870</p>
+                                </div>
+                                <div class="dataMsg">
+                                    <p class="p1">车&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型：</p>
+                                    <p class="p2">奥迪A6L 2015豪华型</p>
+                                </div>
+                                <div class="dataMsg">
+                                    <p class="p1">权益服务：</p>
+                                    <p class="p2">三锋-卡克线下-阳光会员5+5</p>
+                                </div>
+                                <div class="dataMsg" style="margin-top:10px; border-top:1px dashed #ececec; border-bottom:1px dashed #ececec; padding:5px 0; color: #999">
+                                    <p class="p1">备注信息：</p>
+                                    <p class="p2">三锋-卡克线下-阳光会员5+5三锋-卡克线下-阳光会员5+5三锋-卡克线下-阳光会员5+5</p>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="order-bottom">
+                            <button class="orderBtn blueBorder">接单</button>
+                            <button class="orderBtn blueBorder" @click="startOrder">开始订单</button>
+                            <button class="orderBtn greyBorder">取消订单</button>
+                            <button class="orderBtn blueBorder">勘验</button>
+                        </div>
+                        <span class="showMore"></span>
+                    </li> -->
+          </ul>
+        </div>
+      </div>
+      <!-- 拒绝理由申请 -->
+      <div class="mark" id="mark" style="display: none"></div>
+      <div class="win-refuse">
+        <!-- <h3 class="tit-refuse" v-show="orderStatus==101">取消订单</h3> -->
+        <h3 class="tit-refuse" v-show="orderStatus==100">拒绝订单</h3>
+        <div class="cont-refuse">
+          <textarea placeholder="请输入理由" v-model="refuseMsg"></textarea>
+        </div>
+        <div class='refuse_btns'>
+          <button class="btn-sur" @click="surRefuse">确定</button>
+          <button class="btn-cancel" @click="cancelRefuse">取消</button>
+        </div>
+      </div>
+      <div id="tip-box">
+        <div class="wx_confirm_tit" id="tip-mes"></div>
+      </div>
+      <div class="mask" id="mask" @click="hideMask"></div>
+      <div class="_loading" id="loading"><img src="images/loading.gif" /></div>
+    </div>
+  </div>
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type="text/javascript" src="js/mui.min.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script src="plugins/lazyload/lazyload.js"></script>
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/orderList.js?v=" + Date.now() + "'><\/script>");
+</script>
+
+</html>

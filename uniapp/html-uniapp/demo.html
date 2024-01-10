@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>demo</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <link rel="stylesheet" type="text/css" href="css/test.css" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+  <style type="text/css">
+    .addUpload {
+      position: relative;
+    }
+
+    .addUploadImg {
+      border: 1px solid #000;
+      display: block;
+      height: 120px;
+      left: 0;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      width: 120px;
+      z-index: 1;
+    }
+
+    .maskUploadImg {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 120px;
+      height: 120px;
+      z-index: 2;
+      background: rgba(0, 0, 0, .6);
+    }
+
+    .scroll-box {
+      position: relative;
+      width: 92%;
+      height: 200px;
+      border: 2px solid #000;
+      margin: 20px auto;
+      overflow: hidden;
+    }
+
+    .scroll-box ul {
+      list-style: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .scroll-box ul li {
+      width: 100%;
+      height: 40px;
+      box-sizing: border-box;
+      line-height: 40px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- <div id="tip-box">
+            <div class="wx_confirm_tit" id="tip-mes"></div>
+        </div> -->
+    <div class="addUpload">
+      <img src="images/upload.jpg" alt="" class="img" id="showImg" width="120px" height="120px" />
+      <input accept="image/*" type="file" class="addUploadImg" id="uploadIMG" capture="camera"
+        @change="btnUploadFile()" />
+      <!-- <span class="maskUploadImg" v-show="isShowMask"></span> -->
+    </div>
+  </div>
+  <div class="js_time_txt"></div>
+  <div id="countdown">还剩 00 分 00 秒</div>
+  <div>
+    <div class="scroll-box">
+      <ul>
+        <li>1好消息！好消息！本店所有商品全部白送1</li>
+        <li>2好消息！好消息！本店所有商品全部白送2</li>
+        <li>3好消息！好消息！本店所有商品全部白送3</li>
+        <li>4好消息！好消息！本店所有商品全部白送4</li>
+        <li>5好消息！好消息！本店所有商品全部白送5</li>
+        <li>6好消息！好消息！本店所有商品全部白送6</li>
+        <li>7好消息！好消息！本店所有商品全部白送7</li>
+        <li>8好消息！好消息！本店所有商品全部白送8</li>
+      </ul>
+    </div>
+  </div>
+  <!-- <div>
+        <marquee direction="up" onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="90">
+            <p>开发工程师</p>
+            <p>设计师</p>
+            <p>前端开发</p>
+            <p>开发工程师</p>
+            <p>设计师</p>
+            <p>前端开发</p>
+        </marquee>
+    </div> -->
+</body>
+ 
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script> <script src="js/varInfo.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<script type='text/javascript' src="js/demo.js?v=1.0"></script>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<!-- <script type="text/javascript">  
+console.log(returnCitySN["cip"]+','+returnCitySN["cname"])
+fn.showTip(returnCitySN["cname"] +`<br>` + returnCitySN["cip"] )
+</script> -->
+<script>
+  //console.log("window.plus：",window.plus);
+  // function btnUploadFile(e) {
+
+  //     //获取图片文件
+  //     var imgFile = e.target.files[0];
+
+  //     //后缀选取
+  //     if (!/\/(?:jpeg|jpg|png)/i.test(imgFile.type)) {
+  //         console.log(图片格式不支持);
+  //         return;
+  //     }
+  //     //异步读取文件
+  //     var reader = new FileReader();
+  //     //reader.readAsDataURL(imgFile);
+  //     reader.onload = async(evt) => {
+  //         //alert(evt.target.result)
+  //         //替换url
+  //         //$("#showImg").attr("src", evt.target.result);
+  //         var params = {
+  //             base64Data: evt.target.result,
+  //             bizType: 101
+  //         }
+  //         Service.uploadPic('POST', JSON.stringify(params), (function callback(data) {
+  //             //console.log("数据：", data)
+  //             if (data.code == 200) {
+  //                 //alert(data.data.webPath);
+  //                 $("#showImg").attr("src", data.data.webPath);
+  //                 alert(data.data.webPath)
+  //             }
+  //         }))
+  //     }
+  //     reader.readAsDataURL(imgFile);
+  // }
+
+  $(function () {
+    // 倒计时
+    var _ordertimer = null;
+    var data = new Date();
+    var txt = $('.js_time_txt');
+    var buyTime = '2018/03/26 17:30:00'; //开抢时间
+    var nowTime = '2018/03/16 17:00:00'; //接口返回当前时间
+
+    var dateDiff = new Date(nowTime) - new Date(getnow()); //请求时间戳与本地时间戳
+    if (dateDiff < 0) {
+      dateDiff = Math.abs(dateDiff);
+    }
+
+    if (new Date(nowTime) > new Date(buyTime)) {
+      $('.time-range').hide(); //已开枪
+      return;
+    } else {
+      leftTimer(buyTime);
+      _ordertimer = setInterval(function () {
+        leftTimer(buyTime)
+      }, 1000);
+    }
+
+    // 获取当前时间 xxxx/xx/xx 00:00:00
+    function getnow() {
+      var year = data.getFullYear();
+      var month = parseInt(data.getMonth() + 1) >= 10 ? parseInt(data.getMonth() + 1) : '0' + parseInt(data
+        .getMonth() + 1);
+      var day = data.getDate();
+      var hours = data.getHours();
+      var minutes = data.getMinutes();
+      var seconds = data.getSeconds();
+      var now = year + '/' + month + '/' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+      return now;
+    }
+
+    function leftTimer(enddate) {
+
+      var leftTime = (new Date(enddate)) - new Date + dateDiff;
+
+      var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10); //计算剩余的天数
+      var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10); //计算剩余的小时
+      var minutes = parseInt(leftTime / 1000 / 60 % 60, 10); //计算剩余的分钟
+      var seconds = parseInt(leftTime / 1000 % 60, 10); //计算剩余的秒数
+      days = checkTime(days);
+      hours = checkTime(hours);
+      minutes = checkTime(minutes);
+      seconds = checkTime(seconds);
+
+      if (days >= 0 || hours >= 0 || minutes >= 0 || seconds >= 0)
+        txt.html(days + "天" + hours + "小时" + minutes + "分" + seconds + "秒");
+      if (days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0) {
+        window.clearInterval(_ordertimer);
+        _ordertimer = null;
+      }
+    }
+
+    function checkTime(i) { //将0-9的数字前面加上0，例1变为01
+      if (i < 10) {
+        i = "0" + i;
+      }
+      return i;
+    }
+
+
+    //30分钟倒计时
+    var countdown = document.getElementById("countdown");
+
+    var time = 30 * 60; //30分钟换算成1800秒
+
+
+    setInterval(function () {
+      time = time - 1;
+      var minute = parseInt(time / 60);
+      var second = parseInt(time % 60);
+      countdown.innerHTML = '还剩' + minute + '分' + second + '秒';
+
+    }, 1000);
+
+
+
+    // //获得当前<ul>
+    // var $uList = $(".scroll-box ul");
+    // var timer = null;
+    // //触摸清空定时器
+    // $uList.hover(function() {
+    //     clearInterval(timer);
+    // },
+    // function() { //离开启动定时器
+    //     timer = setInterval(function() {
+    //         scrollList($uList);
+    //     },
+    //     1000);
+    // }).trigger("mouseleave"); //自动触发触摸事件
+    // //滚动动画
+    // function scrollList(obj) {
+    //     //获得当前<li>的高度
+    //     var scrollHeight = $("ul li:first").height();
+    //     //滚动出一个<li>的高度
+    //     $uList.stop().animate({
+    //         marginTop: -scrollHeight
+    //     },
+    //     600,
+    //     function() {
+    //         //动画结束后，将当前<ul>marginTop置为初始值0状态，再将第一个<li>拼接到末尾。
+    //         $uList.css({
+    //             marginTop: 0
+    //         }).find("li:first").appendTo($uList);
+    //     });
+    // }
+
+    //1、数组对象元素相同,分组显示
+    let arry = [{
+        expensedate: '2018/09/29',
+        amount: 1,
+        type: '交通费'
+      },
+      {
+        expensedate: '2018/08/19',
+        amount: 2.5,
+        type: '补贴费'
+      },
+      {
+        expensedate: '2018/09/29',
+        amount: 6.3,
+        type: '住宿费'
+      },
+      {
+        expensedate: '2018/01/19',
+        amount: 18.5,
+        type: '采购经费'
+      },
+      {
+        expensedate: '2018/09/22',
+        amount: 8.4,
+        type: '活动经费'
+      },
+      {
+        expensedate: '2018/09/29',
+        amount: 7.9,
+        type: '材料打印费'
+      }
+    ]
+
+    function collect(arry) {
+      let items = [];
+      let datelist = {};
+      for (let i = 0; i < arry.length; i++) {
+        let element = arry[i];
+        if (!datelist[element.expensedate]) {
+          items.push({
+            expensedate: element.expensedate,
+            subitems: [element]
+          })
+          datelist[element.expensedate] = element;
+        } else {
+          for (let j = 0; j < items.length; j++) {
+            let subment = items[j];
+            if (subment.expensedate == element.expensedate) {
+              subment.subitems.push(element)
+            }
+          }
+        }
+
+      }
+      return items
+    }
+
+    var colArray = collect(arry)
+    console.log("colArray", colArray)
+
+    // console.log("datelist：", datelist['2018/01/19'])
+    // console.log(items);
+
+    //2、数组对象元素相同,汇总显示
+    let arrys = [{
+        expensedate: '2018/09/29',
+        amount: 1,
+        type: '交通费'
+      },
+      {
+        expensedate: '2018/08/19',
+        amount: 2.5,
+        type: '补贴费'
+      },
+      {
+        expensedate: '2018/09/29',
+        amount: 6.3,
+        type: '交通费'
+      },
+      {
+        expensedate: '2018/01/08',
+        amount: 18.5,
+        type: '采购经费'
+      },
+      {
+        expensedate: '2018/09/22',
+        amount: 8.4,
+        type: '活动经费'
+      },
+      {
+        expensedate: '2018/09/29',
+        amount: 7.9,
+        type: '交通费'
+      }
+    ]
+    let otheritems = [];
+    let list = {};
+    for (let i = 0; i < arrys.length; i++) {
+      let element = arrys[i].expensedate;
+      if (list[element]) {
+        list[element].expensedate = list[element].expensedate;
+        list[element].amount = list[element].amount + arrys[i].amount;
+      } else {
+        list[element] = {};
+        list[element].expensedate = arrys[i].expensedate;
+        list[element].amount = arrys[i].amount;
+      }
+      list[element].type = arrys[i].type;
+    }
+    //对象转数组
+    for (var i in list) {
+      otheritems.push(list[i])
+    }
+    console.log(otheritems)
+
+
+
+
+
+
+
+    const oldArr = [{
+      id: 1
+    }, {
+      id: 2
+    }, {
+      id: 5
+    }]
+
+    const newArr = [{
+      presonId: 2,
+      name: '张三'
+    }, {
+      presonId: 4,
+      name: '李四'
+    }, {
+      presonId: 5,
+      name: '王五'
+    }]
+
+    // 将旧数组的值处理成id集合
+    const oldIds = oldArr.map(item => item.id)
+    // 得到newArr与oldArr不同的值
+    const result = newArr.filter(item => !oldIds.includes(item.presonId))
+    // 打印
+    console.log(result)
+
+    //判断是否回文
+    function checkPalindrom(str) {
+      return str == str.split('').reverse().join('');
+    }
+
+    console.log("madam是否回文：", checkPalindrom("madam"))
+
+    //判断数组唯一，并出现的次数
+    function unique(arr) {
+      if (!Array.isArray(arr)) {
+        console.log('type error');
+        return
+      }
+      let res = [];
+      obj = {}
+      for (let i = 0; i < arr.length; i++) {
+        if (!obj[arr[i]]) {
+          res.push(arr[i]);
+          obj[arr[i]] = 1
+        } else {
+          obj[arr[i]]++
+        }
+      }
+      return obj
+    }
+
+    var arr = ['a', 'a', 'a', 'b', 'b', 'c'];
+    console.log(unique(arr))
+    var uJson = unique(arr);
+    var iMax = 0;
+    var iIndex = "";
+    for (var i in uJson) {
+      if (uJson[i] > iMax) {
+        iMax = uJson[i];
+        iIndex = i
+      }
+    }
+    console.log('出现次数最多的是：' + iIndex + ' 出现 ' + iMax + '次')
+
+    //快速排序
+    var arrSort = [1, 3, 2, 5, 9, 4, 8, 7]
+
+    function quickSort(arr) {
+      if (arr.length < 1) {
+        return arr
+      }
+      let leftArr = [],
+        rightArr = [];
+      let pivotIndex = Math.floor(arr.length / 2);
+      var pivot = arr.splice(pivotIndex, 1)[0];
+
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] > pivot) {
+          rightArr.push(arr[i])
+        } else {
+          leftArr.push(arr[i])
+        }
+      }
+      return [].concat(quickSort(leftArr), [pivot], quickSort(rightArr))
+
+    }
+
+    console.log('快速排序：', quickSort(arrSort))
+
+    //斐波那契数组 ： fibo[i] = fibo[i- - 1]+fibo[i- -
+    function getFibonacci(n) {
+      var fibarr = [];
+      var i = 0;
+      while (i < n) {
+        if (i <= 1) {
+          fibarr.push(i);
+        } else {
+          fibarr.push(fibarr[i - 1] + fibarr[i - 2])
+        }
+        i++;
+      }
+      return fibarr;
+    }
+
+    console.log("斐波那契数组：", getFibonacci(20))
+
+    //找出下列正数组的最大差值
+    function getMaxProfit(arr) {
+      var min = max = 0;
+      for (var i in arr) {
+        if (arr[i] < min) min = arr[i];
+        if (arr[i] > max) max = arr[i];
+
+      }
+      return max - min
+    }
+
+    console.log("数组的最大差值：", getMaxProfit(arrSort))
+
+    // 随机生成指定长度的字符串
+    function randomString(n) {
+      let str = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      let tmp = '',
+        l = str.length;
+      for (var i = 0; i < n; i++) {
+        tmp += str.charAt(Math.floor(Math.random() * l))
+      }
+      return tmp;
+    }
+
+    console.log("随机生成8位字符串：", randomString(8))
+
+
+
+  })
+</script>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>准备考试</title>
+  <link rel="stylesheet" type="text/css" href="css/common.css?v=1.1" />
+  <script>
+    document.write("<link rel='stylesheet' type='text/css' href='css/style.css?v=" + Date.now() + "'/>");
+  </script>
+</head>
+
+<body style="background:#efeff4">
+  <div id="app">
+    <div id="appContent">
+      <div class="examTop">
+        <img src="images/cert/examTop.jpg" width="100%">
+      </div>
+      <div class="innerCont pb40">
+        <div class="item-info">
+          <div class="inner-item">
+            <h3 class="item-tit">
+              <span>测评信息</span>
+            </h3>
+            <ul class="item-lists pb10">
+              <li class="item-list">
+                <em>测评名称</em>
+                <p>
+                  {{examInfo.subjectName}}
+                </p>
+              </li>
+              <li class="item-list">
+                <em>店员姓名</em>
+                <p>
+                  <select v-model="personId" @change="cngPerson(personId)">
+                    <option value="">请选择店员姓名</option>
+                    <option :value="item.personId" v-for="item in shopPersonList">{{item.personName}}</option>
+                  </select>
+                </p>
+              </li>
+              <li class="item-list" v-if="personId">
+                <em>证书名称</em>
+                <p>
+                  {{cerName ? cerName : '暂无'}}
+                </p>
+              </li>
+              <li class="item-list" v-if="personId">
+                <em>证书级别</em>
+                <p>
+                  {{cerGrade ? cerGrade : '暂无'}}
+                </p>
+              </li>
+
+              <li class="item-list">
+                <em>测评时间</em>
+                <p>
+                  {{examInfo.startTime}} 到 {{examInfo.endTime}}
+                </p>
+              </li>
+
+              <li class="item-list">
+                <em>测评用时</em>
+                <p class="blue">
+                  {{examInfo.answerTime }} 分钟
+                </p>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+        <!-- <div class="item-info">
+                    <div class="inner-item">
+                        <h3 class="item-tit">
+                            <span>店员信息</span>
+                        </h3>
+                        <ul class="item-lists pb10">
+                            <li class="item-list">
+                                <em>店员姓名</em>
+                                <p>
+                                    <select v-model="personId">
+                                        <option value="">请选择店员姓名</option>
+                                        <option :value="item.personId" v-for="item in shopPersonList">{{item.personName}}</option>
+                                    </select>
+                                </p>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div> -->
+      </div>
+      <div class="btns">
+        <button class="startOrder fullBtn" @click="toExam">开始考试</button>
+      </div>
+    </div>
+  </div>
+  <div id="tip-box">
+    <div class="wx_confirm_tit" id="tip-mes"></div>
+  </div>
+  </div>
+</body>
+<script src="js/varInfo.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script type='text/javascript' src="js/jquery-1.8.2.min.js"></script>
+<script type='text/javascript' src="js/jweixin-1.2.0.js"></script>
+<script type='text/javascript' src="js/common.js?v=0.6"></script>
+
+<!-- <script type='text/javascript' src="js/jswx.js"></script> -->
+<script>
+  document.write("<script type='text/javascript' src='js/Service.js?v=" + Date.now() + "'><\/script>");
+  document.write("<script type='text/javascript' src='js/examReg.js?v=" + Date.now() + "'><\/script>");
+</script>
+</html>
